@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d73d540a62f74deebe45a0ca464e9b4b, type: 3}
+  m_Name: "AMR_002_\uD45C\uC900 \uC804\uD22C \uD5EC\uBA67(\uAC1C\uB7C9\uD615)"
+  m_EditorClassIdentifier: 
+  itemId: AMR_002
+  itemName: "\uD45C\uC900 \uC804\uD22C \uD5EC\uBA67(\uAC1C\uB7C9\uD615)"
+  itemType: 6
+  spawnArea: 1
+  itemImage: {fileID: 21300000, guid: 9bfd8def30b38cc44a4103fa950e52c8, type: 3}
+  description: "\uCDA9\uACA9 \uD761\uC218 \uB77C\uC774\uB108\uAC00 \uBCF4\uAC15\uB418\uC5B4
+    \uADFC\uAC70\uB9AC \uAD50\uC804\uC5D0\uC11C \uBC1C\uC0DD\uD558\uB294 \uCDA9\uACA9\uACFC
+    \uD30C\uD3B8\uC73C\uB85C\uBD80\uD130 \uBA38\uB9AC\uB97C \uC548\uC815\uC801\uC73C\uB85C
+    \uBCF4\uD638\uD574 \uC8FC\uB294 \uAC15\uD654\uD615 \uD5EC\uBA67\uC785\uB2C8\uB2E4."
+  rarity: 1
+  rarityWeight: 45
+  value: 0
+  maxStack: 1
+  addStats:
+  - targetStat: {fileID: 11400000, guid: e8d35beaad87d9f48ab996860659e33d, type: 2}
+    value: 5
+  - targetStat: {fileID: 11400000, guid: 458b46c63a1c40d4ab9a6d39717dde19, type: 2}
+    value: 5
+  - targetStat: {fileID: 11400000, guid: 15fc09ad501e2844986107c6459f339e, type: 2}
+    value: 55
+  modelOffset: {x: 0, y: 0, z: 0}
+  equipmentPrefab: {fileID: 2934817683792801847, guid: 7f9f2e4d2c25ee845a4098327b60a192, type: 3}
+  skillDB: {fileID: 11400000, guid: 8d774c9ec3ed519468eeb141576d259c, type: 2}
+  maxDurability: 0

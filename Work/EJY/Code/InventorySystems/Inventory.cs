@@ -1,0 +1,465 @@
+﻿using Chipmunk.ComponentContainers;
+using Chipmunk.GameEvents;
+using Code.GameEvents;
+using Code.Hotbar;
+using Code.InventorySystems.Items;
+using InGame.InventorySystem;
+using Scripts.Combat.Datas;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using Work.LKW.Code.Items;
+using Work.LKW.Code.Items.ItemInfo;
+
+namespace Code.InventorySystems
+{
+    public abstract class Inventory : MonoBehaviour, IContainerComponent
+    {
+        public ComponentContainer ComponentContainer { get; set; }
+        [SerializeField] private int _currentInventorySize = 4;
+        protected int CurrentInventorySize { get => _currentInventorySize;set 
+            {
+                if (value > itemSlots.Count)
+                {
+                    int loop = value - itemSlots.Count;
+                    for (int i = 0; i < loop; i++)
+                    {
+                        CreateSlot();
+                    }
+                }
+                _currentInventorySize = value;
+            } }
+
+        [SerializeField] protected List<ItemSlot> itemSlots;
+
+        public event Action InventoryChanged;
+
+        protected virtual void Awake()
+        {
+            for (int i = 0; i < CurrentInventorySize; ++i)
+            {
+                CreateSlot();
+            }
+        }
+
+        private void CreateSlot()
+        {
+            ItemSlot slot = new ItemSlot(null);
+            slot.SetOwner(this);
+            itemSlots.Add(slot);
+        }
+
+        protected virtual void OnDestroy()
+        {
+        }
+
+        public ItemSlot GetItemSlot(int slotIndex)
+        {
+            if (slotIndex >= CurrentInventorySize || slotIndex >= itemSlots.Count || slotIndex < 0) return null;
+            return itemSlots[slotIndex];
+        }
+
+        public ItemSlot GetItemSlot(ItemDataSO itemData)
+        {
+            for (int i = 0; i < CurrentInventorySize; i++)
+            {
+                var slot = itemSlots[i];
+
+                if (itemData == null)
+                {
+                    if (slot.Item == null)
+                        return slot;
+                }
+                else
+                {
+                    if (slot.Item != null && slot.Item.ItemData == itemData)
+                        return slot;
+                }
+            }
+
+            return null;
+        }
+
+        public IEnumerable<ItemSlot> GetItemSlots(ItemDataSO itemData)
+        {
+            for (int i = 0; i < CurrentInventorySize; i++)
+            {
+                var slot = itemSlots[i];
+
+                if (itemData == null)
+                {
+                    if (slot.Item == null)
+                        yield return slot;
+                }
+                else
+                {
+                    if (slot.Item != null && slot.Item.ItemData == itemData)
+                        yield return slot;
+                }
+            }
+        }
+        public List<T> GetItems<T>() where T : ItemBase
+        {
+            List<T> items = new List<T>();
+            HashSet<ItemDataSO> itemDataHashSet = new HashSet<ItemDataSO>();
+
+            for (int i = 0; i < CurrentInventorySize; ++i)
+            {
+                if (itemSlots[i].Item is T typedItem && itemDataHashSet.Add(typedItem.ItemData))
+                {
+                    items.Add(typedItem);
+                }
+            }
+
+            return items;
+        }
+        
+        private int AddItemInternal(ItemBase item, int count)
+        {
+            int remain = count;
+
+            for (int i = 0; i < CurrentInventorySize; i++)
+            {
+                var slot = itemSlots[i];
+
+                if (slot.Item == null)
+                    continue;
+
+                if (slot.Item.ItemData != item.ItemData)
+                    continue;
+
+                if (slot.IsFull)
+                    continue;
+
+                remain = slot.AddItem(remain);
+
+                if (remain <= 0)
+                    return count;
+            }
+
+            for (int i = 0; i < CurrentInventorySize; i++)
+            {
+                var slot = itemSlots[i];
+
+                if (slot.Item != null)
+                    continue;
+
+                int addAmount = Mathf.Min(remain, item.ItemData.maxStack);
+                slot.SetData(item, addAmount);
+                remain -= addAmount;
+
+                if (remain <= 0)
+                    return count;
+            }
+
+            return count - remain;
+        }
+
+        public bool TryAddItem(ItemBase item, int count = 1)
+        {
+            if (item == null || count <= 0)
+                return false;
+
+            if (GetAddableItemCount(item, count) < count)
+                return false;
+
+            int added = AddItemInternal(item, count);
+
+            if (added != count)
+                return false;
+
+            UpdateInventory();
+            return true;
+        }
+
+        // 실질적으로 넣을 수 있는 아이템의 개수 구하기
+        public int GetAddableItemCount(ItemBase item, int requestCount)
+        {
+            // 타겟 인벤토리의 같은 아이템 슬롯들의 남은 공간
+            List<ItemSlot> targetSlots = GetItemSlots(item.ItemData).ToList();
+            // 타겟 인벤토리의 빈 슬롯 수
+            targetSlots.AddRange(GetItemSlots(null));
+         
+            int addableCnt = 0;
+
+            foreach (var slot in targetSlots)
+            {
+                if (slot.Item == null)
+                {
+                    addableCnt += item.ItemData.maxStack;
+                }
+                else
+                {
+                    addableCnt += item.ItemData.maxStack - slot.Stack;
+                }
+                
+
+                if (addableCnt >= requestCount)
+                {
+                    addableCnt = requestCount;
+                    break;
+                }
+            }
+
+            return addableCnt;
+        }
+
+        public bool RemoveItem(ItemBase item, int count = 1, bool isFirst = true)
+        {
+            if (item == null || count <= 0)
+                return false;
+
+            int remaining = count;
+
+            for (int i = 0; i < CurrentInventorySize; i++)
+            {
+                var slot = itemSlots[i];
+
+                if (slot.Item == null)
+                    continue;
+
+                if (slot.Item.ItemData != item.ItemData)
+                    continue;
+
+                if (!isFirst && slot.Item != item)
+                    continue;
+
+                remaining = slot.RemoveItem(remaining);
+
+                if (remaining <= 0)
+                {
+                    UpdateInventory();
+                    return true;
+                }
+
+                if (!isFirst)
+                    break;
+            }
+
+            return false;
+        }
+
+        public bool InventoryHasBlankSlot()
+        {
+            for (int i = 0; i < CurrentInventorySize; ++i)
+            {
+                var slot = itemSlots[i];
+                if(slot.Item == null) return true;
+            }
+            
+            return false;
+        }
+        
+        public bool TryConsume(Dictionary<ItemDataSO, int> cosumeItems)
+        {
+            if (!CanConsume(cosumeItems)) return false;
+            
+            foreach (var pair in cosumeItems)
+            {
+                RemoveItemByData(pair.Key, pair.Value);
+            }
+
+            return true;
+        }
+
+        public bool CanConsume(Dictionary<ItemDataSO, int> cosumeItems)
+        {
+            foreach (var pair in cosumeItems)
+            {
+                if (GetItemCount(pair.Key) < pair.Value)
+                    return false;
+            }
+
+            return true;
+        }
+
+        public bool RemoveItemByData(ItemDataSO data, int count)
+        {
+            if (count <= 0) return false;
+
+            int totalCount = GetItemCount(data);
+            if (totalCount < count) return false;
+
+            int remaining = count;
+
+            foreach (var slot in GetItemSlots(data))
+            {
+                if (slot.Item == null) continue;
+
+                int removeAmount = Mathf.Min(slot.Stack, remaining);
+                slot.RemoveItem(removeAmount);
+                remaining -= removeAmount;
+
+                if (remaining <= 0)
+                    break;
+            }
+
+            UpdateInventory();
+            return true;
+        }
+
+        public bool SubmitItem(ItemBase item, int count = 1)
+        {
+            if (count > GetItemCount(item.ItemData))
+            {
+                // 아이템 수량 딸림
+                Debug.Log("아이템 수량 딸림");
+                return false;
+            }
+
+            return RemoveItem(item, count);
+        }
+
+        public int GetItemCount(ItemDataSO item)
+        {
+            int cnt = 0;
+
+            foreach (var itemSlot in GetItemSlots(item))
+            {
+                cnt += itemSlot.Stack;
+            }
+
+            return cnt;
+        }
+
+        public bool ContainsItem(ItemBase item) => itemSlots.FirstOrDefault(slot => slot.Item == item) != default;
+
+        public int MoveItem(Inventory target, ItemSlot sourceSlot, int amount)
+        {
+            if (sourceSlot.Item == null)
+                return 0;
+
+            amount = Mathf.Clamp(amount, 1, sourceSlot.Stack);
+
+            int addable = target.GetAddableItemCount(sourceSlot.Item, amount);
+            if (addable <= 0)
+                return 0;
+
+            int moved = target.AddItemInternal(sourceSlot.Item, addable);
+
+            if (moved > 0)
+            {
+                sourceSlot.RemoveItem(moved);
+                target.UpdateInventory();
+                UpdateInventory();
+            }
+
+            return moved;
+        }
+        
+        public void UpdateInventory()
+        {
+            InventoryChanged?.Invoke();
+        }
+
+        protected void HandleSwapItemSlot(SwapItemSlotEvent evt)
+        {
+            ItemSlot startSlot = evt.StartSlot;
+            ItemSlot targetSlot = evt.TargetSlot;
+
+            if (startSlot == null || targetSlot == null)
+            {
+                Debug.Log("start slot or target slot is null");
+                return;
+            }
+
+            if (!evt.IsHandled)
+            {
+                ItemBase startSlotItem = startSlot.Item;
+
+                ItemBase targetSlotItem = targetSlot.Item;
+
+                if (startSlot is EquipSlot startEquip && targetSlot is EquipSlot targetEquip)
+                {
+                    if (targetEquip.CanEquip(startSlotItem) && startEquip.CanEquip(targetSlotItem))
+                    {
+                        EventBus<SwapEquipEvent>.Raise(new SwapEquipEvent(startEquip, targetEquip));
+                    }
+                }
+                else if (startSlot is EquipSlot)
+                {
+                    if (targetSlotItem == null)
+                        EventBus<UnEquipByDragEvent>.Raise(new UnEquipByDragEvent(startSlotItem, targetSlot));
+                }
+                // 드래그 끝점이 장착UI일 때
+                else if (targetSlot is EquipSlot equipSlot)
+                {
+                    if (equipSlot.CanEquip(startSlotItem))
+                    {
+                        EventBus<EquipByDragEvent>.Raise(new EquipByDragEvent(startSlotItem, equipSlot.EquipType, startSlot));
+                        if (startSlot.Owner != targetSlot.Owner)
+                        {
+                            startSlot.Owner.RemoveItem(startSlotItem, 1, false);
+                        }
+                    }
+                }
+                else if (startSlot is HotbarSlot unquipSlot)
+                {
+                    if (targetSlotItem == null && startSlot.Owner == targetSlot.Owner)
+                        EventBus<UnEquipHotbarEvent>.Raise(new UnEquipHotbarEvent(unquipSlot.Index));
+                }
+                else if (targetSlot is HotbarSlot hotbarSlot)
+                {
+                    if (targetSlotItem == null && startSlot.Owner == targetSlot.Owner && startSlotItem is ThrowableItem or UsableItem)
+                        EventBus<EquipHotbarEvent>.Raise(new EquipHotbarEvent(hotbarSlot.Index, startSlotItem));
+                }
+                else
+                {
+                    int targetSlotStack = targetSlot.Stack;
+                    int startSlotStack = startSlot.Stack;
+                    
+                    startSlot.SetData(targetSlotItem, targetSlotStack);
+                    targetSlot.SetData(startSlotItem, startSlotStack);
+                }
+
+                evt.IsHandled = true;
+            }
+
+            UpdateInventory();
+        }
+
+        public virtual void OnInitialize(ComponentContainer componentContainer)
+        {
+        }
+
+        public void SortInventory()
+        {
+            var activeSlots = itemSlots.GetRange(0, CurrentInventorySize);
+
+            activeSlots.Sort((x, y) =>
+            {
+                bool xBlank = x == null || x.Item == null;
+                bool yBlank = y == null || y.Item == null;
+
+                if (xBlank && yBlank)
+                    return 0;
+                if (xBlank)
+                    return 1;
+                if (yBlank)
+                    return -1;
+
+                int typeCompare = x.Item.ItemData.itemType.CompareTo(y.Item.ItemData.itemType);
+                if (typeCompare != 0)
+                    return typeCompare;
+
+                int rarityCompare = x.Item.ItemData.rarity.CompareTo(y.Item.ItemData.rarity);
+                if (rarityCompare != 0)
+                    return rarityCompare;
+
+                return string.Compare(
+                    x.Item.ItemData.itemName,
+                    y.Item.ItemData.itemName,
+                    StringComparison.Ordinal
+                );
+            });
+
+            for (int i = 0; i < CurrentInventorySize; i++)
+            {
+                itemSlots[i] = activeSlots[i];
+            }
+
+            UpdateInventory();
+        }
+    }
+}

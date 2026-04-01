@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7004dd3430498a6438d5db89f3c6d29f, type: 3}
+  m_Name: GUN_006_C_AWM
+  m_EditorClassIdentifier: 
+  itemId: GUN_006_C
+  itemName: AWM
+  itemType: 4
+  spawnArea: 64
+  itemImage: {fileID: 21300000, guid: 1f446f3ebbdb66049829b0fac7286c4c, type: 3}
+  description: "\uC555\uB3C4\uC801\uC778 \uC0AC\uAC70\uB9AC\uC640 \uD30C\uAD34\uB825\uC744
+    \uC9C0\uB2CC \uB9E4\uADF8\uB118 \uC800\uACA9\uCD1D\uC785\uB2C8\uB2E4."
+  rarity: 0
+  rarityWeight: 70
+  value: 48
+  maxStack: 1
+  addStats: []
+  modelOffset: {x: 0, y: 0.038, z: 0.174}
+  equipmentPrefab: {fileID: 5640389525089971645, guid: a2429d68325c9e2459e4debfb26409c6, type: 3}
+  skillDB: {fileID: 11400000, guid: 8d774c9ec3ed519468eeb141576d259c, type: 2}
+  maxDurability: 442
+  attackRange: 90
+  defaultDamage: 48
+  attackSpeed: 0.75
+  controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
+  fireRate: 2.25
+  gunType: 3
+  bulletPerShot: 1
+  reloadTime: 4
+  bulletSpeed: 75
+  maxAmmoCapacity: 6
+  aimSpeedMultiplier: 0.522
+  defaultSpread: 0.018
+  crosshairData: {fileID: 0}
+  maxSpread: 0.05
+  spreadGrow: 0.006
+  spreadRecover: 0.495
+  spreadFactor: 10.79
+  verticalRecoil: 126.5
+  horizontalRecoil: 46
+  minVerticalMultiplier: 0.948
+  maxVerticalMultiplier: 1.052
+  minHorizontalMultiplier: -0.367
+  maxHorizontalMultiplier: 0.683
+  recoilDuration: 0.095
+  recoilRecoveryStartTime: 0.137
+  recoilRecoveryTime: 0.168
+  recoilRecovery: 405
+  pixelsPerRecoilUnit: 0.45

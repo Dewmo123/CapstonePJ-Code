@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7004dd3430498a6438d5db89f3c6d29f, type: 3}
+  m_Name: GUN_005_C_AK47
+  m_EditorClassIdentifier: 
+  itemId: GUN_005_C
+  itemName: AK47
+  itemType: 4
+  spawnArea: 64
+  itemImage: {fileID: 21300000, guid: d3d38d23223e4b64489ae8178401e5b6, type: 3}
+  description: "\uB192\uC740 \uC0B4\uC0C1\uB825\uACFC \uC2E0\uB8B0\uC131\uC744 \uC790\uB791\uD558\uB294
+    \uAC15\uB825\uD55C \uC790\uB3D9\uC18C\uCD1D\uC785\uB2C8\uB2E4."
+  rarity: 0
+  rarityWeight: 70
+  value: 32
+  maxStack: 1
+  addStats: []
+  modelOffset: {x: 0.012, y: 0.141, z: 0.369}
+  equipmentPrefab: {fileID: 5912053865660236352, guid: f83af4bd2c594b74fb6265902dca2d20, type: 3}
+  skillDB: {fileID: 11400000, guid: 8d774c9ec3ed519468eeb141576d259c, type: 2}
+  maxDurability: 425
+  attackRange: 54
+  defaultDamage: 32
+  attackSpeed: 5
+  controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
+  fireRate: 0.2
+  gunType: 2
+  bulletPerShot: 1
+  reloadTime: 2.75
+  bulletSpeed: 45
+  maxAmmoCapacity: 22
+  aimSpeedMultiplier: 0.618
+  defaultSpread: 0.06
+  crosshairData: {fileID: 0}
+  maxSpread: 0.95
+  spreadGrow: 0.22
+  spreadRecover: 0.693
+  spreadFactor: 10.79
+  verticalRecoil: 86.25
+  horizontalRecoil: 57.5
+  minVerticalMultiplier: 0.948
+  maxVerticalMultiplier: 1.052
+  minHorizontalMultiplier: -0.367
+  maxHorizontalMultiplier: 0.683
+  recoilDuration: 0.084
+  recoilRecoveryStartTime: 0.116
+  recoilRecoveryTime: 0.137
+  recoilRecovery: 468
+  pixelsPerRecoilUnit: 0.45
