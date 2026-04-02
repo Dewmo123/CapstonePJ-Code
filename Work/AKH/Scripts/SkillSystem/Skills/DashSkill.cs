@@ -19,9 +19,9 @@ namespace Scripts.SkillSystem.Skills
             _movement = container.GetSubclassComponent<ISkillMovement>();
         }
 
-        public override async void UseSkill()
+        public override async void StartAndUseSkill()
         {
-            base.UseSkill();
+            base.StartAndUseSkill();
             _movement.CanMove = false;
             Vector3 velocity = _movement.Velocity;
             velocity.y = 0;

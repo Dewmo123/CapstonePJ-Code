@@ -11,6 +11,7 @@ using Scripts.SkillSystem;
 using TMPro;
 using UnityEngine;
 using Work.LKW.Code.Items;
+using Scripts.SkillSystem.Manage;
 
 namespace Code.UI.Inventory
 {

@@ -1,6 +1,6 @@
-﻿using Assets.Work.AKH.Scripts.SkillSystem.Skills;
+﻿using Scripts.SkillSystem.Manage;
+using Scripts.SkillSystem.Skills;
 using Chipmunk.ComponentContainers;
-using Scripts.SkillSystem;
 using System;
 
 namespace Scripts.Players.States

@@ -5,7 +5,6 @@ using Scripts.Combat;
 using Scripts.Entities;
 using Scripts.SkillSystem;
 using UnityEngine;
-using UnityEngine.Splines;
 
 namespace Code.SkillSystem.Skills.MissilePassiveSkill
 {
@@ -18,8 +17,11 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
         [SerializeField] private bool isDmgRangIncrease;
         [SerializeField] private bool isInduction;
         [SerializeField] private float additionalDmgRange = 2.5f;
-        [SerializeField] private float randomAdditionalX = 2.5f;
-        [SerializeField] private float randomAdditionalZ = 2.5f;
+        [SerializeField] private float launchRiseHeight = 2f;
+        [SerializeField] private float randomSpawnRangeX = 1.5f;
+        [SerializeField] private float randomSpawnRangeZ = 1.5f;
+        [SerializeField] private float spawnHeightOffset = 0f;
+        [SerializeField] private float minSpawnSpacing = 0.5f;
 
         [Inject] private PoolManagerMono _poolManager;
         private int _currentHitCnt = 0;
@@ -35,7 +37,7 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
             _owner.OnHit -= HandleOnHit;
             base.DisableSkill();
         }
-        
+
         private void SetDmgRangeIncrease() => isDmgRangIncrease = true;
         private void SetInduction() => isInduction = true;
 
@@ -54,38 +56,92 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
                 Transform targetRootTrm = targetMono.transform.root;
                 IHitTransform hitTransform = targetRootTrm.gameObject.GetComponent<IHitTransform>();
 
-                if(hitTransform == null) return;
-                
+                if (hitTransform == null)
+                    return;
+
+                List<Vector3> middlePoints = GenerateMiddlePoints();
+
                 for (int i = 0; i < multiShotMissile; ++i)
                 {
                     var missile = _poolManager.Pop<Missile>(missilePoolItem);
-                    missile.InitMissile(_owner, hitTransform.HitTransform, firePosTrm.position, isInduction);
-                    if (isDmgRangIncrease) missile.SetDmgRange(additionalDmgRange);
-                    var path = GenerateMissilePath(firePosTrm.position, hitTransform.HitTransform.position);
-                    missile.SetPathToTarget(path);
+                    missile.InitMissile(_owner, hitTransform.HitTransform, firePosTrm.position, isInduction, GenerateLaunchOffset(), middlePoints[i]);
+                    if (isDmgRangIncrease)
+                        missile.SetDmgRange(additionalDmgRange);
                 }
-                
+
                 _currentHitCnt = 0;
             }
         }
 
-        private Spline GenerateMissilePath(Vector3 start, Vector3 end)
+        private Vector3 GenerateLaunchOffset()
         {
-            Spline pathSpline = new Spline();
-            pathSpline.Add(new BezierKnot(start));
+            return Vector3.up * launchRiseHeight;
+        }
 
-            Vector3 ownerUp = start + Vector3.up * 2;
-            
-            float x = Random.Range(-randomAdditionalX, randomAdditionalX);
-            float z = Random.Range(-randomAdditionalZ, randomAdditionalZ);
+        private List<Vector3> GenerateMiddlePoints()
+        {
+            List<Vector3> positions = new List<Vector3>(multiShotMissile);
+            GetLaunchBasis(out Vector3 forward, out Vector3 right);
+            Vector3 center = firePosTrm.position + GenerateLaunchOffset() + Vector3.up * spawnHeightOffset;
+            float minSpacingSqr = minSpawnSpacing * minSpawnSpacing;
 
-            ownerUp.x += x;
-            ownerUp.z += z;
-            pathSpline.Add(new BezierKnot(ownerUp));
-            
-            pathSpline.Add(new BezierKnot(end));
+            for (int i = 0; i < multiShotMissile; i++)
+            {
+                Vector3 candidate = center;
+                bool foundSpacedPoint = false;
 
-            return pathSpline;
+                for (int attempt = 0; attempt < 8; attempt++)
+                {
+                    float lateralOffset = Random.Range(-randomSpawnRangeX, randomSpawnRangeX);
+                    float forwardOffset = Random.Range(0f, randomSpawnRangeZ);
+                    candidate = center + (right * lateralOffset) + (forward * forwardOffset);
+
+                    if (IsFarEnough(candidate, positions, minSpacingSqr))
+                    {
+                        foundSpacedPoint = true;
+                        break;
+                    }
+                }
+
+                if (foundSpacedPoint == false && positions.Count > 0)
+                {
+                    float t = multiShotMissile <= 1 ? 0.5f : i / (float)(multiShotMissile - 1);
+                    float lateralOffset = Mathf.Lerp(-randomSpawnRangeX, randomSpawnRangeX, t);
+                    candidate = center + (right * lateralOffset) + (forward * randomSpawnRangeZ);
+                }
+
+                positions.Add(candidate);
+            }
+
+            return positions;
+        }
+
+        private void GetLaunchBasis(out Vector3 forward, out Vector3 right)
+        {
+            Transform basisTrm = _owner != null ? _owner.transform : firePosTrm;
+
+            forward = Vector3.ProjectOnPlane(basisTrm.forward, Vector3.up);
+            if (forward.sqrMagnitude < 0.0001f)
+                forward = Vector3.forward;
+            else
+                forward.Normalize();
+
+            right = Vector3.ProjectOnPlane(basisTrm.right, Vector3.up);
+            if (right.sqrMagnitude < 0.0001f)
+                right = Vector3.Cross(Vector3.up, forward).normalized;
+            else
+                right.Normalize();
+        }
+
+        private bool IsFarEnough(Vector3 candidate, List<Vector3> existingPositions, float minSpacingSqr)
+        {
+            for (int i = 0; i < existingPositions.Count; i++)
+            {
+                if ((existingPositions[i] - candidate).sqrMagnitude < minSpacingSqr)
+                    return false;
+            }
+
+            return true;
         }
     }
 }

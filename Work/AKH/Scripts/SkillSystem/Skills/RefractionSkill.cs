@@ -29,9 +29,9 @@ namespace Scripts.SkillSystem.Skills
             _statusEffect = container.Get<EntityStatusEffect>();
             _movement = container.GetSubclassComponent<ISkillMovement>();
         }
-        public override void UseSkill()
+        public override void StartAndUseSkill()
         {
-            base.UseSkill();
+            base.StartAndUseSkill();
             if (!_isUsing)
             {
                 _returnPos = _owner.transform.position;
@@ -74,7 +74,7 @@ namespace Scripts.SkillSystem.Skills
             {
                 _skillTimer = Mathf.Max(_skillTimer - Time.deltaTime, 0);
                 if (Mathf.Approximately(_skillTimer, 0))
-                    UseSkill();
+                    StartAndUseSkill();
             }
         }
     }

@@ -11,6 +11,8 @@ namespace Code.EnemySpawn
         [SerializeField] private List<EnemySO> spawnEnemies;
         [SerializeField] private SpawnListSO spawnList;
 
+        private List<Enemy> _enemies = new List<Enemy>();
+
         private void Start()
         {
             foreach (Transform child in transform)
@@ -20,8 +22,7 @@ namespace Code.EnemySpawn
 
             SetUpSpawnZone();
             
-            TimeController.Instance.AddEvent(TimeUtil.Day(1), SpawnAllEnemies);
-            
+            TimeController.Instance.AddRepeatEvent(TimeUtil.Hour(1), SpawnAllEnemies);
         }
 
         private void SetUpSpawnZone()
@@ -37,7 +38,15 @@ namespace Code.EnemySpawn
         public void SpawnAllEnemies()
         {
             if (spawnPoints == null || spawnEnemies == null) return;
-            
+
+            if (_enemies.Count > 0)
+            {
+                foreach (var enemy in _enemies)
+                {
+                    Destroy(enemy.gameObject);
+                }
+                _enemies.Clear();
+            }
 
             for (int i = 0; i < spawnPoints.Count; i++)
             {
@@ -55,6 +64,7 @@ namespace Code.EnemySpawn
 
             Enemy enemy = enemyObject.GetComponent<Enemy>();
             enemy.SpawnEnemy(position,enemyData);
+            _enemies.Add(enemy);
         }
     }
 }

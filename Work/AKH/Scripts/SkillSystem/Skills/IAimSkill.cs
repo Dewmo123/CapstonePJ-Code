@@ -1,4 +1,4 @@
-﻿namespace Assets.Work.AKH.Scripts.SkillSystem.Skills
+﻿namespace Scripts.SkillSystem.Skills
 {
     public interface IAimSkill : IUseStateSkill
     {

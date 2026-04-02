@@ -16,7 +16,7 @@ namespace Code.Hotbar
 
             for (int i = 0; i < _hotbars.Length; i++)
             {
-                _hotbars[i].SetIndex(i);
+                _hotbars[i].SetIndex(i + 1);
             }
             
             EventBus.Subscribe<UpdateHotbarUIEvent>(HandleUpdateHotbar);

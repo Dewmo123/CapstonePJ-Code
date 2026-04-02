@@ -42,7 +42,7 @@ namespace Scripts.Entities.Vitals
         private void Update()
         {
             _stopTimer = Mathf.Max(_stopTimer - Time.deltaTime, 0);
-            if (_stopTimer > 0)
+            if (_stopTimer > 0 || StatPerSecStat == null)
                 return;
             CurrentValue += StatPerSecStat.Value * Time.deltaTime;
         }
@@ -73,7 +73,7 @@ namespace Scripts.Entities.Vitals
         public void ChangeValueWithTimer(float value, float timer)
         {
             CurrentValue += value;
-            _stopTimer += timer;
+            _stopTimer = Mathf.Max(timer,_stopTimer);
         }
     }
 }

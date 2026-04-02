@@ -1,5 +1,4 @@
-﻿using Assets.Work.AKH.Scripts.SkillSystem.Skills;
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Chipmunk.Modules.StatSystem;
 using Code.StatusEffectSystem;
 using Cysharp.Threading.Tasks;
@@ -8,7 +7,6 @@ using Scripts.Combat;
 using Scripts.Entities;
 using Scripts.FSM;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Scripts.SkillSystem.Skills
 {
@@ -22,6 +20,9 @@ namespace Scripts.SkillSystem.Skills
         [SerializeField] private BuffSO reloadSpeedData;
         
         public StateDataSO TargetState { get => _targetState; set => _targetState = value; }
+
+        public SkillAnimType AnimType => SkillAnimType.Default;
+
         private EntityStatusEffect _buffCompo;
         private VFXComponent _vfxCompo;
         private StatOverrideBehavior _statCompo;
@@ -37,19 +38,7 @@ namespace Scripts.SkillSystem.Skills
             _vfxCompo = container.Get<VFXComponent>();
             _statCompo = container.Get<StatOverrideBehavior>();
         }
-        public override void EndSkill()
-        {
-            base.EndSkill();
-
-            if (!_isBuffActive)
-            {
-                RunBuffLoop().Forget();
-                if(addReloadSpeed)
-                    AddReloadSpeed();
-                if (getAdditionalTime)
-                    OnHitGetAdditionalTime().Forget();
-            }
-        }
+        
 
         private async UniTaskVoid RunBuffLoop()
         {
@@ -95,6 +84,18 @@ namespace Scripts.SkillSystem.Skills
         
              _remainingBuffTime += additionalTime;
          }
+
+        public void OnSkillTrigger()
+        {
+            if (!_isBuffActive)
+            {
+                RunBuffLoop().Forget();
+                if (addReloadSpeed)
+                    AddReloadSpeed();
+                if (getAdditionalTime)
+                    OnHitGetAdditionalTime().Forget();
+            }
+        }
     }
 }
 

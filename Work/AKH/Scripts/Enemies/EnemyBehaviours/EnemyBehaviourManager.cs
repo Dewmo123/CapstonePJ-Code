@@ -24,7 +24,6 @@ namespace Scripts.Enemies.EnemyBehaviours
         public void OnInitialize(ComponentContainer componentContainer)
         {
             _enemy = componentContainer.Get<Enemy>(true);
-            ActiveSkillComponent skillComponent = componentContainer.Get<ActiveSkillComponent>(true);
         }
 
         public void OnLocalEvent(EnemySpawnEvent spawnEvent)

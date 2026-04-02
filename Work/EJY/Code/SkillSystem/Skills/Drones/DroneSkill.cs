@@ -27,7 +27,7 @@ namespace Code.SkillSystem.Skills.Drones
             _aimProvider = container.GetSubclassComponent<IAimProvider>();
         }
 
-        public override void UseSkill()
+        public override void StartAndUseSkill()
         {
             Vector3 targetPos = _aimProvider.GetAimPosition();
             targetPos.y = _owner.transform.position.y;

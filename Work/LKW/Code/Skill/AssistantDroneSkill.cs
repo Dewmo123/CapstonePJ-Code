@@ -1,4 +1,4 @@
-using DewmoLib.ObjectPool.RunTime;
+﻿using DewmoLib.ObjectPool.RunTime;
 using Scripts.SkillSystem;
 using UnityEngine;
 
@@ -8,9 +8,9 @@ namespace Work.LKW.Skill
     {
         [SerializeField] private PoolManagerSO poolManager;
 
-        public override void UseSkill()
+        public override void StartAndUseSkill()
         {
-            base.UseSkill();
+            base.StartAndUseSkill();
         }
 
         public override void EndSkill()

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Chipmunk.GameEvents;
 using Code.UI.Core;
-using Code.UI.Core.Interaction;
 using Code.UI.Popup;
 using UnityEngine;
 
@@ -10,7 +10,6 @@ namespace Code.UI.Controller
     public class PopupController : MonoBehaviour
     {
         [SerializeField] private List<BasePopup> popups;
-        [SerializeField] private Transform layoutRoot;
 
         private Dictionary<Type, BasePopup> _popupMap = new();
         private Dictionary<Type, Stack<BasePopup>> _pool = new();
@@ -26,22 +25,47 @@ namespace Code.UI.Controller
                 if (popup == null) continue;
                 _popupMap.TryAdd(popup.DataType, popup);
             }
+            
+            EventBus.Subscribe<BindPopupEvent>(HandleBindPopup);
+            EventBus.Subscribe<UnBindPopupEvent>(HandleUnBindPopup);
         }
 
-        public void BindPopup<TData>(IPopupUI popup, Func<TData> data)
+        private void OnDestroy()
+        {
+            EventBus.Unsubscribe<BindPopupEvent>(HandleBindPopup);
+            EventBus.Unsubscribe<UnBindPopupEvent>(HandleUnBindPopup);
+        }
+
+        private void HandleUnBindPopup(UnBindPopupEvent evt)
+        {
+            
+        }
+
+        private void HandleBindPopup(BindPopupEvent evt)
+        {
+            BindPopup(evt.Popup);
+        }
+
+        public void BindPopup(IPopupable popup)
         {
             popup.OnClickHandler += HandleClickPopup;
         }
 
-        public void UnbindPopup(IPopupUI popup)
+        public void UnbindPopup(IPopupable popup)
         {
             popup.OnClickHandler -= HandleClickPopup;
+        }
+        
+        private void HandleClickPopup(Func<object> data, ICallbackData callback)
+        {
+            var type = data.Invoke();
+            if (type == null) return;
+            ShowPopup(type, callback);
         }
         
         public void ShowPopup(object data, ICallbackData callback = null)
         {
             var type = data.GetType();
-
             if (!_popupMap.TryGetValue(type, out var prefab))
             {
                 Debug.LogWarning($"Popup not found for type: {type}");
@@ -57,20 +81,19 @@ namespace Code.UI.Controller
             popup.ShowPopup(data, callback);
             _popupStack.Push(popup);
         }
-
-        private void HandleClickPopup(IPopupUI parent, Func<object> data)
+        
+        public void CloseTopPopup()
         {
-            
-        }
+            if (_popupStack.Count == 0) return;
 
-        private void ShowPopup(IPopupUI popup, Func<object> data)
-        {
-            
-        }
+            var popup = _popupStack.Pop();
+            var type = popup.DataType;
+            popup.ClosePopup();
 
-        private void OnDestroy()
-        {
-            
+            if (!_pool.ContainsKey(type))
+                _pool[type] = new Stack<BasePopup>();
+
+            _pool[type].Push(popup);
         }
     }
 }

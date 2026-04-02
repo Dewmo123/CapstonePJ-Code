@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Scripts.SkillSystem.Manage;
 using Scripts.SkillSystem;
 
 namespace Work.Code.SkillInventory

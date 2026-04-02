@@ -45,9 +45,9 @@ namespace Code.SkillSystem.Skills.BackDash
         }
 
 
-        public override async void UseSkill()
+        public override async void StartAndUseSkill()
         {
-            base.UseSkill();
+            base.StartAndUseSkill();
 
             Vector3 targetPos = _aimProvider.GetAimPosition(); 
             Vector3 ownerPos = _owner.transform.position;

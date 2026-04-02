@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Scripts.SkillSystem;
+using Scripts.SkillSystem.Manage;
 using UnityEngine;
 
 namespace Code.SkillSystem

@@ -77,9 +77,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SkillData>k__BackingField: {fileID: 11400000, guid: d7fc9b33fde60b24482884a4b97b7898, type: 2}
-  upgradedList: []
-  <animName>k__BackingField: awdwa
+  <animName>k__BackingField: Skill
   cooldown: 10
   animHash: 0
   summonPrefab: {fileID: 357341424337504981, guid: 89dacf10a3a723445b4870c5f9b5adc0, type: 3}
   summonTransform: {fileID: 4619107303810860611}
+  <TargetState>k__BackingField: {fileID: 11400000, guid: 78221511401be5b488b6a8c7595827c5, type: 2}

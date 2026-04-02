@@ -119,10 +119,10 @@ namespace Code.UI.Controller
             else
                 tooltip = Instantiate(prefab, tooltipRoot);
 
+            _rebuildFlag = true;
             tooltip.ShowTooltip(data);
             state.Tooltips.Add(tooltip);
             SortTooltips(state);
-            _rebuildFlag = true;
         }
 
         private void HideTooltip(GameObject owner, TooltipState state)

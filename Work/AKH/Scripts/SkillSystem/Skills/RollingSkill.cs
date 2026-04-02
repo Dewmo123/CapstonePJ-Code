@@ -1,5 +1,4 @@
-﻿using Assets.Work.AKH.Scripts.SkillSystem.Skills;
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Scripts.Combat;
 using Scripts.Combat.Datas;
 using Scripts.Entities.Vitals;
@@ -20,6 +19,7 @@ namespace Scripts.SkillSystem.Skills
         private StaminaCompo _staminaCompo;
 
         [field:SerializeField]public StateDataSO TargetState{ get; set; }
+        public SkillAnimType AnimType => SkillAnimType.Rolling;
 
         public override void Init(ComponentContainer container)
         {
@@ -33,9 +33,9 @@ namespace Scripts.SkillSystem.Skills
         {
             return base.CanUseSkill() && (_staminaCompo?.CurrentValue ?? 0f) >= staminaUsage;
         }
-        public override void UseSkill()
+        public override void StartAndUseSkill()
         {
-            base.UseSkill();
+            base.StartAndUseSkill();
             _movement.CanMove = false;
             Vector3 velocity = _movement.Velocity;
             velocity.y = 0;
@@ -51,6 +51,10 @@ namespace Scripts.SkillSystem.Skills
         {
             _movement.CanMove = true;
             _owner.gameObject.layer = _defaultLayer;
+        }
+
+        public void OnSkillTrigger()
+        {
         }
     }
 }

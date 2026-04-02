@@ -39,10 +39,6 @@ namespace Code.StatusEffectSystem
         {
             ClearStatusEffect();
         }
-        private void HandleStatusEffectEvent(StatusEffectEvent evt)
-        {
-            AddStatusEffect(evt.StatusEffectInfo);
-        }
         private void Update()
         {
             for (int i = _appliedStatusEffects.Count - 1; i >= 0; i--)

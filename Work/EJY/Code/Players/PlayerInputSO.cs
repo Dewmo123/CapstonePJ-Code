@@ -1,4 +1,4 @@
-﻿using Scripts.SkillSystem;
+﻿using Scripts.SkillSystem.Manage;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;

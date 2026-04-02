@@ -1,27 +1,30 @@
-using System;
+﻿using System;
+using Scripts.SkillSystem.Skills;
+using Scripts.FSM;
 using Scripts.SkillSystem;
 using SHS.Scripts.Summon;
 using UnityEngine;
 
 namespace SHS.Scripts.Skills
 {
-    public class SummonSkill : ActiveSkill
+    public class SummonSkill : ActiveSkill,IUseStateSkill
     {
         [SerializeField] private GameObject summonPrefab;
         [SerializeField] private Transform summonTransform;
+
+        [field: SerializeField] public SkillAnimType AnimType { get; private set; }
+        [field:SerializeField] public StateDataSO TargetState { get; set; }
 
         private void OnValidate()
         {
             Debug.Assert(summonPrefab.GetComponent<ISummonable>() != null,
                 "SummonPrefab does not implement ISummonable");
         }
-
-        public override void UseSkill()
+        public void OnSkillTrigger()
         {
-            base.UseSkill();
             Summon();
-        }
 
+        }
         private GameObject Summon()
         {
             GameObject summon = null;
@@ -36,5 +39,7 @@ namespace SHS.Scripts.Skills
 
             return summon;
         }
+
+
     }
 }

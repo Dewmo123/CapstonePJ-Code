@@ -7,6 +7,7 @@ using Scripts.Combat.Datas;
 using Scripts.Entities;
 using UnityEngine;
 using Code.Combat;
+using Work.AKH.Scripts.Entities;
 using Work.Code.GameEvents;
 using Work.LKW.Code.Items;
 
@@ -17,6 +18,7 @@ namespace Scripts.Players.States
         private GunItem _gun;
         private PlayerEquipment _equipment;
         private EntityGunStatInfo _entityGunStatInfo;
+        private ItemGrabBehavior _itemGrabBehavior;
 
         private float _reloadTime;
         private readonly string _reloadText = "재장전..";
@@ -26,11 +28,13 @@ namespace Scripts.Players.States
             _myMoveType = MoveType.Walk;
             _equipment = container.Get<PlayerEquipment>();
             _entityGunStatInfo = container.Get<EntityGunStatInfo>();
+            _itemGrabBehavior = container.Get<ItemGrabBehavior>();
         }
 
         public override void Enter()
         {
             base.Enter();
+            _itemGrabBehavior.SetWeight(0);
 
             if (_equipment.TryGetEquippedItem(EquipType.Hand, out EquipableItem item) && item is GunItem gun)
             {
@@ -68,6 +72,7 @@ namespace Scripts.Players.States
             _gun.Reload();
             EventBus.Raise(new AmmoUpdateEvent(_gun.CurrentBulletCnt, _gun.GunItemData.maxAmmoCapacity));
             base.Exit();
+            _itemGrabBehavior.SetWeight(1);
         }
     }
 }

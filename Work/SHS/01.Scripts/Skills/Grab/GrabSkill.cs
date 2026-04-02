@@ -1,14 +1,16 @@
-﻿using Chipmunk.ComponentContainers;
+﻿using Scripts.SkillSystem.Skills;
+using Chipmunk.ComponentContainers;
 using Code.ETC;
 using Code.SHS.Entities.Enemies;
 using Scripts.Combat;
 using Scripts.Combat.Datas;
 using Scripts.Entities;
+using Scripts.FSM;
 using UnityEngine;
 
 namespace Scripts.SkillSystem.Skills.Grab
 {
-    public class GrabSkill : ActiveSkill
+    public class GrabSkill : ActiveSkill,IUseStateSkill
     {
         [Header("Projectile")]
         [Tooltip("Optional projectile prefab. If empty, a runtime projectile object is created.")]
@@ -65,52 +67,15 @@ namespace Scripts.SkillSystem.Skills.Grab
         private DamageCalcCompo _damageCalcCompo;
         private MovementDataSO _fallbackPullMovementData;
 
+        public SkillAnimType AnimType => SkillAnimType.Grab;
+
+        [field:SerializeField]public StateDataSO TargetState { get; private set; }
+
         public override void Init(ComponentContainer container)
         {
             base.Init(container);
             _aimProvider = container.GetSubclassComponent<IAimProvider>();
             _damageCalcCompo = container.Get<DamageCalcCompo>();
-        }
-
-        public override void UseSkill()
-        {
-            base.UseSkill();
-
-            MovementDataSO movementData = GetPullMovementData();
-            Vector3 origin = firePoint != null ? firePoint.position : _owner.transform.position;
-            Vector3 direction = GetFireDirection(origin);
-            Vector3 spawnPos = origin + direction * spawnForwardOffset;
-            Transform targetAnchor = pullAnchor != null ? pullAnchor : _owner.transform;
-            DamageData damageData = BuildDamageData();
-
-            GrabHookProjectile projectile;
-            if (hookProjectilePrefab != null)
-            {
-                projectile = Instantiate(
-                    hookProjectilePrefab,
-                    spawnPos,
-                    Quaternion.LookRotation(direction));
-            }
-            else
-            {
-                GameObject runtimeProjectile = new GameObject("GrabHookProjectile_Runtime");
-                runtimeProjectile.transform.SetPositionAndRotation(spawnPos, Quaternion.LookRotation(direction));
-                projectile = runtimeProjectile.AddComponent<GrabHookProjectile>();
-            }
-
-            projectile.Launch(
-                _owner,
-                targetAnchor,
-                direction,
-                hitMask,
-                projectileSpeed,
-                projectileRange,
-                projectileRadius,
-                projectileLifeTime,
-                movementData,
-                pullStopDistance,
-                controlLockDuration,
-                damageData);
         }
 
         private MovementDataSO GetPullMovementData()
@@ -168,6 +133,45 @@ namespace Scripts.SkillSystem.Skills.Grab
                 direction = _owner.transform.forward;
 
             return direction.normalized;
+        }
+
+        public void OnSkillTrigger()
+        {
+            MovementDataSO movementData = GetPullMovementData();
+            Vector3 origin = firePoint != null ? firePoint.position : _owner.transform.position;
+            Vector3 direction = GetFireDirection(origin);
+            Vector3 spawnPos = origin + direction * spawnForwardOffset;
+            Transform targetAnchor = pullAnchor != null ? pullAnchor : _owner.transform;
+            DamageData damageData = BuildDamageData();
+
+            GrabHookProjectile projectile;
+            if (hookProjectilePrefab != null)
+            {
+                projectile = Instantiate(
+                    hookProjectilePrefab,
+                    spawnPos,
+                    Quaternion.LookRotation(direction));
+            }
+            else
+            {
+                GameObject runtimeProjectile = new GameObject("GrabHookProjectile_Runtime");
+                runtimeProjectile.transform.SetPositionAndRotation(spawnPos, Quaternion.LookRotation(direction));
+                projectile = runtimeProjectile.AddComponent<GrabHookProjectile>();
+            }
+
+            projectile.Launch(
+                _owner,
+                targetAnchor,
+                direction,
+                hitMask,
+                projectileSpeed,
+                projectileRange,
+                projectileRadius,
+                projectileLifeTime,
+                movementData,
+                pullStopDistance,
+                controlLockDuration,
+                damageData);
         }
     }
 }

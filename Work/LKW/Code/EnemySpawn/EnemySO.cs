@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Assets.Work.AKH.Scripts.SkillSystem.Skills;
+﻿using AYellowpaper.SerializedCollections;
 using Chipmunk.Modules.StatSystem;
-using Work.LKW.Code.Items.ItemInfo;
 using Code.Players;
-using Code.SHS.Entities.Enemies.Behaviors;
 using Code.SHS.Utility.DynamicFieldBinding;
 using Scripts.Combat.Datas;
 using Scripts.Enemies.EnemyBehaviours;
-using Scripts.FSM;
 using Scripts.SkillSystem;
+using Scripts.SkillSystem.Manage;
 using Sirenix.OdinInspector;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
-using AYellowpaper.SerializedCollections;
+using Work.LKW.Code.Items.ItemInfo;
 
 namespace Code.EnemySpawn
 {
@@ -34,16 +31,17 @@ namespace Code.EnemySpawn
         [Header("Equipment Settings")] public EnemyEquipData[] equipments;
         public BulletDataSO bulletData;
 
-        [InlineButton("LoadStatsFromPrefab",  "Load From Prefab")]
+        [InlineButton("LoadStatsFromPrefab", "Load From Prefab")]
         public List<StatOverride> statOverrides;
 
         [Header("Behavior Settings")] public FieldPatch<EnemyBehaviour>[] behaviourPrefabs;
 
-        [Header("Skill Settings")] [SerializeField]
-        public SerializedDictionary<PassiveSlotType,FieldPatch<PassiveSkill>> passiveSkill = new();
+        [Header("Skill Settings")]
+        [SerializeField]
+        public SerializedDictionary<PassiveSlotType, FieldPatch<PassiveSkill>> passiveSkill = new();
 
         [SerializeField]
-        public SerializedDictionary<ActiveSlotType,FieldPatch<ActiveSkill>> activeSkill = new();
+        public SerializedDictionary<ActiveSlotType, FieldPatch<ActiveSkill>> activeSkill = new();
 
         private void OnEnable()
         {
@@ -74,7 +72,7 @@ namespace Code.EnemySpawn
 
             foreach (var prefabStatOverride in prefabStatOverrideBehavior.StatOverrides)
             {
-                if(statOverrides.Contains(prefabStatOverride) == false)
+                if (statOverrides.Contains(prefabStatOverride) == false)
                     statOverrides.Add(prefabStatOverride);
             }
         }

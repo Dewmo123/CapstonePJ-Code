@@ -1,15 +1,13 @@
-﻿using Assets.Work.AKH.Scripts.SkillSystem.Skills;
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Chipmunk.Modules.StatSystem;
 using Code.ETC;
-using DewmoLib.Dependencies;
 using DewmoLib.ObjectPool.RunTime;
 using Scripts.Combat;
 using Scripts.Combat.Datas;
-using Scripts.Entities;
 using Scripts.FSM;
 using Scripts.SkillSystem;
 using UnityEngine;
+using Scripts.SkillSystem.Skills;
 
 namespace Code.SkillSystem.Skills.Bombing
 {
@@ -23,14 +21,15 @@ namespace Code.SkillSystem.Skills.Bombing
         [SerializeField] private float defaultDamageMultiplier = 1.25f;
         [SerializeField] private bool createFloor;
         [SerializeField] private bool slowAndAdditionalDamage;
-        
-        [SerializeField] private PoolManagerSO _poolManager; 
+
+        [SerializeField] private PoolManagerSO _poolManager;
         private DamageCalcCompo _damageCalcCompo;
         private StatOverrideBehavior _statCompo;
         private IAimProvider _aimProvider;
         private bool _isAiming;
 
         public StateDataSO TargetState { get => targetState; set => targetState = value; }
+        public SkillAnimType AnimType => SkillAnimType.Default;
 
         public override void Init(ComponentContainer container)
         {
@@ -40,7 +39,7 @@ namespace Code.SkillSystem.Skills.Bombing
             _aimProvider = container.GetSubclassComponent<IAimProvider>();
         }
 
-        public override void UseSkill()
+        public override void StartAndUseSkill()
         {
             _isAiming = false;
             decalObject.SetParent(null);
@@ -50,7 +49,7 @@ namespace Code.SkillSystem.Skills.Bombing
             bombingMissile.CreateFloor = createFloor;
             bombingMissile.SlowAndAdditionalDamage = slowAndAdditionalDamage;
             bombingMissile.transform.position = new Vector3(decalObject.transform.position.x, 15, decalObject.transform.position.z);
-            
+
             void HandleMissilePush()
             {
                 decalObject.SetParent(transform);
@@ -59,9 +58,9 @@ namespace Code.SkillSystem.Skills.Bombing
             }
 
             bombingMissile.OnPush += HandleMissilePush;
-            
-            DamageData damageData = _damageCalcCompo.CalculateDamage(_statCompo.GetStat(attackStat).Value,  defaultDamageMultiplier + _statCompo.GetStat(damageModifier).Value
-                ,0,DamageType.MELEE);
+
+            DamageData damageData = _damageCalcCompo.CalculateDamage(_statCompo.GetStat(attackStat).Value, defaultDamageMultiplier + _statCompo.GetStat(damageModifier).Value
+                , 0, DamageType.MELEE);
             bombingMissile.SetDamageData(damageData);
         }
 
@@ -85,6 +84,10 @@ namespace Code.SkillSystem.Skills.Bombing
                 Vector3 targetPos = _aimProvider.GetAimPosition();
                 decalObject.SetPos(targetPos);
             }
+        }
+
+        public void OnSkillTrigger()
+        {
         }
     }
 }

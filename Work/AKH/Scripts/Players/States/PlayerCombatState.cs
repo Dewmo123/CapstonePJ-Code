@@ -1,7 +1,7 @@
-﻿using Chipmunk.ComponentContainers;
+﻿using Scripts.SkillSystem.Manage;
+using Chipmunk.ComponentContainers;
 using Code.Players;
 using Scripts.Combat.Datas;
-using Scripts.SkillSystem;
 using Work.LKW.Code.Items;
 
 namespace Scripts.Players.States

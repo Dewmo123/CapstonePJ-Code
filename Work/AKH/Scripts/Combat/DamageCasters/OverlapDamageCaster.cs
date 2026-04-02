@@ -1,4 +1,5 @@
-﻿using Scripts.Combat.Datas;
+﻿using System;
+using Scripts.Combat.Datas;
 using Scripts.Entities;
 using UnityEngine;
 
@@ -15,13 +16,12 @@ namespace Scripts.Combat
         
         public float CastRadius => castRadius;
 
-        public override void InitCaster(Entity entity)
+        private void Awake()
         {
-            base.InitCaster(entity);
-            
             _originRadius = castRadius;
             _colliders = new Collider[maxCollideCount];
         }
+
         public override bool CastDamage(DamageData damageData, Vector3 position, Vector3 direction, MovementDataSO knockBackData)
         {
             int count = Physics.OverlapSphereNonAlloc(position, castRadius, _colliders, whatIsTarget);

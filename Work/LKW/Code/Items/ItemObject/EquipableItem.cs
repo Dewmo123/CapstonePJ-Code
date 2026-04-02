@@ -3,8 +3,9 @@ using Work.LKW.Code.Items.ItemInfo;
 using Code.SkillSystem;
 using Scripts.Combat.ItemObjects;
 using Scripts.Entities;
-using Scripts.SkillSystem;
 using UnityEngine;
+using Work.AKH.Scripts.Entities;
+using Scripts.SkillSystem.Manage;
 
 namespace Work.LKW.Code.Items
 {
@@ -15,12 +16,14 @@ namespace Work.LKW.Code.Items
         public EquipItemDataSO EquipItemData { get; protected set; }
         public bool IsEquipped { get; set; }
         private SkillManager _skillManager;
+
         public EquipableItem(ItemDataSO itemData) : base(itemData)
         {
             ItemData = itemData;
             EquipItemData = ItemData as EquipItemDataSO;
             Skill = EquipItemData.skillDB?.GetRandomSkill();
         }
+
         public virtual void OnEquip(Entity entity, Transform parent)
         {
             IsEquipped = true;

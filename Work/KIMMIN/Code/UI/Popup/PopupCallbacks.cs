@@ -4,15 +4,27 @@ namespace Code.UI.Popup
 {
     public interface ICallbackData { }
     
-    public struct EmptyCallback : ICallbackData { }
+    public class EmptyCallback : ICallbackData { }
 
-    public struct ConfirmCallback : ICallbackData
+    public class ConfirmCallback : ICallbackData
     {
         public Action OnConfirm;
     }
     
-    public struct ChoiceCallback : ICallbackData
+    public class ConfirmCallback<T> : ICallbackData
     {
-        public Action OnConfirm;
+        public Action<T> OnConfirm;
+    }
+    
+    public class ChoiceCallback : ICallbackData
+    {
+        public Action OnAccept;
+        public Action OnReject;
+    }
+    
+    public class ChoiceCallback<T> : ICallbackData
+    {
+        public Action<T> OnAccept;
+        public Action<T> OnReject;
     }
 }

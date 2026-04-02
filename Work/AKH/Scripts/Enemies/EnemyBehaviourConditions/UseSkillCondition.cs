@@ -1,6 +1,6 @@
 ﻿using Chipmunk.ComponentContainers;
 using Code.SHS.Entities.Enemies;
-using Scripts.SkillSystem;
+using Scripts.SkillSystem.Manage;
 using UnityEngine;
 
 namespace Scripts.Enemies.EnemyBehaviourConditions

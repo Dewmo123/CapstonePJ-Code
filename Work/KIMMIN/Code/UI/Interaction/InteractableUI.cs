@@ -1,6 +1,7 @@
 ﻿using System;
 using Chipmunk.GameEvents;
 using Code.UI.Core;
+using Code.UI.Popup;
 using UnityEngine;
 using Work.Code.GameEvents;
 
@@ -31,6 +32,16 @@ namespace Work.Code.UI.Core.Interaction
         protected void UnbindTooltip(GameObject go)
         {
             EventBus.Raise(new UnBindTooltipEvent(go));
+        }
+        
+        protected void BindPopup(IPopupable popup)
+        {
+            EventBus.Raise(new BindPopupEvent(popup));
+        }
+        
+        protected void UnBindPopup(IPopupable popup)
+        {
+            EventBus.Raise(new UnBindPopupEvent(popup));
         }
 
         protected virtual void ClearInteractEvents() { }

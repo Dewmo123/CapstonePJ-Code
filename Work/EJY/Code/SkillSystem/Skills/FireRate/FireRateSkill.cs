@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Chipmunk.ComponentContainers;
 using Chipmunk.Modules.StatSystem;
 using Code.StatusEffectSystem;
@@ -35,7 +35,7 @@ namespace Code.SkillSystem.Skills.FireRate
             fireRateBuffSO.statusEffectCreateData.Add(bulletReduceRateData);
         }
         
-        public override async void UseSkill()
+        public override async void StartAndUseSkill()
         {
             foreach (var info in fireRateBuffSO.GetStatusEffectInfo())
             {

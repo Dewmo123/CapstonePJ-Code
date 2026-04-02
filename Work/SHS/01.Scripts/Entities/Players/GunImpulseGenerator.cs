@@ -1,14 +1,15 @@
-﻿using Chipmunk.Library.Utility.GameEvents.Local;
+﻿using Chipmunk.GameEvents;
+using Chipmunk.Library.Utility.GameEvents.Local;
+using Code.GameEvents;
 using SHS.Scripts.Combats.Events;
 using Unity.Cinemachine;
 using UnityEngine;
 
 namespace SHS.Scripts.Entities.Players
 {
-    public class GunImpulseGenerator : MonoBehaviour, ILocalEventSubscriber<GunAttackEvent>
+    public class GunImpulseGenerator : MonoBehaviour, ILocalEventSubscriber<GunAttackEvent> 
     {
         [SerializeField] private float multiplier = 0.02f;
-        [SerializeField] private CinemachineImpulseSource impulseSource;
 
         public void OnLocalEvent(GunAttackEvent eventData)
         {
@@ -16,7 +17,7 @@ namespace SHS.Scripts.Entities.Players
             direction.y = 0f;
             direction.Normalize();
             float force = -(eventData.GunData.horizontalRecoil + eventData.GunData.verticalRecoil) / 2 * multiplier;
-                impulseSource.GenerateImpulse(direction * force);
+            Bus.Raise(new CameraShakeEvent(transform.position, direction, force));
         }
     }
 }

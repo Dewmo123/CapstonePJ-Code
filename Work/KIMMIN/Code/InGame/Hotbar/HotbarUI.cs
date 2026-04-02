@@ -16,8 +16,11 @@ namespace Code.InGame.Hotbar
         [SerializeField] private TextMeshProUGUI keyText;
         [SerializeField] private TextMeshProUGUI countText;
         [SerializeField] private Image icon;
+        [SerializeField] private Image background;
         
         private Tween _hotbarTween;
+        private readonly Color32 _activeColor = new Color32(65, 100, 150, 150);
+        private readonly Color32 _inActiveColor = new Color32(0, 0, 0, 100);
 
         public int Index { get; private set; }
 
@@ -52,12 +55,15 @@ namespace Code.InGame.Hotbar
                 icon.sprite = equipableItem.ItemData.itemImage;
                 countText.text = slot.Stack.ToString();
             }
+            
+            background.color = _activeColor;
         }
 
         public void Clear()
         {
             icon.gameObject.SetActive(false);
             countText.gameObject.SetActive(false);
+            background.color = _inActiveColor;
         }
         
         private void SetIndexText()

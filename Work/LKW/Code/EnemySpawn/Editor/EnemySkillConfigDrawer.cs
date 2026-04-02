@@ -1,4 +1,4 @@
-﻿using Assets.Work.AKH.Scripts.SkillSystem.Skills;
+﻿using Scripts.SkillSystem.Skills;
 using Scripts.SkillSystem;
 using UnityEditor;
 using UnityEngine;

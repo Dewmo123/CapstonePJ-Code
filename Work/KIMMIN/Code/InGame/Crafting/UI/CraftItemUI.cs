@@ -12,7 +12,7 @@ using Work.LKW.Code.Items.ItemInfo;
 
 namespace Work.Code.Crafting
 {
-    public class CraftItemUI : InteractableUI, IUIElement<ItemDataSO>, IPopupUI
+    public class CraftItemUI : InteractableUI, IUIElement<ItemDataSO>, IPopupable
     {
         [SerializeField] private Image icon;
         [SerializeField] private Image pin;
@@ -32,7 +32,9 @@ namespace Work.Code.Crafting
         public CraftTreeSO Tree { get; private set; }
         public bool IsFavorite { get; set; }
         public event Action<CraftItemUI, bool> OnRightClick;
-        public event Action<IPopupUI, Func<object>> OnClickHandler;
+        public event Action<Func<object>, ICallbackData> OnClickHandler;
+        
+        private readonly ConfirmCallback _callback = new();
 
 
         protected override void Awake()
@@ -40,6 +42,7 @@ namespace Work.Code.Crafting
             base.Awake();
             favoriteButton.onClick.AddListener(HandleFavoriteClicked);
             BindTooltip(gameObject, () => _tooltipText, 1f);
+            BindPopup(this);
         }
 
         private void HandleFavoriteClicked()
@@ -89,7 +92,7 @@ namespace Work.Code.Crafting
             {
                 bool pinStatus = !pin.gameObject.activeSelf;
                 OnRightClick?.Invoke(this, pinStatus);
-                OnClickHandler?.Invoke(this, () => null);
+                OnClickHandler?.Invoke(() => "진짜로 하시겠어요?", _callback);
             }
         }
 

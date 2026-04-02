@@ -180,7 +180,7 @@ MonoBehaviour:
     - _fieldKey: Scripts.Enemies.EnemyBehaviours.EnemyBehaviour.conditions
       _fieldName: conditions
       _valueKind: 13
-      _hasOverride: 0
+      _hasOverride: 1
       _intValue: 0
       _floatValue: 0
       _doubleValue: 0
@@ -193,7 +193,7 @@ MonoBehaviour:
       _colorValue: {r: 1, g: 1, b: 1, a: 1}
       _enumValue: 0
       _objectValue: {fileID: 0}
-      _managedReferenceData: 022f000000000180000000530079007300740065006d002e0043006f006c006c0065006300740069006f006e0073002e00470065006e0065007200690063002e004c00690073007400600031005b005b0053006300720069007000740073002e0045006e0065006d006900650073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e0073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e002c00200041007300730065006d0062006c0079002d004300530068006100720070005d005d002c0020006d00730063006f0072006c006900620000000000060100000000000000022f01000000014b00000053006300720069007000740073002e0045006e0065006d006900650073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e0073002e0055007300650053006b0069006c006c0043006f006e0064006900740069006f006e002c00200041007300730065006d0062006c0079002d00430053006800610072007000010000001d010800000073006c006f00740054007900700065000000000000000000050705
+      _managedReferenceData: 022f000000000180000000530079007300740065006d002e0043006f006c006c0065006300740069006f006e0073002e00470065006e0065007200690063002e004c00690073007400600031005b005b0053006300720069007000740073002e0045006e0065006d006900650073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e0073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e002c00200041007300730065006d0062006c0079002d004300530068006100720070005d005d002c0020006d00730063006f0072006c006900620000000000060100000000000000022f01000000014b00000053006300720069007000740073002e0045006e0065006d006900650073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e0073002e0055007300650053006b0069006c006c0043006f006e0064006900740069006f006e002c00200041007300730065006d0062006c0079002d00430053006800610072007000010000001d010800000073006c006f00740054007900700065000100000000000000050705
   - _target: {fileID: 6966378624523003732, guid: 1b3a84a388a931146b2a8745e74698a9, type: 3}
     _inputs:
     - _fieldKey: Code.SHS.Entities.Enemies.Behaviors.UseSkillBehavior.slotType
@@ -267,7 +267,7 @@ MonoBehaviour:
     - _fieldKey: Scripts.Enemies.EnemyBehaviours.EnemyBehaviour.conditions
       _fieldName: conditions
       _valueKind: 13
-      _hasOverride: 0
+      _hasOverride: 1
       _intValue: 0
       _floatValue: 0
       _doubleValue: 0
@@ -280,7 +280,7 @@ MonoBehaviour:
       _colorValue: {r: 1, g: 1, b: 1, a: 1}
       _enumValue: 0
       _objectValue: {fileID: 0}
-      _managedReferenceData: 022f000000000180000000530079007300740065006d002e0043006f006c006c0065006300740069006f006e0073002e00470065006e0065007200690063002e004c00690073007400600031005b005b0053006300720069007000740073002e0045006e0065006d006900650073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e0073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e002c00200041007300730065006d0062006c0079002d004300530068006100720070005d005d002c0020006d00730063006f0072006c006900620000000000060100000000000000022f01000000014b00000053006300720069007000740073002e0045006e0065006d006900650073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e0073002e0055007300650053006b0069006c006c0043006f006e0064006900740069006f006e002c00200041007300730065006d0062006c0079002d00430053006800610072007000010000001d010800000073006c006f00740054007900700065000000000000000000050705
+      _managedReferenceData: 022f000000000180000000530079007300740065006d002e0043006f006c006c0065006300740069006f006e0073002e00470065006e0065007200690063002e004c00690073007400600031005b005b0053006300720069007000740073002e0045006e0065006d006900650073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e0073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e002c00200041007300730065006d0062006c0079002d004300530068006100720070005d005d002c0020006d00730063006f0072006c006900620000000000060100000000000000022f01000000014b00000053006300720069007000740073002e0045006e0065006d006900650073002e0045006e0065006d0079004200650068006100760069006f007500720043006f006e0064006900740069006f006e0073002e0055007300650053006b0069006c006c0043006f006e0064006900740069006f006e002c00200041007300730065006d0062006c0079002d00430053006800610072007000010000001d010800000073006c006f00740054007900700065000200000000000000050705
   - _target: {fileID: 114189840105380667, guid: 9709e573ae4e5a54d9b4da8f7a19ab09, type: 3}
     _inputs:
     - _fieldKey: Scripts.Enemies.EnemyBehaviours.EnemyBehaviour.<Priority>k__BackingField
@@ -858,9 +858,9 @@ MonoBehaviour:
           _enumValue: 2
           _objectValue: {fileID: 0}
           _managedReferenceData: 
-        - _fieldKey: Scripts.SkillSystem.ActiveSkill.<animName>k__BackingField
-          _fieldName: animName
-          _valueKind: 6
+        - _fieldKey: Scripts.SkillSystem.Skills.Grab.GrabSkill.<TargetState>k__BackingField
+          _fieldName: TargetState
+          _valueKind: 12
           _hasOverride: 0
           _intValue: 0
           _floatValue: 0
@@ -873,7 +873,7 @@ MonoBehaviour:
           _vector4Value: {x: 0, y: 0, z: 0, w: 0}
           _colorValue: {r: 1, g: 1, b: 1, a: 1}
           _enumValue: 0
-          _objectValue: {fileID: 0}
+          _objectValue: {fileID: 11400000, guid: 92665a5a1cf0aec4e87819ed62d2d2e1, type: 2}
           _managedReferenceData: 
         - _fieldKey: Scripts.SkillSystem.ActiveSkill.cooldown
           _fieldName: cooldown
@@ -881,23 +881,6 @@ MonoBehaviour:
           _hasOverride: 0
           _intValue: 0
           _floatValue: 12
-          _doubleValue: 0
-          _longValue: 0
-          _boolValue: 0
-          _stringValue: 
-          _vector2Value: {x: 0, y: 0}
-          _vector3Value: {x: 0, y: 0, z: 0}
-          _vector4Value: {x: 0, y: 0, z: 0, w: 0}
-          _colorValue: {r: 1, g: 1, b: 1, a: 1}
-          _enumValue: 0
-          _objectValue: {fileID: 0}
-          _managedReferenceData: 
-        - _fieldKey: Scripts.SkillSystem.ActiveSkill.animHash
-          _fieldName: animHash
-          _valueKind: 1
-          _hasOverride: 0
-          _intValue: 0
-          _floatValue: 0
           _doubleValue: 0
           _longValue: 0
           _boolValue: 0
@@ -964,29 +947,12 @@ MonoBehaviour:
           _enumValue: 0
           _objectValue: {fileID: 4619107303810860611, guid: e1a0940dae378374f8bfdd3a173e4920, type: 3}
           _managedReferenceData: 
-        - _fieldKey: Scripts.SkillSystem.ActiveSkill.<animName>k__BackingField
-          _fieldName: animName
-          _valueKind: 6
+        - _fieldKey: SHS.Scripts.Skills.SummonSkill.<AnimType>k__BackingField
+          _fieldName: AnimType
+          _valueKind: 11
           _hasOverride: 0
           _intValue: 0
           _floatValue: 0
-          _doubleValue: 0
-          _longValue: 0
-          _boolValue: 0
-          _stringValue: awdwa
-          _vector2Value: {x: 0, y: 0}
-          _vector3Value: {x: 0, y: 0, z: 0}
-          _vector4Value: {x: 0, y: 0, z: 0, w: 0}
-          _colorValue: {r: 1, g: 1, b: 1, a: 1}
-          _enumValue: 0
-          _objectValue: {fileID: 0}
-          _managedReferenceData: 
-        - _fieldKey: Scripts.SkillSystem.ActiveSkill.cooldown
-          _fieldName: cooldown
-          _valueKind: 2
-          _hasOverride: 0
-          _intValue: 0
-          _floatValue: 10
           _doubleValue: 0
           _longValue: 0
           _boolValue: 0
@@ -998,12 +964,29 @@ MonoBehaviour:
           _enumValue: 0
           _objectValue: {fileID: 0}
           _managedReferenceData: 
-        - _fieldKey: Scripts.SkillSystem.ActiveSkill.animHash
-          _fieldName: animHash
-          _valueKind: 1
+        - _fieldKey: SHS.Scripts.Skills.SummonSkill.<TargetState>k__BackingField
+          _fieldName: TargetState
+          _valueKind: 12
           _hasOverride: 0
           _intValue: 0
           _floatValue: 0
+          _doubleValue: 0
+          _longValue: 0
+          _boolValue: 0
+          _stringValue: 
+          _vector2Value: {x: 0, y: 0}
+          _vector3Value: {x: 0, y: 0, z: 0}
+          _vector4Value: {x: 0, y: 0, z: 0, w: 0}
+          _colorValue: {r: 1, g: 1, b: 1, a: 1}
+          _enumValue: 0
+          _objectValue: {fileID: 11400000, guid: 78221511401be5b488b6a8c7595827c5, type: 2}
+          _managedReferenceData: 
+        - _fieldKey: Scripts.SkillSystem.ActiveSkill.cooldown
+          _fieldName: cooldown
+          _valueKind: 2
+          _hasOverride: 0
+          _intValue: 0
+          _floatValue: 10
           _doubleValue: 0
           _longValue: 0
           _boolValue: 0
@@ -1189,46 +1172,12 @@ MonoBehaviour:
           _enumValue: 0
           _objectValue: {fileID: 11400000, guid: c413011c9deace64aa106d229c06e489, type: 2}
           _managedReferenceData: 
-        - _fieldKey: Scripts.SkillSystem.ActiveSkill.<animName>k__BackingField
-          _fieldName: animName
-          _valueKind: 6
-          _hasOverride: 0
-          _intValue: 0
-          _floatValue: 0
-          _doubleValue: 0
-          _longValue: 0
-          _boolValue: 0
-          _stringValue: Skill
-          _vector2Value: {x: 0, y: 0}
-          _vector3Value: {x: 0, y: 0, z: 0}
-          _vector4Value: {x: 0, y: 0, z: 0, w: 0}
-          _colorValue: {r: 1, g: 1, b: 1, a: 1}
-          _enumValue: 0
-          _objectValue: {fileID: 0}
-          _managedReferenceData: 
         - _fieldKey: Scripts.SkillSystem.ActiveSkill.cooldown
           _fieldName: cooldown
           _valueKind: 2
           _hasOverride: 0
           _intValue: 0
           _floatValue: 15
-          _doubleValue: 0
-          _longValue: 0
-          _boolValue: 0
-          _stringValue: 
-          _vector2Value: {x: 0, y: 0}
-          _vector3Value: {x: 0, y: 0, z: 0}
-          _vector4Value: {x: 0, y: 0, z: 0, w: 0}
-          _colorValue: {r: 1, g: 1, b: 1, a: 1}
-          _enumValue: 0
-          _objectValue: {fileID: 0}
-          _managedReferenceData: 
-        - _fieldKey: Scripts.SkillSystem.ActiveSkill.animHash
-          _fieldName: animHash
-          _valueKind: 1
-          _hasOverride: 0
-          _intValue: 0
-          _floatValue: 0
           _doubleValue: 0
           _longValue: 0
           _boolValue: 0

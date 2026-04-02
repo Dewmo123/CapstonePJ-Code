@@ -1,4 +1,5 @@
-﻿using Chipmunk.ComponentContainers;
+﻿using Scripts.SkillSystem.Manage;
+using Chipmunk.ComponentContainers;
 using Code.SkillSystem;
 using Code.SkillSystem.Upgrade;
 using Scripts.Entities;
@@ -49,30 +50,5 @@ namespace Scripts.SkillSystem
 
         }
         public abstract SkillType SkillType { get; }
-    }
-
-    public abstract class ActiveSkill : Skill
-    {
-        [field: SerializeField] public string animName { get; private set; }
-        public float cooldown;
-
-        public int animHash;
-        public override void Init(ComponentContainer container)
-        {
-            base.Init(container);
-            animHash = Animator.StringToHash(animName);
-        }
-        public virtual bool CanUseSkill()
-    => true;
-        public sealed override SkillType SkillType
-            => SkillType.Active;
-
-        public virtual void UseSkill()
-        {
-        }
-
-        public virtual void EndSkill()
-        {
-        }
     }
 }

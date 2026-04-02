@@ -1,10 +1,18 @@
 ﻿using Scripts.FSM;
 
-namespace Assets.Work.AKH.Scripts.SkillSystem.Skills
+namespace Scripts.SkillSystem.Skills
 {
+    public enum SkillAnimType
+    {
+        Default = 0,
+        Rolling = 1,
+        Grab = 2,
+    }
     public interface IUseStateSkill
     {
-        StateDataSO TargetState { get; set; }
+        SkillAnimType AnimType { get; }
+        StateDataSO TargetState { get; }
+        void OnSkillTrigger();
     }
 }
 

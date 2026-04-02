@@ -1,12 +1,17 @@
-﻿using Scripts.Combat.Fovs;
+﻿using System;
+using Scripts.Combat.Fovs;
 using Scripts.Entities;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Work.AKH.Scripts.Entities;
 using Work.LKW.Code.Items;
 
 namespace Scripts.Combat.ItemObjects
 {
     public abstract class ItemObject : MonoBehaviour
     {
+        [field: SerializeField] public GrabableObjectBehavior GrabableObjectBehavior { get; private set; }
+
         protected Entity _owner;
         protected EquipableItem _item;
         private Renderer[] _targetRenderers;
@@ -22,6 +27,7 @@ namespace Scripts.Combat.ItemObjects
                 HandleFounded(!findable.IsFounded);
             }
         }
+
         private void HandleFounded(bool arg0)
         {
             for (int i = 0; i < _targetRenderers.Length; i++)

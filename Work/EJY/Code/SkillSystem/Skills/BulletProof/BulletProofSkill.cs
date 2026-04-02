@@ -1,4 +1,4 @@
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Code.StatusEffectSystem;
 using Code.StatusEffectSystem.StatusEffects;
 using Entities;
@@ -32,7 +32,7 @@ namespace Code.SkillSystem.Skills.BulletProof
             shieldBuff.statusEffectCreateData.Add(damageMultyIncreaseData);
         }
         [ContextMenu("Temp Use Skill")]
-        public override void UseSkill()
+        public override void StartAndUseSkill()
         {
             if (_isBulletProofVfxPlaying == false)
             {

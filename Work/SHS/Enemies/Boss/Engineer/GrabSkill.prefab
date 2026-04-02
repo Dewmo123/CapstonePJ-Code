@@ -45,10 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SkillData>k__BackingField: {fileID: 11400000, guid: 112976183d32d1d42b19860a3500758a, type: 2}
-  upgradedList: []
-  <animName>k__BackingField: 
   cooldown: 12
-  animHash: 0
   hookProjectilePrefab: {fileID: 7476008836844655840, guid: f679a210d0fc4564e928c97624f63ef3, type: 3}
   firePoint: {fileID: 0}
   hitMask:
@@ -67,3 +64,4 @@ MonoBehaviour:
   damageMultiplier: 1
   defPierceLevel: 0
   damageType: 2
+  <TargetState>k__BackingField: {fileID: 11400000, guid: 92665a5a1cf0aec4e87819ed62d2d2e1, type: 2}
