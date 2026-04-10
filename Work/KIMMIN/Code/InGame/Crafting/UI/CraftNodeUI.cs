@@ -1,17 +1,32 @@
-﻿using System;
-using Chipmunk.GameEvents;
+﻿using Chipmunk.GameEvents;
 using Code.UI.Core;
+using Code.UI.Core.Interaction;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Work.Code.GameEvents;
 using Work.Code.UI.Core.Interaction;
 
 namespace Work.Code.Crafting
 {
-    public class CraftNodeUI : InteractableUI, IUIElement<NodeData, int, bool>
+    public struct CraftNodeData
+    {
+        public NodeData data;
+        public int count;
+        public bool isNeedItem;
+
+        public CraftNodeData(NodeData data, int count = 1, bool isNeedItem = false)
+        {
+            this.data = data;
+            this.count = count;
+            this.isNeedItem = isNeedItem;
+        }
+    }
+    
+    public class CraftNodeUI : InteractableUI, IHoverable
     {
         [SerializeField] private Image icon; 
         [SerializeField] private TextMeshProUGUI countText;
@@ -29,39 +44,37 @@ namespace Work.Code.Crafting
         public RectTransform Rect => icon.transform as RectTransform;
         public NodeData Data { get; set; }
 
-        public void EnableFor(NodeData data, int count = 1, bool isNeedItem = true)
+        public void InitUI(CraftNodeData nodeData, bool isNotificate = true)
         {
-            if (background == null) return; 
+            if (background == null) return;
+            
+            var data = nodeData.data;
             gameObject.SetActive(true);
             background.color = UIDefine.RarityColors[(int)data.Item.rarity];
             icon.sprite = data.Item.itemImage;
-            if (isNeedItem)
+            if (nodeData.isNeedItem)
             {
                 countText.text = $"{data.Count}개";
                 countText.color = Color.white;
             }
             else
             {
-                countText.text = $"{count}/{data.Count}";
-                countText.color = count >= data.Count ? Color.white : Color.red;
+                countText.text = $"{nodeData.count}/{data.Count}";
+                countText.color = nodeData.count >= data.Count ? Color.white : Color.red;
             }
 
             Data = data;
 
             SubscribeEvents();
-            EnableTween();
+
+            if (isNotificate)
+                EnableTween();
         }
 
         private void SubscribeEvents()
         {
-            EventBus.Raise(new UnBindTooltipEvent(gameObject));
-            
-            _eventHandler.BindUIEvent(gameObject, _ => gameObject.transform
-                .DOScale(1.2f, 0.3f).SetEase(Ease.OutBack), EUIEvent.PointerEnter);
-            _eventHandler.BindUIEvent(gameObject, _ => gameObject.transform
-                .DOScale(1f, 0.3f).SetEase(Ease.OutBack), EUIEvent.PointerExit);
-            
-            BindTooltip(gameObject, () => Data.Item);
+            UnbindTooltip();
+            BindTooltip(() => Data.Item);
         }
         
         private void EnableTween()
@@ -87,7 +100,7 @@ namespace Work.Code.Crafting
         { 
             gameObject.SetActive(false);
             NodeButton?.onClick.RemoveAllListeners();
-            UnbindTooltip(gameObject);
+            UnbindTooltip();
         }
 
         public void SubscribeClick(UnityAction action)
@@ -97,7 +110,19 @@ namespace Work.Code.Crafting
 
         public void SubscribeTooltip()
         {
-            BindTooltip(gameObject, () => _tooltipText);
+            BindTooltip(() => _tooltipText);
+        }
+
+        public void OnHoverEnter(PointerEventData eventData)
+        {
+            transform.DOKill();
+            transform.DOScale(1.2f, 0.3f).SetEase(Ease.OutBack);
+        }
+
+        public void OnHoverExit(PointerEventData eventData)
+        {
+            transform.DOKill();
+            transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack);
         }
     }
 }

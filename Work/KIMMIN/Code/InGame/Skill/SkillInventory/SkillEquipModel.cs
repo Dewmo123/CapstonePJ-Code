@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Scripts.SkillSystem.Manage;
 using Scripts.SkillSystem;
+using UnityEngine;
 
 namespace Work.Code.SkillInventory
 {
@@ -10,13 +11,12 @@ namespace Work.Code.SkillInventory
         private readonly Skill[] _activeSkills = new Skill[3];
         private readonly Skill[] _passiveSkills = new Skill[3];
         
-        public event Action<Skill, int> OnSkillUnequipped;
+        public event Action<Skill> OnSkillUnequipped;
         public event Action OnSkillChanged;
 
         public void Equip(Skill sendSkill, Skill targetSkill, int index, SkillType type, bool isInventory)
         {
             var skills = GetSkills(type);
-            Skill prevSkill = skills[index];
             int sendIndex = Array.IndexOf(skills, sendSkill);
 
             if (isInventory)
@@ -32,11 +32,6 @@ namespace Work.Code.SkillInventory
             {
                 skills[sendIndex] = targetSkill;
                 skills[index] = sendSkill;
-            }
-
-            if (prevSkill != null && prevSkill != sendSkill)
-            {
-                OnSkillUnequipped?.Invoke(prevSkill, sendIndex);
             }
             
             OnSkillChanged?.Invoke();
@@ -61,17 +56,48 @@ namespace Work.Code.SkillInventory
             return skills[index];
         }
 
-        private void RemoveDuplicate(Skill skill, int except, Skill[] skills)
+        private void RemoveDuplicate(Skill skill, int target, Skill[] skills)
         {
             for (int i = 0; i < skills.Length; i++)
             {
-                if (i == except) continue;
+                if (i == target) continue;
                 if (skills[i] == skill)
                 {
+                    skills[target] = skill;
                     skills[i] = null;
-                    OnSkillUnequipped?.Invoke(skill, i);
+                    return;
                 }
             }
+        }
+
+        public void RemoveSkill(Skill target)
+        {
+            if (target == null) return;
+
+            bool isChanged = false;
+
+            for (int i = 0; i < _activeSkills.Length; i++)
+            {
+                if (_activeSkills[i] == target)
+                {
+                    _activeSkills[i] = null;
+                    isChanged = true;
+                    break;
+                }
+            }
+
+            for (int i = 0; i < _passiveSkills.Length; i++)
+            {
+                if (_passiveSkills[i] == target)
+                {
+                    _passiveSkills[i] = null;
+                    isChanged = true;
+                    break;
+                }
+            }
+
+            if (isChanged)
+                OnSkillChanged?.Invoke();
         }
 
         private Skill[] GetSkills(SkillType type)

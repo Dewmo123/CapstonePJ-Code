@@ -14,7 +14,7 @@ namespace Work.LKW.Code.Items.ItemInfo
         
         public override ItemCreateData CreateItem()
         {
-            return new ItemCreateData(new FoodItem(this, foodAmount, waterAmount), Random.Range(1, maxStack));
+            return new ItemCreateData(new FoodItem(this, foodAmount, waterAmount), Random.Range(1, maxSpawnCount));
         }
     }
 }

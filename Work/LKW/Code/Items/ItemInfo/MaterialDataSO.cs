@@ -7,6 +7,6 @@ namespace Work.LKW.Code.Items.ItemInfo
     public class MaterialDataSO : ItemDataSO
     {
         public override ItemCreateData CreateItem()
-            => new ItemCreateData(new MaterialItem(this), Random.Range(1, maxStack));
+            => new ItemCreateData(new MaterialItem(this), Random.Range(1, maxSpawnCount));
     }
 }

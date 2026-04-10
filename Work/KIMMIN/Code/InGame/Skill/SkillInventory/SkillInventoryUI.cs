@@ -14,7 +14,6 @@ namespace Work.Code.SkillInventory
 
         private ActiveSkillComponent _activeSkillCompo;
         private PassiveSkillComponent _passiveSkillCompo;
-
         public event Action<Skill[]> OnChangeInventory;
 
         public void Initialize(Player player)
@@ -47,7 +46,8 @@ namespace Work.Code.SkillInventory
             
             var activeSkills = _activeSkillCompo.Skills.Values.ToList();
             var passiveSkills = _passiveSkillCompo.Skills.Values.ToList();
-            var skills = activeSkills.Union(passiveSkills).ToArray();
+            var skills = activeSkills.Union(passiveSkills)
+                .Where(skill => !skill.SkillData.defaultSkill).ToArray();
             
             UpdateInventory(skills);
         }
@@ -63,6 +63,18 @@ namespace Work.Code.SkillInventory
             }
             
             OnChangeInventory?.Invoke(skills);
+        }
+
+        public void RemoveSkill(Skill skill)
+        {
+            foreach (var skillUI in _skillUIs)
+            {
+                if (skillUI.CurrentSkill.SkillData == skill.SkillData)
+                {
+                    skillUI.DisableUI();
+                    return;
+                }
+            }
         }
     }
 }

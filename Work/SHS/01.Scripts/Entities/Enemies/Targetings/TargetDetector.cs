@@ -1,4 +1,4 @@
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Chipmunk.Library.Utility.GameEvents.Local;
 using Chipmunk.Modules.StatSystem;
 using Code.SHS.Entities.Enemies;
@@ -6,6 +6,7 @@ using Code.SHS.Entities.Enemies.Targetings.Events;
 using Scripts.Entities;
 using Scripts.Players;
 using SHS.Scripts.Combats.Events;
+using SHS.Scripts.Entities.Players;
 using SHS.Scripts.NoiseSystems.Events;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ namespace Code.SHS.Targetings.Enemies
 
         public ComponentContainer ComponentContainer { get; set; }
 
-        private Collider[] _overlapResults = new Collider[10];
+        private EntitySensor _sensor;
         private Vector3 EyePosition => eyePoint != null ? eyePoint.position : transform.position + Vector3.up;
         private float DetectionRange => detectionRange.Value;
         private TargetProvider _targetProvider;
@@ -33,14 +34,17 @@ namespace Code.SHS.Targetings.Enemies
             StatOverrideBehavior _statOverrideBehavior = componentContainer.Get<StatOverrideBehavior>();
             detectionRange = _statOverrideBehavior.GetStat(detectionRange);
             _targetProvider = componentContainer.Get<TargetProvider>();
+            _sensor = componentContainer.Get<EntitySensor>();
         }
 
         private void Update()
         {
-            if (_targetProvider.Target != null)
+            if (_targetProvider.CurrentTarget != null)
             {
-                if (IsTargetVisible(_targetProvider.Target) == false)
+                if (IsTargetVisible(_targetProvider.CurrentTarget) == false)
                     _targetProvider.SetTarget(null);
+                else
+                    _targetProvider.SetTarget(_targetProvider.CurrentTarget);
             }
             else
             {
@@ -54,19 +58,16 @@ namespace Code.SHS.Targetings.Enemies
 
         private Entity TryFindClosestTarget()
         {
-            int count = Physics.OverlapSphereNonAlloc(EyePosition, DetectionRange, _overlapResults, targetlayerMask);
             float closestDistance = float.MaxValue;
             Entity closestTarget = null;
-
-            for (int i = 0; i < count; i++)
+            foreach (Entity detectedEntity in _sensor.DetectedEntities)
             {
-                Collider findCollider = _overlapResults[i];
                 // 적끼리 싸우게 되면 바뀔듯
-                Entity target = findCollider.GetComponent<Player>();
+                Entity target = detectedEntity.GetComponent<Player>();
                 if (target == null)
                     continue;
 
-                if (IsTargetVisible(target) == false)
+                if (IsTargetVisible(detectedEntity) == false)
                     continue;
 
                 float distance = Vector3.Distance(EyePosition, target.transform.position);
@@ -108,7 +109,10 @@ namespace Code.SHS.Targetings.Enemies
             // 장애 판별
             {
                 if (Physics.Raycast(EyePosition, direction.normalized, distance, obstacleMask))
+                {
+                    Debug.Log("장애물에 가려짐");
                     return false;
+                }
             }
 
             return true;
@@ -126,12 +130,12 @@ namespace Code.SHS.Targetings.Enemies
         public void OnLocalEvent(NoiseListenedEvent eventData)
         {
             if (enabled == false) return;
-            if (_targetProvider.Target != null) return; // 이미 타겟이 있을 때는 소리에 반응하지 않음
+            if (_targetProvider.CurrentTarget != null) return; // 이미 타겟이 있을 때는 소리에 반응하지 않음
             // 소리 볼륨에 따라 반응 조절 필요.
 
-            if (eventData.Source is Enemy enemy && enemy.TargetProvider.Target != null)
+            if (eventData.Source is Enemy enemy && enemy.TargetProvider.CurrentTarget != null)
             {
-                _targetProvider.SetTarget(enemy.TargetProvider.Target);
+                _targetProvider.SetTarget(enemy.TargetProvider.CurrentTarget);
                 return;
             }
 

@@ -3,7 +3,7 @@ using Code.Players;
 using Scripts.Combat.Datas;
 using UnityEngine;
 using Code.Combat;
-using Work.AKH.Scripts.Entities;
+using SHS.Scripts.Entities.Players;
 using Work.LKW.Code.Items;
 
 namespace Code.SHS.Entities.Enemies.FSM

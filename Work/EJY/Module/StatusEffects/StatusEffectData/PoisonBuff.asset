@@ -15,9 +15,11 @@ MonoBehaviour:
   buffName: Poision
   buffIcon: {fileID: 0}
   statusEffectCreateData:
-  - statusEffect: 1024
+  - statusEffect: 512
     isPercent: 1
     level: 1
     effectValue:
-    - -0.15
+    - 10
+    isOverrideApplyTime: 0
+    overrideTime: 0
   applyTime: 5

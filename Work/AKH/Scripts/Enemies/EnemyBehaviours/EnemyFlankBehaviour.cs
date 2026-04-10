@@ -49,7 +49,7 @@ namespace Scripts.Enemies.EnemyBehaviours
                 // 이동 불가능 시 방향 반전 및 쿨다운 설정
                 _flankLeft = !_flankLeft;
                 SetCooldown();
-                _enemy.ChangeState(EnemyStateEnum.Aim);
+                //_enemy.ChangeState(EnemyStateEnum.Aim);
             }
         }
     }

@@ -6,6 +6,6 @@ namespace Code.UI.Core.Interaction
     
     public interface IClickable
     {
-        void OnClick(PointerEventData eventData) { }
+        public void OnClick(PointerEventData eventData) { }
     }
 }

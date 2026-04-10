@@ -1,13 +1,11 @@
 ﻿using System;
 using Scripts.SkillSystem.Manage;
-using Chipmunk.GameEvents;
 using Code.UI.Core;
 using DG.Tweening;
 using Scripts.SkillSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Work.Code.GameEvents;
 using Work.Code.UI.Interaction;
 
 namespace Work.Code.SkillInventory
@@ -29,11 +27,17 @@ namespace Work.Code.SkillInventory
         
         public event Action<SkillSlot, SkillSlot> OnDropSkill;
         public event Action<Skill, int> OnEquipped;
+        public event Action<Skill> OnUnequipped;
         
 
         public void EnableFor(Skill skill)
         {
-            if (skill == null || skill.SkillData == null) return;
+            if (skill == null || skill.SkillData == null)
+            {
+                Clear();
+                return;
+            };
+            
             background.SetActive(true);
             skillIcon.sprite = skill.SkillData.skillIcon;
             SkillType = skill.SkillType;
@@ -44,7 +48,8 @@ namespace Work.Code.SkillInventory
                 OnEquipped?.Invoke(skill, Index);
             }
             
-            BindTooltip(gameObject, () => skill.SkillData);
+            UnbindTooltip();
+            BindTooltip(() => skill.SkillData);
         }
         
         public void HighlightUI(bool isHighlight)
@@ -63,7 +68,8 @@ namespace Work.Code.SkillInventory
 
         public void Clear()
         {
-            UnbindTooltip(gameObject);
+            UnbindTooltip();
+            OnUnequipped?.Invoke(CurrentSkill);
             background.SetActive(false);
             CurrentSkill = null;
         }

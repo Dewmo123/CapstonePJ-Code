@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Chase
   m_EditorClassIdentifier: 
   enumName: Chase
-  className: Code.SHS.Enemies.FSM.MeleeEnemyChaseState
+  className: Code.SHS.Entities.Enemies.FSM.MeleeEnemyChaseState
   animParamName: Sprint
   animationHash: -399748991

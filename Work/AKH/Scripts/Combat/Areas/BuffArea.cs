@@ -7,7 +7,6 @@ namespace Scripts.Combat.Areas
     {
         [SerializeField] private BuffCaster buffCaster;
         [SerializeField] private BuffSO targetBuff;
-        [SerializeField] private StatusEffectCreateData createData;
         [SerializeField] private float buffDuration;
         protected override void TickElapsed()
         {

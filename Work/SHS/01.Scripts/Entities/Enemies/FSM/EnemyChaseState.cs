@@ -1,11 +1,14 @@
 ﻿using Chipmunk.ComponentContainers;
+using Scripts.Enemies.States;
 using Scripts.Entities;
 using UnityEngine;
 
 namespace Code.SHS.Entities.Enemies.FSM
 {
-    public class EnemyChaseState : EnemyState
+    public class EnemyChaseState : EnemyExecuteBehaviourState
     {
+        public override float ExecuteTimer => 0.1f;
+
         public EnemyChaseState(ComponentContainer container, int animationHash) : base(container, animationHash)
         {
         }
@@ -20,7 +23,6 @@ namespace Code.SHS.Entities.Enemies.FSM
 
         public override void Update()
         {
-            base.Update();
 
             if (TargetEntity == null && _movement.IsArrived)
             {
@@ -30,7 +32,7 @@ namespace Code.SHS.Entities.Enemies.FSM
 
             if (TargetEntity != null)
             {
-                float distance = Vector3.Distance(_enemy.transform.position, _targetProvider.Target.transform.position);
+                float distance = Vector3.Distance(_enemy.transform.position, _targetProvider.CurrentTarget.transform.position);
                 if (distance <= _attackRange)
                 {
                     _enemy.ChangeState(EnemyStateEnum.Aim);
@@ -41,6 +43,7 @@ namespace Code.SHS.Entities.Enemies.FSM
             Vector3 destination = TargetEntity != null ? TargetEntity.transform.position : _targetProvider.LastTargetPosition;
             _movement.SetDestination(destination);
             UpdateMovementAnimation();
+            base.Update();
         }
 
         public override void Exit()

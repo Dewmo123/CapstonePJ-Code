@@ -32,6 +32,7 @@ namespace Code.SHS.Utility.DynamicFieldBinding
         Enum = 11,
         ObjectReference = 12,
         ManagedReference = 13,
+        List = 14,
     }
 
     [Serializable]
@@ -119,6 +120,9 @@ namespace Code.SHS.Utility.DynamicFieldBinding
                 case FieldPatchValueKind.ManagedReference:
                     SetManagedReference(value);
                     break;
+                case FieldPatchValueKind.List:
+                    SetManagedReference(value);
+                    break;
             }
         }
 
@@ -183,8 +187,50 @@ namespace Code.SHS.Utility.DynamicFieldBinding
                     throw new InvalidOperationException(
                         $"'{_fieldName}' expects '{fieldType.Name}', but input is '{managedReferenceValue.GetType().Name}'.");
                 }
+                case FieldPatchValueKind.List:
+                {
+                    object listValue = GetManagedReferenceValue();
+                    if (listValue == null)
+                    {
+                        return null;
+                    }
+
+                    if (fieldType.IsInstanceOfType(listValue))
+                    {
+                        return listValue;
+                    }
+
+                    throw new InvalidOperationException(
+                        $"'{_fieldName}' expects '{fieldType.Name}', but input is '{listValue.GetType().Name}'.");
+                }
                 default:
                     throw new NotSupportedException($"'{_fieldName}' type is unsupported.");
+            }
+        }
+
+        public object ReadClonedOrThrow(Type fieldType)
+        {
+            switch (_valueKind)
+            {
+                case FieldPatchValueKind.ManagedReference:
+                case FieldPatchValueKind.List:
+                {
+                    object clonedValue = DeserializeManagedReferenceValue();
+                    if (clonedValue == null)
+                    {
+                        return null;
+                    }
+
+                    if (fieldType.IsInstanceOfType(clonedValue))
+                    {
+                        return clonedValue;
+                    }
+
+                    throw new InvalidOperationException(
+                        $"'{_fieldName}' expects '{fieldType.Name}', but input is '{clonedValue.GetType().Name}'.");
+                }
+                default:
+                    return ReadOrThrow(fieldType);
             }
         }
 
@@ -202,10 +248,7 @@ namespace Code.SHS.Utility.DynamicFieldBinding
                 return null;
             }
 
-            _managedReferenceCache = SerializationUtility.DeserializeValueWeak(
-                _managedReferenceData,
-                DataFormat.Binary,
-                (DeserializationContext)null);
+            _managedReferenceCache = DeserializeManagedReferenceValue();
             _hasManagedReferenceCache = true;
             return _managedReferenceCache;
         }
@@ -217,6 +260,19 @@ namespace Code.SHS.Utility.DynamicFieldBinding
             _managedReferenceData = value == null
                 ? null
                 : SerializationUtility.SerializeValueWeak(value, DataFormat.Binary, (SerializationContext)null);
+        }
+
+        private object DeserializeManagedReferenceValue()
+        {
+            if (_managedReferenceData == null || _managedReferenceData.Length == 0)
+            {
+                return null;
+            }
+
+            return SerializationUtility.DeserializeValueWeak(
+                _managedReferenceData,
+                DataFormat.Binary,
+                (DeserializationContext)null);
         }
     }
 
@@ -412,6 +468,54 @@ namespace Code.SHS.Utility.DynamicFieldBinding
             }
 
             _generatedSetter.Invoke(target);
+            ApplyReferenceOverrides(target);
+        }
+
+        private void ApplyReferenceOverrides(T target)
+        {
+            if (target == null || _inputs == null || _inputs.Count == 0)
+            {
+                return;
+            }
+
+            IReadOnlyList<FieldInfo> fields = FieldPatchUtility.GetMutableFields(target.GetType());
+            if (fields.Count == 0)
+            {
+                return;
+            }
+
+            Dictionary<string, FieldPatchValue> inputByKey = new Dictionary<string, FieldPatchValue>(_inputs.Count);
+            for (int i = 0; i < _inputs.Count; i++)
+            {
+                FieldPatchValue input = _inputs[i];
+                if (input == null)
+                {
+                    continue;
+                }
+
+                inputByKey[input.FieldKey] = input;
+            }
+
+            for (int i = 0; i < fields.Count; i++)
+            {
+                FieldInfo field = fields[i];
+                string fieldKey = FieldPatchUtility.GetFieldKey(field);
+                if (!inputByKey.TryGetValue(fieldKey, out FieldPatchValue input)
+                    || input == null
+                    || !input.HasOverride)
+                {
+                    continue;
+                }
+
+                if (input.ValueKind != FieldPatchValueKind.ManagedReference
+                    && input.ValueKind != FieldPatchValueKind.List)
+                {
+                    continue;
+                }
+
+                object clonedValue = input.ReadClonedOrThrow(field.FieldType);
+                field.SetValue(target, clonedValue);
+            }
         }
 
         public static bool operator ==(FieldPatch<T> left, FieldPatch<T> right)
@@ -586,6 +690,11 @@ namespace Code.SHS.Utility.DynamicFieldBinding
                 return valueKind;
             }
 
+            if (TryGetSupportedListElementType(field.FieldType, out _))
+            {
+                return FieldPatchValueKind.List;
+            }
+
             if (field.IsDefined(typeof(SerializeReference), true) && IsManagedReferenceType(field.FieldType))
             {
                 return FieldPatchValueKind.ManagedReference;
@@ -645,6 +754,37 @@ namespace Code.SHS.Utility.DynamicFieldBinding
             return !fieldType.IsValueType
                    && fieldType != typeof(string)
                    && !typeof(UnityEngine.Object).IsAssignableFrom(fieldType);
+        }
+
+        public static bool TryGetSupportedListElementType(Type fieldType, out Type elementType)
+        {
+            elementType = null;
+            if (fieldType == null
+                || !fieldType.IsGenericType
+                || fieldType.GetGenericTypeDefinition() != typeof(List<>))
+            {
+                return false;
+            }
+
+            Type candidateElementType = fieldType.GetGenericArguments()[0];
+            if (candidateElementType == null)
+            {
+                return false;
+            }
+
+            if (candidateElementType == typeof(LayerMask))
+            {
+                elementType = candidateElementType;
+                return true;
+            }
+
+            if (GetValueKind(candidateElementType) == FieldPatchValueKind.Unsupported)
+            {
+                return false;
+            }
+
+            elementType = candidateElementType;
+            return true;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Code.SHS.Entities.Enemies.Skills
 
         public override void StartAndUseSkill()
         {
-            if (_enemy == null || _enemy.TargetProvider.Target == null)
+            if (_enemy == null || _enemy.TargetProvider.CurrentTarget == null)
                 return;
 
             if (smokeEffectPrefab != null)
@@ -39,7 +39,7 @@ namespace Code.SHS.Entities.Enemies.Skills
 
         private void RepositionBehindTarget()
         {
-            Transform target = _enemy.TargetProvider.Target.transform;
+            Transform target = _enemy.TargetProvider.CurrentTarget.transform;
             Vector3 backward = -target.forward;
             backward.y = 0f;
 

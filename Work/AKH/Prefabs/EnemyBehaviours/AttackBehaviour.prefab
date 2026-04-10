@@ -45,21 +45,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Priority>k__BackingField: 50
+  <TargetStates>k__BackingField: 020000000400000003000000
   cooldown: 0
   conditionType: 1
   conditions:
   - rid: 2466404181872738748
-  - rid: 2466404304945938529
+  - rid: 1504945668886364282
   references:
     version: 2
     RefIds:
-    - rid: 2466404181872738748
-      type: {class: TargetInAttackRangeCondition, ns: Scripts.Enemies.EnemyBehaviourConditions, asm: Assembly-CSharp}
-      data: 
-    - rid: 2466404304945938529
-      type: {class: CanFireSafelyCondition, ns: Enemies.EnemyBehaviourConditions, asm: Assembly-CSharp}
+    - rid: 1504945668886364282
+      type: {class: CanFireSafelyCondition, ns: Scripts.Enemies.EnemyBehaviourConditions, asm: Assembly-CSharp}
       data:
         dontShootLayer:
           serializedVersion: 2
           m_Bits: 4096
-        halfBox: {x: 1, y: 1, z: 0.1}
+        halfBox: {x: 0.09, y: 0.89, z: 1}
+    - rid: 2466404181872738748
+      type: {class: TargetInAttackRangeCondition, ns: Scripts.Enemies.EnemyBehaviourConditions, asm: Assembly-CSharp}
+      data: 

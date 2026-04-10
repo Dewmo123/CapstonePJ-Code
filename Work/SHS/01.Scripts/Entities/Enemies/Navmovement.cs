@@ -127,12 +127,20 @@ namespace Code.SHS.Entities.Enemies
 
         public void SetLookAtTarget(Transform target)
         {
-            //Debug.Log("SetLookAtTarget: " + (target != null ? target.name : "null"));
             _lookAtTrm = target;
             UpdateRotation = _lookAtTrm == null;
         }
 
-        public void SetStop(bool isStop) => agent.isStopped = isStop;
+        public void Move(Vector3 position) => agent.Move(position);
+        public void SetStop(bool isStop)
+        {
+            if (!agent.isActiveAndEnabled)
+                return;
+
+            if (!agent.isOnNavMesh)
+                return;
+            agent.isStopped = isStop;
+        }
         public void SetVelocity(Vector3 velocity) => agent.velocity = velocity;
         public virtual void SetSpeed(float speed) => agent.speed = speed;
 

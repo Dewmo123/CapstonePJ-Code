@@ -1,9 +1,9 @@
 ﻿using System;
 using Scripts.Combat.Fovs;
 using Scripts.Entities;
+using SHS.Scripts.Entities.Players;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Work.AKH.Scripts.Entities;
 using Work.LKW.Code.Items;
 
 namespace Scripts.Combat.ItemObjects

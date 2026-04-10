@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Rolling
   skillIcon: {fileID: 21300000, guid: af6ae02fd9c7e21469520e6ef3584512, type: 3}
-  skillDescription: "\uB864\uB9C1\uB864\uB9C1\uB864\uB9C1 \uC6B0\uB9AC \uC5C4\uB9C8
-    \uB864\uB9C1\uB864\uB9C1~~ \uB864\uB9C1\uD31D~! \uD478\uC2DC\uD478\uC2DC \uBBF8\uC774!!~~
-    \uC6B0\uB9AC \uBAA8\uB450 \uB864\uB9C1\uB864\uB9C1~! \uB864! LOL - RING \uC6C3\uB294
-    \uBC18\uC9C0~~~\n"
+  skillDescription: '
+
+'
   upgradeList: []
   skillPrefab: {fileID: 0}
+  defaultSkill: 1

@@ -50,4 +50,16 @@ namespace Scripts.Entities.Vitals
             MaxStamina = maxValue;
         }
     }
+    
+    public struct ExpChangeEvent : IVitalEvent
+    {
+        public float PrevExp { get; set; }
+        public float CurrentExp { get; set; }
+
+        public void Init(float prev, float current)
+        {
+            PrevExp = prev;
+            CurrentExp = current;
+        }
+    }
 }

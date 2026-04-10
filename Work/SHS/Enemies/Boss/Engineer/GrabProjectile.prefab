@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 263156584568368127}
   - component: {fileID: 7476008836844655840}
   - component: {fileID: 4972162652423663514}
-  m_Layer: 0
+  - component: {fileID: 7568998762749296387}
+  - component: {fileID: 6905160935571256077}
+  m_Layer: 10
   m_Name: GrabProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,6 +49,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggerInteraction: 1
+  rb: {fileID: 6905160935571256077}
+  triggerCollider: {fileID: 7568998762749296387}
+  trail: {fileID: 4972162652423663514}
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 64
+  speed: 35
+  maxDistance: 20
+  lifeTime: 2
+  pullMovementData: {fileID: 11400000, guid: cdd2ae17cdabdce488d243585c588689, type: 2}
+  pullStopDistance: 1.2
+  controlLockDuration: 1
 --- !u!96 &4972162652423663514
 TrailRenderer:
   serializedVersion: 3
@@ -163,6 +177,54 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!135 &7568998762749296387
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6145358613250557675}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &6905160935571256077
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6145358613250557675}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &7475431408093241700
 PrefabInstance:
   m_ObjectHideFlags: 0

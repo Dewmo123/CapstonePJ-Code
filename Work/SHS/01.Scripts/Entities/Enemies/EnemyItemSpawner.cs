@@ -1,7 +1,5 @@
-﻿using System;
-using Code.EnemySpawn;
+﻿using Code.EnemySpawn;
 using UnityEngine;
-using Work.LKW.Code.Items.ItemInfo;
 
 namespace Code.SHS.Entities.Enemies
 {

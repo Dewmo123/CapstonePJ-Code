@@ -1,4 +1,5 @@
-﻿using Scripts.SkillSystem.Manage;
+﻿using System;
+using Scripts.SkillSystem.Manage;
 using Chipmunk.ComponentContainers;
 using Scripts.Entities;
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace Scripts.SkillSystem
 {
     public abstract class PassiveSkill : Skill
     {
+        public Action OnSkillInvoked;
         public bool Enabled { get; private set; } = false;
         
         

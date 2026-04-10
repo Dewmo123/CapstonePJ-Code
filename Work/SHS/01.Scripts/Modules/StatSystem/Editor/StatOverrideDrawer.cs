@@ -8,7 +8,8 @@ namespace Chipmunk.Modules.StatSystem.Editor
     public class StatOverrideDrawer : PropertyDrawer
     {
         [SerializeField] private Material statIconMaterial;
-        private const float ToggleWidth = 95f;
+        private const float ToggleWidth = 92f;
+        private const float ValueLabelWidth = 38f;
         private const float Padding = 4f;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -27,38 +28,68 @@ namespace Chipmunk.Modules.StatSystem.Editor
             float line = EditorGUIUtility.singleLineHeight;
             float spacing = EditorGUIUtility.standardVerticalSpacing;
 
-            Rect firstLineRect = new Rect(position.x, position.y, position.width, line);
-            Rect secondLineRect = new Rect(position.x, position.y + line + spacing, position.width, line);
-
             EditorGUI.BeginProperty(position, label, property);
 
-            Rect contentRect = EditorGUI.PrefixLabel(firstLineRect, label);
+            Rect contentRect = EditorGUI.IndentedRect(position);
             int previousIndent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 0;
 
+            Rect firstLineRect = new Rect(contentRect.x, contentRect.y, contentRect.width, line);
+            Rect secondLineRect = new Rect(contentRect.x, contentRect.y + line + spacing, contentRect.width, line);
             Rect statRect = contentRect;
+            statRect.y = firstLineRect.y;
+            statRect.height = line;
             statRect.width -= line + Padding;
 
-            Rect iconRect = new Rect(statRect.xMax + Padding, contentRect.y, line, line);
-
-            EditorGUI.PropertyField(statRect, statProperty, GUIContent.none);
-            DrawIcon(iconRect, statProperty.objectReferenceValue);
+            Rect iconRect = new Rect(statRect.xMax + Padding, firstLineRect.y, line, line);
 
             Rect toggleRect = new Rect(secondLineRect.x, secondLineRect.y, ToggleWidth, secondLineRect.height);
+            Rect valueLabelRect = new Rect(toggleRect.xMax + Padding, secondLineRect.y, ValueLabelWidth, secondLineRect.height);
             Rect valueRect = new Rect(
-                toggleRect.xMax + Padding,
+                valueLabelRect.xMax + Padding,
                 secondLineRect.y,
-                secondLineRect.width - toggleRect.width - Padding,
+                Mathf.Max(0f, secondLineRect.xMax - (valueLabelRect.xMax + Padding)),
                 secondLineRect.height);
 
-            EditorGUI.PropertyField(toggleRect, useOverrideProperty, new GUIContent("Override"));
-            using (new EditorGUI.DisabledScope(!useOverrideProperty.boolValue))
+            EditorGUI.BeginChangeCheck();
+
+            Object nextStat = EditorGUI.ObjectField(statRect, statProperty.objectReferenceValue, typeof(StatSO), false);
+            bool nextUseOverride = EditorGUI.ToggleLeft(toggleRect, "Override", useOverrideProperty.boolValue);
+            EditorGUI.LabelField(valueLabelRect, "Value");
+            using (new EditorGUI.DisabledScope(!nextUseOverride))
             {
-                EditorGUI.PropertyField(valueRect, overrideValueProperty, new GUIContent("Value"));
+                float nextOverrideValue = EditorGUI.DelayedFloatField(valueRect, GUIContent.none, overrideValueProperty.floatValue);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    statProperty.objectReferenceValue = nextStat;
+                    useOverrideProperty.boolValue = nextUseOverride;
+                    overrideValueProperty.floatValue = nextOverrideValue;
+                    ApplyStatOverrideChanges(property.serializedObject);
+                }
+            }
+
+            if (Event.current.type == EventType.Repaint)
+            {
+                DrawIcon(iconRect, statProperty.objectReferenceValue);
             }
 
             EditorGUI.indentLevel = previousIndent;
             EditorGUI.EndProperty();
+        }
+
+        private static void ApplyStatOverrideChanges(SerializedObject serializedObject)
+        {
+            if (serializedObject == null)
+            {
+                return;
+            }
+
+            serializedObject.ApplyModifiedProperties();
+
+            if (serializedObject.targetObject != null)
+            {
+                EditorUtility.SetDirty(serializedObject.targetObject);
+            }
         }
 
         private void DrawIcon(Rect iconRect, Object statObject)

@@ -3,6 +3,7 @@ using System.Linq;
 using Chipmunk.GameEvents;
 using Code.GameEvents;
 using Code.InventorySystems.Items;
+using Code.UI.Core;
 using Code.UI.Core.Interaction;
 using DewmoLib.Utiles;
 using InGame.InventorySystem;
@@ -12,7 +13,7 @@ using Work.Code.UI.Interaction;
 
 namespace Code.UI.Inventory
 {
-    public abstract class AbstractSlotUIsPanel : MonoBehaviour
+    public abstract class AbstractSlotUIsPanel : UIBase
     {
         [SerializeField] protected Transform root;
 
@@ -24,7 +25,7 @@ namespace Code.UI.Inventory
         protected static readonly Color _defaultColor = new Color32(100, 125, 200, 125);
         protected static readonly Color _notAvailableColor = new Color32(255, 100, 100, 125);
         
-        protected virtual void Awake()
+        protected override void Awake()
         {
             EventBus.Subscribe<HoveringSlotEvent>(HandleHoveringItem);
 
@@ -58,7 +59,7 @@ namespace Code.UI.Inventory
             }
         }
         
-        protected void HandleHoveringSlotChange(ItemSlotUI previousvalue, ItemSlotUI nextvalue)
+        private void HandleHoveringSlotChange(ItemSlotUI previousvalue, ItemSlotUI nextvalue)
         {
             if (_isDraging)
             {
@@ -67,7 +68,7 @@ namespace Code.UI.Inventory
             }
         }
 
-        protected void HandleHoveringItem(HoveringSlotEvent evt)
+        private void HandleHoveringItem(HoveringSlotEvent evt)
         {
             _hoveringSlot.Value = evt.ItemSlot;
         }

@@ -243,7 +243,7 @@ namespace Code.Players
                 targetType = GetSuitableSlotType(itemType);
 
             if (!IsSuitable(targetType, itemType) || targetType == EquipSlotType.None) return new TryEquipData(false, null);
-            
+
             var itemSlot = _equipSlots[targetType];
 
             // 이미 장착된게 있는지 확인, 없으면 추가 있으면 교체
@@ -251,7 +251,7 @@ namespace Code.Players
             {
                 EquipableItem equipped = itemSlot.Item as EquipableItem;
                 equippedItem = equipped;
-                UnEquip(equipped, byDrag: byDrag);
+                UnEquip(equipped, byDrag: byDrag, isExchange: true);
             }
 
             AddStatModify(equipable.EquipItemData);
@@ -261,13 +261,17 @@ namespace Code.Players
             if (_equips.TryGetValue(equipType, out EquipableItem equippingItem) && equippingItem == null)
             {
                 _equips[equipType] = equipable;
-                _handlingSlotType = (HotbarSlotType)targetType;
+                if (equipType == EquipType.Hand)
+                {
+                    _handlingSlotType = (HotbarSlotType)targetType;
+                    EventBus.Raise(new ChangeHandlingEvent(equipable));
+                }
+                
                 equipable.Equip(_player, equipTrms[equipType]);
             }
 
             if (equipType == EquipType.Hand)
             {
-                EventBus.Raise(new ChangeHandlingEvent(equipable));
                 EventBus<EquipHotbarEvent>.Raise(new EquipHotbarEvent((int)targetType, equipable));
             }
 
@@ -278,7 +282,7 @@ namespace Code.Players
             return new TryEquipData(true, equippedItem);
         }
 
-        public bool UnEquip(EquipableItem equipped, bool isRaiseEvent = false, bool byDrag = false)
+        public bool UnEquip(EquipableItem equipped, bool isRaiseEvent = false, bool byDrag = false, bool isExchange = false)
         {
             EquipSlotType itemSlotType = GetEquippedSlotType(equipped);
 
@@ -300,7 +304,7 @@ namespace Code.Players
                     EventBus.Raise(new UnEquipItemEvent(slot, itemSlotType));
                     StatRemoveModify(equipped.EquipItemData);
                     slot.SetData(null);
-                    UnequipItemAppearance(itemSlotType, true);
+                    UnequipItemAppearance(itemSlotType, isExchange);
 
                     if (!byDrag)
                         _playerInventory.TryAddItem(equipped);
@@ -317,18 +321,13 @@ namespace Code.Players
 
         public void ChangeHandlingItem(HotbarSlotType hotbarSlotType, EquipableItem targetItem)
         {
+            if (hotbarSlotType == _handlingSlotType || targetItem == null)
+                return;
+            
             if (_equips.TryGetValue(EquipType.Hand, out EquipableItem currentEquipped))
             {
                 _equips[EquipType.Hand] = null;
                 (currentEquipped as IEquipable).Unequip(_player);
-            }
-
-            if (hotbarSlotType == _handlingSlotType || targetItem == null)
-            {
-                _handledSlotType = _handlingSlotType;
-                _handlingSlotType = HotbarSlotType.None;
-                EventBus.Raise(new ChangeHandlingEvent(null));
-                return;
             }
 
             _equips[EquipType.Hand] = targetItem;
@@ -344,9 +343,9 @@ namespace Code.Players
             EquipType equipType = slotType.GetEquipType();
 
             if (_equips[equipType] == null) return;
-
             if (equipType == EquipType.Hand && (int)slotType == (int)_handlingSlotType)
             {
+
                 HotbarSlotType spareSlotType = _handlingSlotType == HotbarSlotType.Item1
                     ? HotbarSlotType.Item2
                     : HotbarSlotType.Item1;

@@ -64,10 +64,8 @@ namespace Code.StatusEffectSystem
 					return statusEffectData.FirstOrDefault(status => status.StatusEffectName == "Additional Damage");
  				case StatusEffectEnum.DAMAGE_STORING:
 					return statusEffectData.FirstOrDefault(status => status.StatusEffectName == "Damage Storing");
- 				case StatusEffectEnum.FLAME:
-					return statusEffectData.FirstOrDefault(status => status.StatusEffectName == "FLAME");
- 				case StatusEffectEnum.POISON:
-					return statusEffectData.FirstOrDefault(status => status.StatusEffectName == "Poison");
+ 				case StatusEffectEnum.DOT:
+					return statusEffectData.FirstOrDefault(status => status.StatusEffectName == "Dot");
  				case StatusEffectEnum.SHIELD:
 					return statusEffectData.FirstOrDefault(status => status.StatusEffectName == "Shield");
  				case StatusEffectEnum.DMGINCREASE:

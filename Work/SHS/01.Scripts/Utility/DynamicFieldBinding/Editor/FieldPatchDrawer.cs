@@ -300,7 +300,8 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
                 SerializedProperty overrideProperty = inputProperty.FindPropertyRelative("_hasOverride");
                 bool wasOverride = GetOverrideValue(inputProperty, overrideProperty);
 
-                bool useSeparateToggleRow = valueKind == FieldPatchValueKind.ManagedReference;
+                bool useSeparateToggleRow = valueKind == FieldPatchValueKind.ManagedReference
+                    || valueKind == FieldPatchValueKind.List;
                 const float toggleWidth = 78f;
                 float inputHeight = GetInputHeight(inputProperty, field, targetObject);
                 float rowHeight = useSeparateToggleRow
@@ -334,6 +335,10 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
                     {
                         DrawReadonlyManagedReferenceValue(valueRect, currentValue, field, inputProperty);
                     }
+                    else if (valueKind == FieldPatchValueKind.List)
+                    {
+                        DrawReadonlySupportedListValue(valueRect, currentValue, field, inputProperty, "Input");
+                    }
                     else
                     {
                         SyncInputValueFromCurrent(inputProperty, currentValue, field, valueKind, targetObject);
@@ -347,7 +352,12 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
                         SyncInputValueFromCurrent(inputProperty, currentValue, field, valueKind, targetObject);
                     }
 
+                    EditorGUI.BeginChangeCheck();
                     DrawInputValue(valueRect, inputProperty, field, valueKind, targetObject);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        ApplyInputPropertyChanges(inputProperty.serializedObject);
+                    }
                 }
 
                 row.y += rowHeight + spacing;
@@ -502,6 +512,9 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
                 case FieldPatchValueKind.ObjectReference:
                     DrawObjectInput(rect, inputProperty.FindPropertyRelative("_objectValue"), fieldType);
                     break;
+                case FieldPatchValueKind.List:
+                    DrawSupportedListInput(rect, inputProperty, field);
+                    break;
                 case FieldPatchValueKind.ManagedReference:
                     DrawManagedReferenceInput(rect, inputProperty, field, targetObject);
                     break;
@@ -603,6 +616,13 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
 
                         break;
                     }
+                case FieldPatchValueKind.List:
+                    {
+                        SetManagedReferenceValue(
+                            inputProperty,
+                            CloneSupportedListValue(currentValue, fieldType));
+                        break;
+                    }
                 case FieldPatchValueKind.ManagedReference:
                     {
                         SetManagedReferenceValue(
@@ -683,7 +703,8 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
             }
 
             FieldPatchValueKind valueKind = FieldPatchUtility.GetValueKind(field);
-            if (valueKind != FieldPatchValueKind.ManagedReference || inputProperty == null)
+            if ((valueKind != FieldPatchValueKind.ManagedReference && valueKind != FieldPatchValueKind.List)
+                || inputProperty == null)
             {
                 return line;
             }
@@ -698,6 +719,12 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
                     return Mathf.Max(line, GetReadonlyManagedReferenceHeight(currentValue, field, inputProperty));
                 }
 
+                if (valueKind == FieldPatchValueKind.List)
+                {
+                    object currentValue = ReadFieldValue(targetObject, field);
+                    return Mathf.Max(line, GetReadonlySupportedListHeight(currentValue, field, inputProperty));
+                }
+
                 return line;
             }
 
@@ -706,7 +733,9 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
                 return line;
             }
 
-            return Mathf.Max(line, GetManagedReferenceInputHeight(inputProperty, field));
+            return valueKind == FieldPatchValueKind.ManagedReference
+                ? Mathf.Max(line, GetManagedReferenceInputHeight(inputProperty, field))
+                : Mathf.Max(line, GetSupportedListInputHeight(inputProperty, field));
         }
 
         private static float GetInputBlockHeight(SerializedProperty inputProperty, FieldInfo field, UnityEngine.Object targetObject)
@@ -715,7 +744,8 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
             float spacing = EditorGUIUtility.standardVerticalSpacing;
             float inputHeight = GetInputHeight(inputProperty, field, targetObject);
 
-            return FieldPatchUtility.GetValueKind(field) == FieldPatchValueKind.ManagedReference
+            FieldPatchValueKind valueKind = FieldPatchUtility.GetValueKind(field);
+            return valueKind == FieldPatchValueKind.ManagedReference || valueKind == FieldPatchValueKind.List
                 ? line + spacing + Mathf.Max(line, inputHeight)
                 : Mathf.Max(line, inputHeight);
         }
@@ -754,6 +784,458 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
             }
 
             InternalEditorUtility.RepaintAllViews();
+        }
+
+        private static void ApplyInputPropertyChanges(SerializedObject serializedObject)
+        {
+            if (serializedObject == null || !serializedObject.hasModifiedProperties)
+            {
+                return;
+            }
+
+            serializedObject.ApplyModifiedProperties();
+
+            if (serializedObject.targetObject != null)
+            {
+                EditorUtility.SetDirty(serializedObject.targetObject);
+            }
+        }
+
+        private static void DrawSupportedListInput(Rect rect, SerializedProperty inputProperty, FieldInfo field)
+        {
+            if (field == null)
+            {
+                EditorGUI.LabelField(rect, "Input", "List field is missing");
+                return;
+            }
+
+            if (!FieldPatchUtility.TryGetSupportedListElementType(field.FieldType, out Type elementType))
+            {
+                EditorGUI.LabelField(rect, "Input", $"Unsupported list: {field.FieldType.Name}");
+                return;
+            }
+
+            IList currentList = GetManagedReferenceValue(inputProperty) as IList;
+            string stateKey = GetManagedReferenceStateKey(inputProperty, field);
+            if (DrawSupportedList(rect, currentList, field.FieldType, elementType, "Input", stateKey, false, out IList nextList))
+            {
+                SetManagedReferenceValue(inputProperty, nextList);
+            }
+        }
+
+        private static float GetSupportedListInputHeight(SerializedProperty inputProperty, FieldInfo field)
+        {
+            float line = EditorGUIUtility.singleLineHeight;
+            if (inputProperty == null
+                || field == null
+                || !FieldPatchUtility.TryGetSupportedListElementType(field.FieldType, out _))
+            {
+                return line;
+            }
+
+            return GetSupportedListHeight(
+                GetManagedReferenceValue(inputProperty) as IList,
+                GetManagedReferenceStateKey(inputProperty, field));
+        }
+
+        private static void DrawReadonlySupportedListValue(Rect rect, object currentValue, FieldInfo field, SerializedProperty inputProperty, string label)
+        {
+            if (field == null)
+            {
+                EditorGUI.LabelField(rect, label, "List field is missing");
+                return;
+            }
+
+            if (!FieldPatchUtility.TryGetSupportedListElementType(field.FieldType, out Type elementType))
+            {
+                using (new EditorGUI.DisabledScope(true))
+                {
+                    DrawReadonlyValue(rect, field.FieldType, currentValue, label);
+                }
+
+                return;
+            }
+
+            DrawReadonlySupportedList(
+                rect,
+                currentValue as IList,
+                field.FieldType,
+                elementType,
+                label,
+                $"{GetManagedReferenceStateKey(inputProperty, field)}/readonly");
+        }
+
+        private static float GetReadonlySupportedListHeight(object currentValue, FieldInfo field, SerializedProperty inputProperty)
+        {
+            float line = EditorGUIUtility.singleLineHeight;
+            if (field == null
+                || !FieldPatchUtility.TryGetSupportedListElementType(field.FieldType, out _))
+            {
+                return line;
+            }
+
+            return GetSupportedListHeight(
+                currentValue as IList,
+                $"{GetManagedReferenceStateKey(inputProperty, field)}/readonly");
+        }
+
+        private static bool DrawSupportedListField(Rect rect, object owner, FieldInfo field, object currentValue, string stateKey, string label)
+        {
+            Type fieldType = field?.FieldType;
+            if (fieldType == null || !FieldPatchUtility.TryGetSupportedListElementType(fieldType, out Type elementType))
+            {
+                return false;
+            }
+
+            if (!DrawSupportedList(rect, currentValue as IList, fieldType, elementType, label, stateKey, false, out IList nextList))
+            {
+                return false;
+            }
+
+            SetFieldValue(owner, field, nextList);
+            return true;
+        }
+
+        private static void DrawReadonlySupportedList(Rect rect, IList currentList, Type listType, Type elementType, string label, string stateKey)
+        {
+            DrawSupportedList(rect, currentList, listType, elementType, label, stateKey, true, out _);
+        }
+
+        private static bool DrawSupportedList(Rect rect, IList currentList, Type listType, Type elementType, string label, string stateKey,
+            bool isReadOnly, out IList nextList)
+        {
+            float line = EditorGUIUtility.singleLineHeight;
+            float spacing = EditorGUIUtility.standardVerticalSpacing;
+            const float addButtonWidth = 54f;
+            const float removeButtonWidth = 24f;
+            const float buttonSpacing = 4f;
+            const float indentWidth = 15f;
+
+            bool changed = false;
+            IList list = currentList;
+            nextList = list;
+
+            Rect headerRect = new Rect(rect.x, rect.y, rect.width, line);
+            Rect foldoutRect = headerRect;
+            Rect addRect = default;
+
+            if (!isReadOnly)
+            {
+                foldoutRect.width = Mathf.Max(0f, headerRect.width - addButtonWidth - buttonSpacing);
+                addRect = new Rect(foldoutRect.xMax + buttonSpacing, headerRect.y, addButtonWidth, line);
+            }
+
+            bool isExpanded = GetManagedReferenceFoldoutState(stateKey, true);
+            bool nextExpanded = EditorGUI.Foldout(foldoutRect, isExpanded, $"{label} ({list?.Count ?? 0})", true);
+            SetManagedReferenceFoldoutState(stateKey, nextExpanded);
+
+            if (!isReadOnly && GUI.Button(addRect, "Add"))
+            {
+                list ??= CreateManagedReferenceList(listType);
+                if (list != null)
+                {
+                    list.Add(CreateDefaultSupportedListElement(elementType));
+                    nextList = list;
+                    changed = true;
+                }
+            }
+
+            if (!nextExpanded)
+            {
+                return changed;
+            }
+
+            float y = headerRect.yMax + spacing;
+            if (list == null)
+            {
+                EditorGUI.LabelField(
+                    new Rect(rect.x + indentWidth, y, Mathf.Max(0f, rect.width - indentWidth), line),
+                    "Null");
+                return changed;
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                string elementLabel = $"Element {i}";
+                Rect elementRect = new Rect(rect.x + indentWidth, y, Mathf.Max(0f, rect.width - indentWidth), line);
+
+                if (isReadOnly)
+                {
+                    using (new EditorGUI.DisabledScope(true))
+                    {
+                        DrawReadonlyValue(elementRect, elementType, list[i], elementLabel);
+                    }
+                }
+                else
+                {
+                    Rect valueRect = new Rect(
+                        elementRect.x,
+                        elementRect.y,
+                        Mathf.Max(0f, elementRect.width - removeButtonWidth - buttonSpacing),
+                        line);
+                    Rect removeRect = new Rect(valueRect.xMax + buttonSpacing, y, removeButtonWidth, line);
+
+                    if (DrawEditableSupportedListElement(valueRect, elementLabel, elementType, list[i], out object nextElement))
+                    {
+                        list[i] = nextElement;
+                        nextList = list;
+                        changed = true;
+                    }
+
+                    if (GUI.Button(removeRect, "-"))
+                    {
+                        list.RemoveAt(i);
+                        nextList = list;
+                        return true;
+                    }
+                }
+
+                y += line + spacing;
+            }
+
+            return changed;
+        }
+
+        private static float GetSupportedListHeight(IList list, string stateKey)
+        {
+            float line = EditorGUIUtility.singleLineHeight;
+            float spacing = EditorGUIUtility.standardVerticalSpacing;
+            float height = line;
+
+            if (!GetManagedReferenceFoldoutState(stateKey, true))
+            {
+                return height;
+            }
+
+            if (list == null)
+            {
+                return height + spacing + line;
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                height += spacing + line;
+            }
+
+            return height;
+        }
+
+        private static bool DrawEditableSupportedListElement(Rect rect, string label, Type elementType, object currentValue, out object nextValue)
+        {
+            nextValue = currentValue;
+
+            if (elementType == typeof(int))
+            {
+                int next = EditorGUI.DelayedIntField(rect, label, currentValue is int typed ? typed : default);
+                if (!(currentValue is int currentInt) || currentInt != next)
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType == typeof(float))
+            {
+                float next = EditorGUI.DelayedFloatField(rect, label, currentValue is float typed ? typed : default);
+                if (!(currentValue is float currentFloat) || !Mathf.Approximately(currentFloat, next))
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType == typeof(double))
+            {
+                double next = EditorGUI.DoubleField(rect, label, currentValue is double typed ? typed : default);
+                if (!(currentValue is double currentDouble) || Math.Abs(currentDouble - next) > double.Epsilon)
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType == typeof(long))
+            {
+                long next = EditorGUI.LongField(rect, label, currentValue is long typed ? typed : default);
+                if (!(currentValue is long currentLong) || currentLong != next)
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType == typeof(bool))
+            {
+                bool next = EditorGUI.Toggle(rect, label, currentValue is bool typed && typed);
+                if (!(currentValue is bool currentBool) || currentBool != next)
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType == typeof(string))
+            {
+                string next = EditorGUI.DelayedTextField(rect, label, currentValue as string ?? string.Empty);
+                if (!string.Equals(currentValue as string, next, StringComparison.Ordinal))
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType == typeof(Vector2))
+            {
+                Vector2 next = EditorGUI.Vector2Field(rect, label, currentValue is Vector2 typed ? typed : default);
+                if (!(currentValue is Vector2 currentVector2) || currentVector2 != next)
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType == typeof(Vector3))
+            {
+                Vector3 next = EditorGUI.Vector3Field(rect, label, currentValue is Vector3 typed ? typed : default);
+                if (!(currentValue is Vector3 currentVector3) || currentVector3 != next)
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType == typeof(Vector4))
+            {
+                Vector4 next = EditorGUI.Vector4Field(rect, label, currentValue is Vector4 typed ? typed : default);
+                if (!(currentValue is Vector4 currentVector4) || currentVector4 != next)
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType == typeof(Color))
+            {
+                Color next = EditorGUI.ColorField(rect, label, currentValue is Color typed ? typed : Color.white);
+                if (!(currentValue is Color currentColor) || currentColor != next)
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType == typeof(LayerMask))
+            {
+                LayerMask next = DrawLayerMaskField(rect, label, currentValue is LayerMask typed ? typed : default);
+                if (!(currentValue is LayerMask currentMask) || currentMask.value != next.value)
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType != null && elementType.IsEnum)
+            {
+                Array values = Enum.GetValues(elementType);
+                Enum currentEnum = currentValue as Enum;
+                if (currentEnum == null && values.Length > 0)
+                {
+                    currentEnum = (Enum)values.GetValue(0);
+                }
+
+                Enum next = currentEnum == null ? null : EditorGUI.EnumPopup(rect, label, currentEnum);
+                if (!Equals(currentEnum, next))
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (elementType != null && typeof(UnityEngine.Object).IsAssignableFrom(elementType))
+            {
+                UnityEngine.Object next = EditorGUI.ObjectField(rect, label, currentValue as UnityEngine.Object, elementType, true);
+                if (!ReferenceEquals(currentValue, next))
+                {
+                    nextValue = next;
+                    return true;
+                }
+
+                return false;
+            }
+
+            EditorGUI.LabelField(rect, label, $"Unsupported ({elementType?.Name ?? "Unknown"})");
+            return false;
+        }
+
+        private static object CloneSupportedListValue(object currentValue, Type listType)
+        {
+            if (!(currentValue is IList sourceList))
+            {
+                return null;
+            }
+
+            IList clonedList = CreateManagedReferenceList(listType);
+            if (clonedList == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < sourceList.Count; i++)
+            {
+                clonedList.Add(sourceList[i]);
+            }
+
+            return clonedList;
+        }
+
+        private static object CreateDefaultSupportedListElement(Type elementType)
+        {
+            if (elementType == null)
+            {
+                return null;
+            }
+
+            if (elementType == typeof(string))
+            {
+                return string.Empty;
+            }
+
+            if (typeof(UnityEngine.Object).IsAssignableFrom(elementType))
+            {
+                return null;
+            }
+
+            if (elementType.IsEnum)
+            {
+                Array values = Enum.GetValues(elementType);
+                return values.Length > 0 ? values.GetValue(0) : Activator.CreateInstance(elementType);
+            }
+
+            return elementType.IsValueType ? Activator.CreateInstance(elementType) : null;
         }
 
         private static bool DrawManagedReferenceObjectInput(Rect rect, object currentValue, Type declaredType,
@@ -1254,6 +1736,12 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
         private static void DrawReadonlySerializedField(Rect rect, FieldInfo field, object currentValue, string stateKey)
         {
             string label = ObjectNames.NicifyVariableName(FieldPatchUtility.GetDisplayName(field));
+            if (FieldPatchUtility.TryGetSupportedListElementType(field?.FieldType, out Type elementType))
+            {
+                DrawReadonlySupportedList(rect, currentValue as IList, field.FieldType, elementType, label, stateKey);
+                return;
+            }
+
             if (CanDrawNestedSerializableField(field?.FieldType))
             {
                 DrawReadonlyNestedSerializableField(rect, label, currentValue, stateKey);
@@ -1270,6 +1758,11 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
         {
             float line = EditorGUIUtility.singleLineHeight;
             float spacing = EditorGUIUtility.standardVerticalSpacing;
+            if (FieldPatchUtility.TryGetSupportedListElementType(field?.FieldType, out _))
+            {
+                return GetSupportedListHeight(currentValue as IList, stateKey);
+            }
+
             if (!CanDrawNestedSerializableField(field?.FieldType))
             {
                 return line;
@@ -1443,6 +1936,11 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
             float line = EditorGUIUtility.singleLineHeight;
             float spacing = EditorGUIUtility.standardVerticalSpacing;
 
+            if (FieldPatchUtility.TryGetSupportedListElementType(field?.FieldType, out _))
+            {
+                return GetSupportedListHeight(currentValue as IList, stateKey);
+            }
+
             if (field == null || !CanDrawNestedSerializableField(field.FieldType))
             {
                 return line;
@@ -1479,6 +1977,11 @@ namespace Code.SHS.Utility.DynamicFieldBinding.Editor
         {
             Type fieldType = field?.FieldType;
             string label = ObjectNames.NicifyVariableName(FieldPatchUtility.GetDisplayName(field));
+
+            if (FieldPatchUtility.TryGetSupportedListElementType(fieldType, out _))
+            {
+                return DrawSupportedListField(rect, owner, field, currentValue, stateKey, label);
+            }
 
             if (fieldType == typeof(int))
             {

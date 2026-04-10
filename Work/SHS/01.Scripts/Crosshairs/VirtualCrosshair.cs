@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using Code.UI.Core;
+using Scripts.Combat.Datas;
+using TMPro;
+using UnityEngine;
 
 namespace SHS.Scripts.Crosshairs
 {
@@ -7,6 +10,7 @@ namespace SHS.Scripts.Crosshairs
         [Header("Refs")]
         [SerializeField] private Canvas canvas;
         [SerializeField] private RectTransform crosshair;
+        [SerializeField] private TextMeshProUGUI rangeText;
 
         [Header("Spread Visual (Optional)")]
         [SerializeField] private RectTransform[] spreadPoints;
@@ -16,6 +20,7 @@ namespace SHS.Scripts.Crosshairs
 
         private Vector2[] _spreadBasePositions;
         private Vector2 _screenPosition;
+        private GunDataSO _gunData;
 
         // UI 기준 좌표/기준점 캐시를 준비한다.
         private void Awake()
@@ -26,6 +31,17 @@ namespace SHS.Scripts.Crosshairs
             CacheSpreadBasePositions();
             SetScreenPosition(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
             SetSpreadRadiusPixels(0f);
+        }
+        
+        public void SetRangeText(float distance)
+        {
+            if (rangeText == null) return;
+            rangeText.text =  distance.ToString("0.0M");
+
+            if (_gunData != null)
+                rangeText.color = distance <= _gunData.attackRange ? Color.white : UIDefine.RedColor;
+            else
+                rangeText.color = Color.white;
         }
 
         // 크로스헤어 표시 여부를 토글한다.
@@ -103,6 +119,11 @@ namespace SHS.Scripts.Crosshairs
                 RectTransform point = spreadPoints[i];
                 _spreadBasePositions[i] = point != null ? point.anchoredPosition : Vector2.zero;
             }
+        }
+
+        public void SetGunData(GunDataSO gunData)
+        {
+            _gunData = gunData;
         }
     }
 }

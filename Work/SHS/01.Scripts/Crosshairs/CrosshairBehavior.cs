@@ -136,6 +136,13 @@ namespace SHS.Scripts.Crosshairs
             return aimRay.GetPoint(fallbackAimDistance);
         }
 
+        public float GetDistance()
+        {
+            Vector3 targetPosition = GetCrosshairWorldPosition();
+            Vector3 position = transform.position;
+            return Vector3.Distance(position, targetPosition);
+        }
+        
         private void HandleChangeCursor(ChangeCursorEvent evt)
         {
             IsCursorLocked = evt.IsLocked;
@@ -192,8 +199,8 @@ namespace SHS.Scripts.Crosshairs
                 _currentGunObject = gunItem.WeaponObj as GunObject;
             }
 
-            CrosshairSO crosshairData = _currentGunData != null ? _currentGunData.crosshairData : null;
-            _localEventBus.Raise(new CrosshairChangeEvent(crosshairData));
+            GunDataSO gunData = _currentGunData != null ? _currentGunData : null;
+            _localEventBus.Raise(new CrosshairChangeEvent(gunData));
         }
 
         private void ApplyShotRecoil(GunDataSO recoilData)

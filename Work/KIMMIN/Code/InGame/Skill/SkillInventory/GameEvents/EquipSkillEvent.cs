@@ -19,12 +19,10 @@ namespace Work.Code.SkillInventory.GameEvents
     public struct UnEquipSkillEvnt : ILocalEvent
     {
         public Skill UnEquippedSkill { get; }
-        public int Index { get; }
 
-        public UnEquipSkillEvnt(Skill unEquippedSkill, int index)
+        public UnEquipSkillEvnt(Skill unEquippedSkill)
         {
             UnEquippedSkill = unEquippedSkill;
-            Index = index;
         }
     }
 }

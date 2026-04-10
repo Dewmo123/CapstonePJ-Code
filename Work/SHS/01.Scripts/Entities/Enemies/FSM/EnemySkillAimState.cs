@@ -1,6 +1,6 @@
-﻿using Scripts.SkillSystem.Manage;
+﻿using Chipmunk.ComponentContainers;
+using Scripts.SkillSystem.Manage;
 using Scripts.SkillSystem.Skills;
-using Chipmunk.ComponentContainers;
 using UnityEngine;
 
 namespace Code.SHS.Entities.Enemies.FSM
@@ -24,10 +24,10 @@ namespace Code.SHS.Entities.Enemies.FSM
         {
             base.Enter();
             _isSuccess = false;
-            _aimSkill = _skillComponent.CurrentSkill.GetComponent<IAimSkill>();
+            _movement.SetStop(true);
+            _aimSkill = _skillComponent.CurrentSkill as IAimSkill;
             _aimSkill.StartAiming();
             aimTimer = aimDuration;
-
             if (TargetEntity == null)
             {
                 _aimSkill.CancelSkill();
@@ -50,6 +50,7 @@ namespace Code.SHS.Entities.Enemies.FSM
                 _isSuccess = true;
                 _enemy.ChangeState(EnemyStateEnum.Skill);
             }
+            UpdateMovementAnimation();
         }
 
         public override void Exit()
@@ -59,6 +60,7 @@ namespace Code.SHS.Entities.Enemies.FSM
                 return;
 
             _aimSkill.CancelSkill();
+            _movement.SetStop(false);
         }
     }
 }

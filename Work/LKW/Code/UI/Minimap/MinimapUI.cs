@@ -46,6 +46,8 @@ namespace Code.UI.Minimap
         {
             if (_player != null)
                 _player.PlayerInput.OnMinimapPressed -= HandleMinimapPressed;
+            _minimapSystem.OnDataAdded -= HandleDataAdded;
+            _minimapSystem.OnDataRemoved -= HandleDataRemoved;
             base.OnDestroy();
         }
         
@@ -70,8 +72,12 @@ namespace Code.UI.Minimap
             if(string.IsNullOrEmpty(id)) return;
             _elements.Remove(id);
         }
-        
-        private void HandleMinimapPressed() => ToggleUI(true);
+
+        private void HandleMinimapPressed()
+        {
+            _minimapSystem.IsActiveMinimap = !_minimapSystem.IsActiveMinimap;
+            ToggleUI(true);
+        }
 
         private void HandleZoom()
         {

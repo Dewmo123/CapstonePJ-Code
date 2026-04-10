@@ -1,17 +1,18 @@
 ﻿using Chipmunk.ComponentContainers;
 using Cysharp.Threading.Tasks;
 using Scripts.Combat;
+using Scripts.Enemies.States;
 using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Code.SHS.Entities.Enemies.FSM
 {
-    public class EnemyAimState : EnemyState
+    public class EnemyAimState : EnemyExecuteBehaviourState
     {
-        private float _aimTime;
-        private float _minAimTime = 0f;
-        private float _maxAimTime = 0f;
-        private float _currentAimDuration;
+        //private float _minAimTime = 0f;
+        //private float _maxAimTime = 0f;
+
+        public override float ExecuteTimer => 0f;
 
         //private float _optimalRangeRatio = 0.7f;
 
@@ -24,22 +25,16 @@ namespace Code.SHS.Entities.Enemies.FSM
         {
             base.Enter();
             _attackCompo.IsAim = true;
-            _currentAimDuration = Random.Range(_minAimTime, _maxAimTime);
             _movement.MoveType = NavMoveType.Aim;
-            _aimTime = 0f;
-            Execute(); //행동에서 aimState 가면 유니티 터짐;;
         }
 
         public override void Update()
         {
-            base.Update();
-
-            if (TargetEntity == null)
+            if(TargetEntity == null)
             {
                 _enemy.ChangeState(EnemyStateEnum.Chase);
                 return;
             }
-
             float distance = Vector3.Distance(_enemy.transform.position, TargetEntity.transform.position);
             if (distance > _attackRange)
             {
@@ -49,16 +44,7 @@ namespace Code.SHS.Entities.Enemies.FSM
 
             _movement.SetLookAtTarget(TargetEntity.transform);
             UpdateMovementAnimation();
-            _aimTime += Time.deltaTime;
-            Execute();
-        }
-
-        private void Execute()
-        {
-            if (_aimTime >= _currentAimDuration)
-            {
-                _behaviourManager.ExecuteOptimal();
-            }
+            base.Update();
         }
 
         public override void Exit()

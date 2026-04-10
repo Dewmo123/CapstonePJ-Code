@@ -127,6 +127,10 @@ PrefabInstance:
       propertyPath: <MaxInventorySize>k__BackingField
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2846337727896608682, guid: 80a783a3c8c03ef4b81dd9fcb78af06d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.75
+      objectReference: {fileID: 0}
     - target: {fileID: 4278691161087203046, guid: 80a783a3c8c03ef4b81dd9fcb78af06d, type: 3}
       propertyPath: minItems
       value: 2
@@ -227,6 +231,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 01f44281fe875614998fc2798779175e, type: 2}
+    - target: {fileID: 7831406691488260832, guid: 80a783a3c8c03ef4b81dd9fcb78af06d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9112035009584679310, guid: 80a783a3c8c03ef4b81dd9fcb78af06d, type: 3}
       propertyPath: m_Mesh
       value: 

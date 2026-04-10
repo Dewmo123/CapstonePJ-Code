@@ -47,7 +47,7 @@ namespace Code.Combat
         
         private void HandleBulletReduceRateValueChanged(StatSO stat, float current, float previous)
         {
-            BulletReduceRate = current;   
+            BulletReduceRate = current;
         }
     }
 }

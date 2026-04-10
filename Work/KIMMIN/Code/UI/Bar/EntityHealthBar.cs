@@ -24,15 +24,21 @@ namespace Code.UI.Bar
             _cam = Camera.main;
             _localEventBus = componentContainer.Get<LocalEventBus>();
             _localEventBus.Subscribe<HealthChangeEvent>(HandleHealthChanged);
-
         }
+        
         private void OnDestroy()
         {
             _localEventBus.Unsubscribe<HealthChangeEvent>(HandleHealthChanged);
         }
         private void HandleHealthChanged(HealthChangeEvent @event)
         {
-            SetBar(@event.CurrentHealth, @event.MaxHealth);
+            SetBar(@event.CurrentHealth, @event.MaxHealth, HandleAfterEffect);
+        }
+
+        private void HandleAfterEffect(float current)
+        {
+            if (current <= 0)
+                DisableUI(true);
         }
 
         private void LateUpdate()
@@ -41,7 +47,7 @@ namespace Code.UI.Bar
             transform.forward = _cam.transform.forward;
         }
 
-        public override void SetBar(float current, float max)
+        public override void SetBar(float current, float max, Action<float> callback = null)
         {
             float target = current / max;
 
@@ -54,7 +60,11 @@ namespace Code.UI.Bar
                 fill.DOFillAmount(target, fillDuration);
                 trailFill.fillAmount = fill.fillAmount;
                 trailFill.DOFillAmount(target, trailDuration).SetDelay(trailDelay)
-                    .OnComplete(()=>trailFill.gameObject.SetActive(false));
+                    .OnComplete(() =>
+                    {
+                        callback?.Invoke(current);
+                        trailFill.gameObject.SetActive(false);
+                    });
             }
             else
             {

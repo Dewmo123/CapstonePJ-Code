@@ -19,7 +19,7 @@ MonoBehaviour:
     isPercent: 0
     level: 1
     effectValue:
-    - 0.15
+    - 0.015
     isOverrideApplyTime: 0
     overrideTime: 0
   applyTime: 10

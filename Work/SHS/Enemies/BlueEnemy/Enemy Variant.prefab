@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 253694809184322524, guid: c860746277aafea409ac52b43a9c6259, type: 3}
+      propertyPath: '_stateDatas.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 0eafbdf5e132e3c479cd6e37300ceafb, type: 2}
     - target: {fileID: 648952304866514258, guid: c860746277aafea409ac52b43a9c6259, type: 3}
       propertyPath: cooldown
       value: 10

@@ -65,7 +65,7 @@ namespace Code.TimeSystem
         {
             if (IsPaused) return;
 
-            float dt = Time.deltaTime * timeScale;
+            float dt = Mathf.Min(Time.deltaTime * timeScale, 0.1f);
             TotalTime += dt;
             DayTime += dt;
 

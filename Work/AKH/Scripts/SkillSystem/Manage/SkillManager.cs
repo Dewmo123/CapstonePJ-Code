@@ -41,7 +41,9 @@ namespace Scripts.SkillSystem.Manage
         private void OnDestroy()
         {
             _localEventBus.Unsubscribe<EquipSkillEvent>(HandleEquipSkill);
+            _localEventBus.Unsubscribe<UnEquipSkillEvnt>(HandleUnequipSkill);
         }
+
         private void HandleEquipSkill(EquipSkillEvent @event)
         {
             ChangeSkill(@event.EquippedSkill.SkillData, @event.Index);
@@ -81,7 +83,6 @@ namespace Scripts.SkillSystem.Manage
                 SkillType skillEnumType = skill.SkillType;
                 if (skillCompos.TryGetValue(skillEnumType, out ISkillCompo skillCompo))
                 {
-                    Debug.Log($"{skill.SkillData.name} 삭제삭제");
                     skillCompo.RemoveSkill(skill);
                 }
             }
@@ -104,6 +105,11 @@ namespace Scripts.SkillSystem.Manage
         }
 
         public bool TryGetSkill(SkillDataSO skillData, out Skill skill)
-            => _skills.TryGetValue(skillData, out skill);
+        {
+            skill = null;
+            if (skillData == null)
+                return false;
+            return _skills.TryGetValue(skillData, out skill);
+        }
     }
 }

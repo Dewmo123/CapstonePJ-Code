@@ -3,6 +3,7 @@ using Chipmunk.ComponentContainers;
 using UnityEngine;
 using Chipmunk.Library.Utility.GameEvents.Local;
 using DewmoLib.Dependencies;
+using Scripts.Combat.Datas;
 
 namespace SHS.Scripts.Crosshairs
 {
@@ -44,6 +45,7 @@ namespace SHS.Scripts.Crosshairs
             CurrentCrosshair.SetScreenPosition(screenPosition);
             CurrentCrosshair.SetSpreadRadiusPixels(_crosshairBehavior.CurrentSpreadRadiusPixels);
             CurrentCrosshair.SetVisible(_crosshairBehavior.IsCursorLocked);
+            CurrentCrosshair.SetRangeText(_crosshairBehavior.GetDistance());
         }
 
 
@@ -56,15 +58,18 @@ namespace SHS.Scripts.Crosshairs
 
         private void HandleCrosshairChange(CrosshairChangeEvent eventData)
         {
-            CrosshairSO targetData = eventData.CrosshairData != null ? eventData.CrosshairData : defaultCrosshair;
-            SetCurrentCrosshair(targetData);
+            GunDataSO gunData = eventData.GunData;
+            CrosshairSO targetData = gunData == null || gunData.crosshairData != null ? gunData.crosshairData : defaultCrosshair;
+            SetCurrentCrosshair(targetData, eventData.GunData);
         }
 
-        private void SetCurrentCrosshair(CrosshairSO targetData)
+        private void SetCurrentCrosshair(CrosshairSO crosshairData, GunDataSO gunData = null)
         {
-            RegisterCrosshair(targetData);
+            RegisterCrosshair(crosshairData);
 
-            VirtualCrosshair targetCrosshair = _crosshairs[targetData];
+            VirtualCrosshair targetCrosshair = _crosshairs[crosshairData];
+            targetCrosshair?.SetGunData(gunData);
+            
             if (CurrentCrosshair == targetCrosshair)
                 return;
 

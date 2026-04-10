@@ -21,9 +21,9 @@ namespace Code.SHS.Entities.Enemies
 
         public Vector3 GetAimPosition()
         {
-            if (_targetProvider.Target == null)
+            if (_targetProvider.CurrentTarget == null)
                 return _targetProvider.LastTargetPosition;
-            return _targetProvider.Target.transform.position;
+            return _targetProvider.CurrentTarget.transform.position;
         }
     }
 }

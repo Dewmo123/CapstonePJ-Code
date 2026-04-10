@@ -7,13 +7,10 @@ namespace Code.UI.Popup
     {
         public override EUILayer Layer => EUILayer.Popup;
         public abstract Type DataType { get; }
+        
         public abstract void ShowPopup(object data, ICallbackData callback = null);
+        
         public virtual void ClosePopup() => DisableUI(true);
-
-        public void SetPriority(int priority)
-        {
-            transform.SetSiblingIndex(priority);
-        }
     }
     
     public abstract class BasePopup<TData, TCallback> : BasePopup where TCallback : ICallbackData

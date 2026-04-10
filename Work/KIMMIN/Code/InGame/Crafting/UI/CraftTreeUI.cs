@@ -26,6 +26,7 @@ namespace Work.Code.Crafting
         private CraftTreeSO _currentTree;
         private Coroutine _binaryRoutine;
         private WaitForSeconds _delay = new WaitForSeconds(0.05f);
+        private WaitForSeconds _nonDelay = new WaitForSeconds(0f);
 
         private int _tripleCount;
         
@@ -34,13 +35,13 @@ namespace Work.Code.Crafting
         private void Start()
         {
             Initialize();
-            createButton.onClick.AddListener(CreateItem);
+            createButton.onClick.AddListener(() => CreateItem(_currentTree));
             EventBus<UpdateInventoryUIEvent>.OnEvent += HandleChangeUI;
         }
 
         private void OnDestroy()
         {
-            createButton.onClick.RemoveListener(CreateItem);
+            createButton.onClick.RemoveListener(() => CreateItem(_currentTree));
             EventBus<UpdateInventoryUIEvent>.OnEvent -= HandleChangeUI;
         }
 
@@ -62,7 +63,7 @@ namespace Work.Code.Crafting
         private void HandleChangeUI(UpdateInventoryUIEvent evt)
         {
             if(_currentTree != null)
-                UpdateTree(_currentTree);
+                UpdateTree(_currentTree, false);
         }
 
         public void EnableFor(CraftTreeSO tree)
@@ -85,7 +86,7 @@ namespace Work.Code.Crafting
                 tripleNode.Clear();
         }
         
-        private void UpdateTree(CraftTreeSO tree)
+        private void UpdateTree(CraftTreeSO tree, bool isNotificate = true)
         {
             Clear();
             title.text = tree == null ? string.Empty : tree.treeName;
@@ -94,25 +95,29 @@ namespace Work.Code.Crafting
             if (tree == null) return;
             
             if(tree.isBinary)
-                BinaryTree(tree);
+                BinaryTree(tree, isNotificate);
             else
-                _tripleTrees[0].EnableFor(tree, _nodes[0].Rect, true);
+                _tripleTrees[0].Init(tree, _nodes[0].Rect, true);
             
             _currentTree = tree;
         }
 
-        private void BinaryTree(CraftTreeSO tree)
+        private void BinaryTree(CraftTreeSO tree, bool isNotificate)
         {
             if (_binaryRoutine != null)
                 StopCoroutine(_binaryRoutine);
 
-            _binaryRoutine = StartCoroutine(BinaryTreeRoutine(tree));
+            if (isNotificate)
+                _binaryRoutine = StartCoroutine(BinaryTreeRoutine(tree));
+            else
+                BinaryTreeImmediate(tree);
         }
         
         private IEnumerator BinaryTreeRoutine(CraftTreeSO tree)
         {
             List<int> childList = new();
-            Root.EnableFor(tree.Root);
+            CraftNodeData nodeData = new CraftNodeData(tree.Root, tree.Count, true);
+            Root.InitUI(nodeData);
 
             for (int i = 1; i < tree.nodeList.Count; i++)
             {
@@ -132,21 +137,46 @@ namespace Work.Code.Crafting
 
             _binaryRoutine = null;
         }
+        
+        private void BinaryTreeImmediate(CraftTreeSO tree)
+        {
+            List<int> childList = new();
+            CraftNodeData nodeData = new CraftNodeData(tree.Root, tree.Count, true);
+            Root.InitUI(nodeData, false);
 
-        private void InitTipleNode(CraftTreeSO tree, NodeData data, int idx)
+            for (int i = 1; i < tree.nodeList.Count; i++)
+            {
+                var node = tree.nodeList[i];
+                if (childList.Contains(i) || node.Item == null) continue;
+
+                InitializeNode(tree.nodeList[i], _nodes[i], i - 1, false);
+
+                if (node.Tree != null && node.Tree.isBinary == false)
+                {
+                    InitTipleNode(tree, node, i, false);
+                    childList.Add(i * 2 + 1);
+                    childList.Add(i * 2 + 2);
+                }
+            }
+        }
+
+        private void InitTipleNode(CraftTreeSO tree, NodeData data, int idx, bool isNotificate = true)
         {
             if (idx > 2) return;
             var node = _tripleTrees[_tripleCount++];
-            node.EnableFor(data.Tree, _nodes[idx].Rect);
+            node.Init(data.Tree, _nodes[idx].Rect, isNotificate);
             node.RootNode.SubscribeTooltip();
             node.RootNode.SubscribeClick(() => UpdateTree(tree.nodeList[idx].Tree));
             _nodes[idx].Clear();
         }
 
-        private void InitializeNode(NodeData data, CraftNodeUI node, int index)
+        private void InitializeNode(NodeData data, CraftNodeUI node, int index, bool isNotificate = true)
         {
+            node.Clear();
+            bool isNeedItem = !(index == 0 || index == 1);
             int count = craftController.Inventory.GetItemCount(data.Item);
-            node.EnableFor(data, count,  !(index == 0 || index == 1));
+            CraftNodeData nodeData = new CraftNodeData(data, count, isNeedItem);
+            node.InitUI(nodeData, isNotificate);
 
             if (node.Data.Tree != null && index >= 0)
             {
@@ -158,11 +188,11 @@ namespace Work.Code.Crafting
                 _lines[index].gameObject.SetActive(true);
         }
 
-        private void CreateItem()
+        public void CreateItem(CraftTreeSO tree)
         {
-            if(craftController.Inventory == null || _currentTree == null) return;
+            if(craftController.Inventory == null || tree == null) return;
 
-            if (!craftController.Craft(_currentTree))
+            if (!craftController.Craft(tree))
                 Debug.Log("아이템 부족");
         }
         

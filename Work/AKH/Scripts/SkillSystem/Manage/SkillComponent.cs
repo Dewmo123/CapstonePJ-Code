@@ -5,6 +5,7 @@ using Scripts.Players;
 using Scripts.SkillSystem;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Scripts.SkillSystem.Manage
@@ -54,12 +55,18 @@ namespace Scripts.SkillSystem.Manage
             if (_skills.ContainsKey(skillType))
                 return;
             _skills.Add(skillType, skill);
+            
             OnSkillsChanged?.Invoke();
         }
 
         public virtual void RemoveSkill(Skill skill)
         {
             SkillDataSO skillType = skill.SkillData;
+            if(_socketBySkillDic.TryGetValue(skill,out SkillSocket socket))
+            {
+                socket.ChangeItem(null);
+                _socketBySkillDic.Remove(skill);
+            }
             _skills.Remove(skillType);
             OnSkillsChanged?.Invoke();
         }
@@ -72,6 +79,8 @@ namespace Scripts.SkillSystem.Manage
                 _socketBySkillDic.Remove(socket.CurrentSkill);
             if (_skills.TryGetValue(skillData, out Skill skill))
             {
+                if (_socketBySkillDic.TryGetValue(skill, out SkillSocket beforeSocket))
+                    beforeSocket.ChangeItem(null);
                 socket.ChangeItem(skill);
                 _socketBySkillDic[skill] = socket;
             }
@@ -86,6 +95,17 @@ namespace Scripts.SkillSystem.Manage
             if (!Enum.IsDefined(typeof(TSlotType), slotType))
                 return;
             ChangeSkill(skillData, (TSlotType)Enum.ToObject(typeof(TSlotType), slotType));
+        }
+        
+        public SkillSocket GetSocket(Skill skill)
+        {
+            return _socketBySkillDic.GetValueOrDefault(skill);
+        }
+        public bool TryGetSlotTypeBySkill(Skill skill,out TSlotType slotType)
+        {
+            KeyValuePair<TSlotType, TSocketType> kvp = Sockets.FirstOrDefault(kvp => kvp.Value.CurrentSkill == skill);
+            slotType = kvp.Key;
+            return kvp.Value != null;
         }
     }
 }

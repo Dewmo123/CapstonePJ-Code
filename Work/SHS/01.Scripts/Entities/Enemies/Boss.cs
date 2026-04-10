@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Code.SHS.Animations;
-using Code.SHS.Entities.Enemies.FSM;
-using Scripts.Combat;
-using Scripts.Combat.Datas;
-using Scripts.Entities;
-using Scripts.FSM;
-using Scripts.Players;
-using UnityEngine;
-using UnityEngine.Events;
-using Random = UnityEngine.Random;
 
 namespace Code.SHS.Entities.Enemies
 {

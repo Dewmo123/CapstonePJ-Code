@@ -28,12 +28,14 @@ namespace Scripts.Combat.Projectiles
         public GameObject GameObject => gameObject;
         public GameObject Dealer => gameObject;
         public Entity Owner => _owner;
+        public Vector3 Velocity => rb.linearVelocity;
         public IBulletShooter ProjectileShooter { get; private set; }
         
         private Pool _myPool;
         private Entity _owner;
         private Collider _collider;
         private Vector3 _previousPosition;
+        private Vector3 _onInitVelocity;
         private bool _isReturningToPool;
 
         private void Awake()
@@ -65,6 +67,8 @@ namespace Scripts.Combat.Projectiles
                 transform.forward = direction.normalized;
             float speed = ProjectileShooter.ProjectileSpeed;
             rb.linearVelocity = direction.normalized * speed;
+            _onInitVelocity = rb.linearVelocity;
+            
             trail.Clear();
 
             if (flashEffect != null)
@@ -78,6 +82,8 @@ namespace Scripts.Combat.Projectiles
             _collider.excludeLayers = 0;
             _isReturningToPool = false;
             _previousPosition = transform.position;
+            _onInitVelocity = Vector3.zero;
+            
             if (rb != null)
             {
                 rb.linearVelocity = Vector3.zero;
@@ -264,6 +270,13 @@ namespace Scripts.Combat.Projectiles
             t.SetParent(transform);
             t.localPosition = Vector3.zero;
             t.localRotation = Quaternion.identity;
+        }
+
+        public void SetVelocity(float percent)
+        {
+            percent = Mathf.Clamp01(percent);
+            
+            rb.linearVelocity = _onInitVelocity * percent;
         }
         
         public void PushBullet() => _myPool.Push(this);

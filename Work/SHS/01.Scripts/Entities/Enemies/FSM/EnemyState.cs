@@ -5,7 +5,6 @@ using Scripts.Combat;
 using Scripts.Enemies.EnemyBehaviours;
 using Scripts.Entities;
 using Scripts.FSM;
-using Scripts.Players;
 using UnityEngine;
 
 namespace Code.SHS.Entities.Enemies.FSM
@@ -27,7 +26,7 @@ namespace Code.SHS.Entities.Enemies.FSM
         Dead
     }
 
-    public class EnemyState : State
+    public abstract class EnemyState : State
     {
         protected Enemy _enemy;
         protected CharacterNavMovement _movement;
@@ -36,13 +35,12 @@ namespace Code.SHS.Entities.Enemies.FSM
         protected EnemyInventory _enemyInventory;
         protected TargetProvider _targetProvider;
         protected LocalEventBus _localEventBus;
-        protected Entity TargetEntity => _targetProvider.Target;
+        protected Entity TargetEntity => _targetProvider.CurrentTarget;
 
         protected static int _xHash = Animator.StringToHash("X");
         protected static int _zHash = Animator.StringToHash("Z");
 
         protected float _attackRange => _attackCompo.AttackRange;
-
         public EnemyState(ComponentContainer container, int animationHash) : base(container, animationHash)
         {
             _enemy = container.GetCompo<Enemy>(true);

@@ -22,6 +22,7 @@ namespace Code.StatusEffectSystem.StatusEffects
             StatusEffectEnum = statusEffectInfo.StatusEffect;
             Level = statusEffectInfo.Level;
             ApplyTime = statusEffectInfo.ApplyTime;
+            Value = statusEffectInfo.Value;
             CurrentTime = 0;
         }
         

@@ -11,6 +11,6 @@ namespace Work.LKW.Code.Items.ItemInfo
         public int healAmount;
 
         public override ItemCreateData CreateItem()
-            => new ItemCreateData(new MedicineItem(this, healAmount), Random.Range(1, maxStack));
+            => new ItemCreateData(new MedicineItem(this, healAmount), Random.Range(1, maxSpawnCount));
     }
 }

@@ -21,7 +21,7 @@ namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
         {
             base.Update();
 
-            if (_enemy.TargetProvider.Target == null)
+            if (_enemy.TargetProvider.CurrentTarget == null)
                 return;
 
             if (_movement.IsArrived)
@@ -31,7 +31,7 @@ namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
                     _behaviourManager.CurrentBehaviour.SetCooldown();
                 }
 
-                _enemy.ChangeState(EnemyStateEnum.Aim);
+                _enemy.ChangeState(EnemyStateEnum.Chase);
                 return;
             }
 

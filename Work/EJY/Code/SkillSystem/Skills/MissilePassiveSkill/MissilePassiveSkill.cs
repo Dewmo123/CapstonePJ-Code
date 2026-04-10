@@ -12,7 +12,9 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
     {
         [SerializeField] private Transform firePosTrm;
         [SerializeField] private int hitCntToFireMissile = 5;
-        [SerializeField] private int multiShotMissile = 3;
+        [SerializeField] private int shotMissile = 1;
+        [SerializeField] private int additionalMissile = 2;
+        [SerializeField] private int downHitCnt = 2;
         [SerializeField] private PoolItemSO missilePoolItem;
         [SerializeField] private bool isDmgRangIncrease;
         [SerializeField] private bool isInduction;
@@ -38,8 +40,22 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
             base.DisableSkill();
         }
 
-        private void SetDmgRangeIncrease() => isDmgRangIncrease = true;
-        private void SetInduction() => isInduction = true;
+        private void UpgradeDmgRange() => isDmgRangIncrease = true;
+        private void RollbackDmgRange() => isDmgRangIncrease = false;
+
+        private void UpgradeMultiShot()
+        {
+            isInduction = true;
+            hitCntToFireMissile -= downHitCnt;
+            shotMissile += additionalMissile;
+        }
+
+        private void RollbackMultiShot()
+        {
+            isInduction = false;
+            hitCntToFireMissile += downHitCnt;
+            shotMissile -= additionalMissile;
+        }
 
         private void HandleOnHit(Entity dealer, IDamageable target)
         {
@@ -61,7 +77,7 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
 
                 List<Vector3> middlePoints = GenerateMiddlePoints();
 
-                for (int i = 0; i < multiShotMissile; ++i)
+                for (int i = 0; i < shotMissile; ++i)
                 {
                     var missile = _poolManager.Pop<Missile>(missilePoolItem);
                     missile.InitMissile(_owner, hitTransform.HitTransform, firePosTrm.position, isInduction, GenerateLaunchOffset(), middlePoints[i]);
@@ -70,6 +86,8 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
                 }
 
                 _currentHitCnt = 0;
+                
+                OnSkillInvoked?.Invoke();
             }
         }
 
@@ -80,12 +98,12 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
 
         private List<Vector3> GenerateMiddlePoints()
         {
-            List<Vector3> positions = new List<Vector3>(multiShotMissile);
+            List<Vector3> positions = new List<Vector3>(shotMissile);
             GetLaunchBasis(out Vector3 forward, out Vector3 right);
             Vector3 center = firePosTrm.position + GenerateLaunchOffset() + Vector3.up * spawnHeightOffset;
             float minSpacingSqr = minSpawnSpacing * minSpawnSpacing;
 
-            for (int i = 0; i < multiShotMissile; i++)
+            for (int i = 0; i < shotMissile; i++)
             {
                 Vector3 candidate = center;
                 bool foundSpacedPoint = false;
@@ -105,7 +123,7 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
 
                 if (foundSpacedPoint == false && positions.Count > 0)
                 {
-                    float t = multiShotMissile <= 1 ? 0.5f : i / (float)(multiShotMissile - 1);
+                    float t = shotMissile <= 1 ? 0.5f : i / (float)(shotMissile - 1);
                     float lateralOffset = Mathf.Lerp(-randomSpawnRangeX, randomSpawnRangeX, t);
                     candidate = center + (right * lateralOffset) + (forward * randomSpawnRangeZ);
                 }

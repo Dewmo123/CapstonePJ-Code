@@ -4,21 +4,23 @@ using Chipmunk.GameEvents;
 using Code.GameEvents;
 using Code.Players;
 using Code.UI.Core;
+using DG.Tweening;
 using Scripts.Combat.Datas;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Work.Code.UI.Misc;
 
 namespace Code.UI.Inventory
 {
-    public class BulletAmmoUI : MonoBehaviour, IUIElement<GunItem>
+    public class BulletAmmoUI : UIBase, IUIElement<GunItem>
     {
         [SerializeField] private float fadeDuration = 0.2f;
         [SerializeField] private Image selectedImage;
         [SerializeField] private GameObject replaceBulletParentGO;
         [SerializeField] private PlayerInputSO playerInput;
-        [SerializeField] private TextMeshProUGUI ammoText;
+        [SerializeField] private DynamicText ammoText;
         
         private RectTransform Rect => selectedImage.transform as RectTransform;
         private InfoUI[] _infoUIs;
@@ -27,7 +29,7 @@ namespace Code.UI.Inventory
         private int _totalCnt;
         private bool _isActive;
         
-        private void Awake()
+        protected override void Awake()
         {
             _infoUIs = GetComponentsInChildren<InfoUI>();
             EventBus.Subscribe<ChangeHandlingEvent>(HandleChangeWeapon);
@@ -128,6 +130,8 @@ namespace Code.UI.Inventory
         
         private void HandleChangeWeapon(ChangeHandlingEvent evt)
         {
+            EventBus.Unsubscribe<AmmoUpdateEvent>(HandleGunFire);
+            
             if (evt.EquipableItem is GunItem gun)
             {
                 if (!_isActive)
@@ -170,7 +174,8 @@ namespace Code.UI.Inventory
 
         private void SetAmmoText(int currentAmmo, int totalAmmo)
         {
-            ammoText.SetText(currentAmmo + "/" + totalAmmo);
+            ammoText.SetText($"{currentAmmo}/{totalAmmo}", currentAmmo == 0);
+            ammoText.Text.color = currentAmmo == 0 ? UIDefine.RedColor : Color.white;
         }
     }
 }

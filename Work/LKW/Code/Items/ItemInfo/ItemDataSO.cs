@@ -82,6 +82,8 @@ namespace Work.LKW.Code.Items.ItemInfo
         public int value;
         [ExcelColumn("maxStack")]
          public int maxStack;
+        [ExcelColumn("maxSpawnCount")] 
+        public int maxSpawnCount;
 
         public abstract ItemCreateData CreateItem();
     }

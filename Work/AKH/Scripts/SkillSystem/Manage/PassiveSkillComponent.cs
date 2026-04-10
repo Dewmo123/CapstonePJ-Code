@@ -11,6 +11,7 @@ namespace Scripts.SkillSystem.Manage
         Passive1,
         Passive2,
         Passive3,
+        None,
     }
 
     public class PassiveSkillComponent : SkillComponent<PassiveSlotType,PassiveSkillSocket>

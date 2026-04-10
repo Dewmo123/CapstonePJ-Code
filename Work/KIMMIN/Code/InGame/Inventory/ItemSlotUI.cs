@@ -5,13 +5,12 @@ using Code.UI.Core;
 using DG.Tweening;
 using System;
 using Code.UI.Core.Interaction;
-using Code.UI.Tooltip;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Work.Code.GameEvents;
 using Work.Code.UI.Interaction;
+using Work.Code.UI.Misc;
 using Work.LKW.Code.Items;
 
 namespace InGame.InventorySystem
@@ -19,7 +18,7 @@ namespace InGame.InventorySystem
     public class ItemSlotUI : DraggableUI, IUIElement<ItemSlot>, IHoverable, IDroppable
     {
         [SerializeField] private CraftableItemListSO craftableItemListSO;
-        [SerializeField] private TextMeshProUGUI stackText;
+        [SerializeField] private DynamicText stackText;
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private Image itemIcon;
         [SerializeField] private Image background;
@@ -67,7 +66,9 @@ namespace InGame.InventorySystem
             if (item == null) return;
 
             SetBackground(true);
-            stackText.text = itemSlot.Stack > 0 ? itemSlot.Stack.ToString() : string.Empty;
+
+            string text = itemSlot.Stack > 0 ? itemSlot.Stack.ToString() : string.Empty;
+            stackText.SetText(text, itemSlot.Stack == 0);
             nameText.text = item.ItemData.itemName;
             itemIcon.sprite = item.ItemData.itemImage;
             _originColor = background.color = UIDefine.RarityColors[(int)item.ItemData.rarity];
@@ -81,10 +82,10 @@ namespace InGame.InventorySystem
             var recipes = craftableItemListSO.GetRecipes(item.ItemData);
             if (recipes != null && recipes.Count != 0)
             {
-                BindTooltip(gameObject, () => recipes);
+                BindTooltip(() => recipes);
             }
             
-            BindTooltip(gameObject, () => ItemSlot.Item.ItemData);
+            BindTooltip(() => ItemSlot.Item.ItemData);
         }
 
         public void Clear()
@@ -92,7 +93,7 @@ namespace InGame.InventorySystem
             ItemSlot = null;
             SetBackground(false);
             skillBackground.gameObject.SetActive(false);
-            UnbindTooltip(gameObject);
+            UnbindTooltip();
         }
 
         public void SetImage(Image targetImage, bool isEnable)
@@ -129,7 +130,7 @@ namespace InGame.InventorySystem
             if (equipItem.Skill == null) return;
             skillBackground.gameObject.SetActive(true);
             skillIcon.sprite = equipItem.Skill.skillIcon;
-            BindTooltip(gameObject, () => equipItem.Skill);
+            BindTooltip(() => equipItem.Skill);
         }
         
         private void HandleClick()

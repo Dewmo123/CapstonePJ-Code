@@ -4,34 +4,44 @@ using Code.UI.Core;
 using Code.UI.Popup;
 using UnityEngine;
 using Work.Code.GameEvents;
+using Work.Code.UI.ContextMenu;
 
 namespace Work.Code.UI.Core.Interaction
 {
     [RequireComponent(typeof(UIEventHandler))]
     public class InteractableUI : UIBase
     {
-        protected UIEventHandler _eventHandler;
+        public UIEventHandler EventHandler { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
-            _eventHandler = GetComponent<UIEventHandler>();
+            EventHandler = GetComponent<UIEventHandler>();
         }
 
         protected override void OnDestroy()
         {
-            _eventHandler?.ClearAll();
             ClearInteractEvents();
         }
-
-        protected void BindTooltip(GameObject go, Func<object> data, float duration = 0f)
+        
+        protected void BindTooltip(Func<object> data, float duration = 0f)
         {
-            EventBus.Raise(new BindTooltipEvent(go, data, duration));
+            EventBus.Raise(new BindTooltipEvent(this, data, duration));
         }
 
-        protected void UnbindTooltip(GameObject go)
+        protected void UnbindTooltip()
         {
-            EventBus.Raise(new UnBindTooltipEvent(go));
+            EventBus.Raise(new UnBindTooltipEvent(this));
+        }
+        
+        protected void BindContextMneu(ContextMenuSO menu, Func<object> data)
+        {
+            EventBus.Raise(new BindContextMenuEvent(this, menu, data));
+        }
+
+        protected void UnBindContextMneu()
+        {
+            EventBus.Raise(new UnBindContextMenuEvent(this));
         }
         
         protected void BindPopup(IPopupable popup)
@@ -43,7 +53,7 @@ namespace Work.Code.UI.Core.Interaction
         {
             EventBus.Raise(new UnBindPopupEvent(popup));
         }
-
+        
         protected virtual void ClearInteractEvents() { }
     }
 }

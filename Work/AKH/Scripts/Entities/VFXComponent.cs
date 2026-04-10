@@ -34,7 +34,7 @@ namespace Entities
             IPlayableVFX vfx = _playableDictionary.GetValueOrDefault(vfxName);
             Debug.Assert(vfx != default(IPlayableVFX), $"{vfxName} is not exist");
             vfx.EffectTransform.SetParent(transform);
-            vfx.EffectTransform.localPosition = Vector3.zero;
+            //vfx.EffectTransform.localPosition = Vector3.zero;
             vfx.StopVFX();
         }
     }

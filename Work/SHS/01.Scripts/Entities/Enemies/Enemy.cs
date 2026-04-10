@@ -1,31 +1,27 @@
 ﻿using Chipmunk.ComponentContainers;
 using Chipmunk.Library.Utility.GameEvents.Local;
-using Scripts.Combat;
-using Scripts.Combat.Datas;
-using Scripts.Entities;
-using Scripts.FSM;
-using Scripts.Players;
-using System;
-using Chipmunk.GameEvents;
 using Code.EnemySpawn;
-using Code.ETC;
-using Code.GameEvents;
-using Code.SHS.Entities.Enemies.Targetings.Events;
 using Code.SHS.Entities.Enemies.Combat;
 using Code.SHS.Entities.Enemies.Events.Local;
 using Code.SHS.Entities.Enemies.FSM;
 using Code.SHS.Targetings.Enemies;
-using UnityEngine;
+using Scripts.Combat;
+using Scripts.Combat.Datas;
 using Scripts.Combat.Fovs;
-using UnityEngine.Events;
+using Scripts.Entities;
+using Scripts.FSM;
+using Scripts.Players;
 using SHS.Scripts.Combats.Events;
+using System;
+using UnityEngine;
+using UnityEngine.Events;
+using Code.Combat;
 
 namespace Code.SHS.Entities.Enemies
 {
-    public class Enemy : Entity, IKnockbackable, IStateEntity, IStunable, IAfterInitialze, IFindable
+    public class Enemy : Entity, IKnockbackable, IStateEntity, IFindable, IPullable
     {
         [SerializeField] public LayerMask playerLayerMask;
-        [SerializeField] private int enemyDropExp = 1;
 
         public float movingRange = 5;
 
@@ -39,9 +35,7 @@ namespace Code.SHS.Entities.Enemies
 
         private bool _isDead = false;
         private EnemyStunState _stunState;
-        private EnemySkillAimState _skillAimState;
         private LocalEventBus _localEventBus;
-        private EntityAnimator _entityAnimator;
 
         public override void OnInitialize(ComponentContainer componentContainer)
         {
@@ -50,17 +44,8 @@ namespace Code.SHS.Entities.Enemies
             NavMovement = ComponentContainer.GetComponent<NavMovement>(true);
             StateMachineBehavior = ComponentContainer.GetComponent<EnemyStateMachineBehavior>(true);
             _localEventBus = ComponentContainer.GetComponent<LocalEventBus>();
-            _entityAnimator = ComponentContainer.GetComponent<EntityAnimator>();
             OnDeadEvent.AddListener(HandleEnemyDead);
         }
-
-
-        public void AfterInitialize()
-        {
-            _stunState = StateMachineBehavior.StateMachine.GetState<EnemyStunState>(EnemyStateEnum.Stun);
-            _skillAimState = StateMachineBehavior.StateMachine.GetState<EnemySkillAimState>(EnemyStateEnum.AimSkill);
-        }
-
         private void Start()
         {
             OnFound?.Invoke(((IFindable)this).IsFounded);
@@ -79,6 +64,7 @@ namespace Code.SHS.Entities.Enemies
             localEventBus.Raise(new EnemySpawnEvent(enemyData));
             EnemyData = enemyData;
             SpawnPos = position;
+            _stunState = StateMachineBehavior.StateMachine.GetState<EnemyStunState>(EnemyStateEnum.Stun);
         }
 
         public void ChangeState(EnemyStateEnum newState, bool forced = false)
@@ -90,9 +76,13 @@ namespace Code.SHS.Entities.Enemies
             {
                 ChangeState(newState);
             }
+            else
+            {
+                Debug.LogWarning($"Can't find state: {stateData.enumName}");
+            }
         }
 
-        public void Stun(float duration)
+        public override void Stun(float duration)
         {
             _stunState.SetStunDuration(duration);
             ChangeState(EnemyStateEnum.Stun);
@@ -107,5 +97,10 @@ namespace Code.SHS.Entities.Enemies
 
         public void Escape()
             => OnFound?.Invoke(false);
+
+        public void Pull(Vector3 pullOffset)
+        {
+            NavMovement.Move(pullOffset);
+        }
     }
 }

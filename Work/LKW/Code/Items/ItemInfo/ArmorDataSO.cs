@@ -14,7 +14,7 @@ namespace Work.LKW.Code.Items.ItemInfo
         
         public override ItemCreateData CreateItem()
         {
-            return new ItemCreateData(new ArmorItem(this, maxDurability), Random.Range(1, maxStack));
+            return new ItemCreateData(new ArmorItem(this, maxDurability), Random.Range(1, maxSpawnCount));
         }
     }
 }

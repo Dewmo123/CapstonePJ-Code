@@ -1,4 +1,5 @@
 ﻿using Code.SHS.Entities.Enemies;
+using Code.SHS.Entities.Enemies.FSM;
 using Scripts.Enemies.EnemyBehaviourConditions;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Scripts.Enemies.EnemyBehaviours
     public abstract class EnemyBehaviour : MonoBehaviour
     {
         [field: SerializeField] public int Priority { get; set; }
+        [field: SerializeField] public List<EnemyStateEnum> TargetStates { get; private set; }
         [SerializeField] protected float cooldown;
         [SerializeField] private ConditionType conditionType;
         [SerializeReference]

@@ -8,6 +8,7 @@ using Scripts.Combat.Datas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Scripts.Entities;
 using UnityEngine;
 using Work.LKW.Code.Items;
 using Work.LKW.Code.Items.ItemInfo;
@@ -16,6 +17,7 @@ namespace Code.InventorySystems
 {
     public abstract class Inventory : MonoBehaviour, IContainerComponent
     {
+        public Entity Owner { get; private set; }
         public ComponentContainer ComponentContainer { get; set; }
         [SerializeField] private int _currentInventorySize = 4;
         protected int CurrentInventorySize { get => _currentInventorySize;set 
@@ -52,12 +54,6 @@ namespace Code.InventorySystems
 
         protected virtual void OnDestroy()
         {
-        }
-
-        public ItemSlot GetItemSlot(int slotIndex)
-        {
-            if (slotIndex >= CurrentInventorySize || slotIndex >= itemSlots.Count || slotIndex < 0) return null;
-            return itemSlots[slotIndex];
         }
 
         public ItemSlot GetItemSlot(ItemDataSO itemData)
@@ -119,40 +115,32 @@ namespace Code.InventorySystems
         {
             int remain = count;
 
-            for (int i = 0; i < CurrentInventorySize; i++)
+            var slots = GetItemSlots(item.ItemData);
+
+            foreach (var slot in slots)
             {
-                var slot = itemSlots[i];
-
-                if (slot.Item == null)
-                    continue;
-
-                if (slot.Item.ItemData != item.ItemData)
-                    continue;
-
                 if (slot.IsFull)
                     continue;
 
                 remain = slot.AddItem(remain);
-
-                if (remain <= 0)
+                
+                if(remain <= 0)
                     return count;
             }
+            
+            slots = GetItemSlots(null);
 
-            for (int i = 0; i < CurrentInventorySize; i++)
+            foreach (var slot in slots)
             {
-                var slot = itemSlots[i];
-
-                if (slot.Item != null)
-                    continue;
-
                 int addAmount = Mathf.Min(remain, item.ItemData.maxStack);
+                item.SetOwner(Owner);
                 slot.SetData(item, addAmount);
                 remain -= addAmount;
 
                 if (remain <= 0)
                     return count;
             }
-
+            
             return count - remain;
         }
 
@@ -212,7 +200,27 @@ namespace Code.InventorySystems
 
             int remaining = count;
 
-            for (int i = 0; i < CurrentInventorySize; i++)
+            var slots = GetItemSlots(item.ItemData);
+
+            foreach (var slot in slots)
+            {
+                if (!isFirst && slot.Item != item)
+                    continue;
+                
+                remaining = slot.RemoveItem(remaining);
+
+                if (remaining <= 0)
+                {
+                    item.SetOwner(null);
+                    UpdateInventory();
+                    return true;
+                }
+
+                if (!isFirst)
+                    break;
+            }
+            
+            /*for (int i = 0; i < CurrentInventorySize; i++)
             {
                 var slot = itemSlots[i];
 
@@ -235,7 +243,7 @@ namespace Code.InventorySystems
 
                 if (!isFirst)
                     break;
-            }
+            }*/
 
             return false;
         }
@@ -388,20 +396,20 @@ namespace Code.InventorySystems
                     if (equipSlot.CanEquip(startSlotItem))
                     {
                         EventBus<EquipByDragEvent>.Raise(new EquipByDragEvent(startSlotItem, equipSlot.EquipType, startSlot));
-                        if (startSlot.Owner != targetSlot.Owner)
+                        if (startSlot.OwnerInventory != targetSlot.OwnerInventory)
                         {
-                            startSlot.Owner.RemoveItem(startSlotItem, 1, false);
+                            startSlot.OwnerInventory.RemoveItem(startSlotItem, 1, false);
                         }
                     }
                 }
                 else if (startSlot is HotbarSlot unquipSlot)
                 {
-                    if (targetSlotItem == null && startSlot.Owner == targetSlot.Owner)
+                    if (targetSlotItem == null && startSlot.OwnerInventory == targetSlot.OwnerInventory)
                         EventBus<UnEquipHotbarEvent>.Raise(new UnEquipHotbarEvent(unquipSlot.Index));
                 }
                 else if (targetSlot is HotbarSlot hotbarSlot)
                 {
-                    if (targetSlotItem == null && startSlot.Owner == targetSlot.Owner && startSlotItem is ThrowableItem or UsableItem)
+                    if (targetSlotItem == null && startSlot.OwnerInventory == targetSlot.OwnerInventory && startSlotItem is ThrowableItem or UsableItem)
                         EventBus<EquipHotbarEvent>.Raise(new EquipHotbarEvent(hotbarSlot.Index, startSlotItem));
                 }
                 else
@@ -421,6 +429,7 @@ namespace Code.InventorySystems
 
         public virtual void OnInitialize(ComponentContainer componentContainer)
         {
+            Owner = componentContainer.GetSubclassComponent<Entity>();
         }
 
         public void SortInventory()

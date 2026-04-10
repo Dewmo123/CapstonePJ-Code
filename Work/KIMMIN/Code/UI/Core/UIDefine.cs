@@ -11,7 +11,7 @@ namespace Code.UI.Core
             new Color32(150, 25, 200, 255),
         };
         
-        public static Color32 GreenColor = new Color32(150, 255, 150, 255);
-        public static Color32 RedColor = new Color32(255, 150, 150, 255);
+        public static Color32 GreenColor = new Color32(125, 255, 125, 255);
+        public static Color32 RedColor = new Color32(255, 100, 100, 255);
     }
 }

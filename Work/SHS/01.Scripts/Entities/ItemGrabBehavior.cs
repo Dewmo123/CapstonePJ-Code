@@ -4,46 +4,54 @@ using Chipmunk.Library.Utility.GameEvents.Local;
 using Code.GameEvents;
 using InGame.InventorySystem;
 using Scripts.Combat.ItemObjects;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using Work.LKW.Code.Items;
 using Work.SHS.Items.Events;
 
-namespace Work.AKH.Scripts.Entities
+namespace SHS.Scripts.Entities.Players
 {
     public class ItemGrabBehavior : MonoBehaviour, IContainerComponent, ILocalEventSubscriber<ItemEquippedEvent>,
         ILocalEventSubscriber<ItemUnEquippedEvent>
     {
         [SerializeField] private TwoBoneIKConstraint leftHandIK, rightHandIK;
-        [SerializeField] private MultiParentConstraint itemParentConstraint;
+        
+        // 이거 나중에 쓸거면 구조 좀 바꿔야함
+        [SerializeField] private bool useItemParentConstraint = false;
+
+        [ShowIf("useItemParentConstraint")] [SerializeField]
+        private MultiParentConstraint itemParentConstraint;
+
+        [ShowIf("useItemParentConstraint")] [SerializeField]
+        private Transform itemParent;
+
+
         [SerializeField] private Transform leftHandTarget, rightHandTarget;
-        [SerializeField] private Transform itemParent;
-        private Rig rig;
         private GrabableObjectBehavior currentGrabableObject;
 
         public ComponentContainer ComponentContainer { get; set; }
 
         public void OnInitialize(ComponentContainer componentContainer)
         {
-            rig = GetComponent<Rig>();
-            rig.weight = 0;
+            SetWeight(0);
         }
 
         public void OnLocalEvent(ItemEquippedEvent eventData)
         {
-            rig.weight = 1;
             if (eventData.EquipableItem is EquipableItem equipableItem &&
                 equipableItem.ItemObject.GrabableObjectBehavior != null)
             {
                 GrabableObjectBehavior grabableObjectBehavior = equipableItem.ItemObject.GrabableObjectBehavior;
                 currentGrabableObject = grabableObjectBehavior;
-                if (grabableObjectBehavior.LeftGrabPoint != null)
-                    leftHandIK.weight = 1;
-                if (grabableObjectBehavior.RightGrabPoint != null)
-                    rightHandIK.weight = 1;
 
-                equipableItem.ItemObject.transform.SetParent(itemParent, false);
-                equipableItem.ItemObject.transform.localPosition = Vector3.zero;
+                if (useItemParentConstraint)
+                {
+                    equipableItem.ItemObject.transform.SetParent(itemParent, false);
+                    equipableItem.ItemObject.transform.localPosition = Vector3.zero;
+                }
+
+                SetWeight(1);
             }
         }
 
@@ -67,15 +75,14 @@ namespace Work.AKH.Scripts.Entities
 
         public void OnLocalEvent(ItemUnEquippedEvent eventData)
         {
-            rig.weight = 0;
-            leftHandIK.weight = 0;
-            rightHandIK.weight = 0;
+            SetWeight(0);
         }
 
         public void SetWeight(int i)
         {
-            Debug.Log("SetWeight: " + i);
-            rig.weight = i;
+            leftHandIK.weight = currentGrabableObject?.LeftGrabPoint == null ? 0 : i;
+            if (useItemParentConstraint)
+                rightHandIK.weight = currentGrabableObject?.RightGrabPoint == null ? 0 : i;
         }
     }
 }

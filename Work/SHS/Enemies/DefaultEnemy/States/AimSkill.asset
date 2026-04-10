@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: AimSkill
   m_EditorClassIdentifier: 
   enumName: AimSkill
-  className: Code.SHS.Entities.Enemies.FSM.EnemyAimState
-  animParamName: AimSkill
-  animationHash: 1938764998
+  className: Code.SHS.Entities.Enemies.FSM.EnemySkillAimState
+  animParamName: Aim
+  animationHash: 153482222

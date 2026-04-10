@@ -3,60 +3,101 @@ using UnityEngine.UI;
 
 namespace Code.UI.Tooltip
 {
+    [DefaultExecutionOrder(-9)]
     public class TooltipMover : MonoBehaviour
     {
-        [SerializeField] private Vector2 offset = new Vector2(15f, 15f);
+        [SerializeField] private Vector2 offset = new Vector2(5f, 5f);
         [SerializeField] private Canvas canvas;
-        private RectTransform _rect;
+
         private RectTransform _canvasRect;
+        private RectTransform _tooltipRoot;
+        private VerticalLayoutGroup _layout;
+        private Vector3 _prevMousePos;
+
+        public void Init(RectTransform tooltipRoot)
+        {
+            _tooltipRoot = tooltipRoot;
+            _layout = _tooltipRoot.GetComponent<VerticalLayoutGroup>();
+        }
 
         private void Awake()
         {
-            _rect = transform as RectTransform;
             _canvasRect = canvas.transform as RectTransform;
-
-            _rect.anchorMin = new Vector2(0.5f, 0.5f);
-            _rect.anchorMax = new Vector2(0.5f, 0.5f);
-            _rect.pivot = new Vector2(0f, 1f);
         }
 
         private void LateUpdate()
         {
-            SetPosition();
+            if (_tooltipRoot == null || _tooltipRoot.childCount == 0) return;
+            if (Input.mousePosition != _prevMousePos)
+            {
+                SetPosition();
+                _prevMousePos = Input.mousePosition;
+            }
         }
 
         private void SetPosition()
         {
-            if (_canvasRect == null) return;
+            RectTransform parent = transform as RectTransform;
+            RectTransform root = _tooltipRoot;
+            RectTransform canvasRect = _canvasRect;
+            Vector2 mousePos = Input.mousePosition;
 
-            LayoutRebuilder.ForceRebuildLayoutImmediate(_rect);
+            Vector2 localPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, mousePos,
+                canvas.worldCamera, out localPos);
 
-            Vector2 localPoint;
-            Camera cam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRect, Input.mousePosition, cam, out localPoint);
+            localPos += offset;
+            parent.anchoredPosition = localPos;
+            
+            Vector2 dir;
 
-            float tw = _rect.rect.width;
-            float th = _rect.rect.height;
-            float cw = _canvasRect.rect.width;
-            float ch = _canvasRect.rect.height;
+            float mouseX = mousePos.x;
+            float mouseY = mousePos.y;
+            float centerX = Screen.width / 2f;
+            float centerY = Screen.height / 2f;
 
-            float posX = localPoint.x + offset.x;
-            float posY = localPoint.y - offset.y;
-
-            if (posX + tw > cw * 0.5f)
+            if (mouseX > centerX && mouseY > centerY)
             {
-                posX = localPoint.x - tw - offset.x;
+                _layout.childAlignment = TextAnchor.LowerRight;
+                dir = new Vector2(-1, -1);
+            }
+            else if (mouseX < centerX && mouseY > centerY)
+            {
+                _layout.childAlignment = TextAnchor.LowerLeft;
+                dir = new Vector2(1, -1);
+            }
+            else if (mouseX < centerX && mouseY < centerY)
+            {
+                _layout.childAlignment = TextAnchor.UpperLeft;
+                dir = new Vector2(1, 1);
+            }
+            else
+            {
+                _layout.childAlignment = TextAnchor.UpperRight;
+                dir = new Vector2(-1, 1);
             }
 
-            if (posY - th < -ch * 0.5f)
-            {
-                posY = localPoint.y + th + offset.y;
-            }
+            localPos += new Vector2(offset.x * dir.x, offset.y * dir.y);
+            parent.anchoredPosition = localPos;
 
-            posX = Mathf.Clamp(posX, -cw * 0.5f, cw * 0.5f - tw);
-            posY = Mathf.Clamp(posY, -ch * 0.5f + th, ch * 0.5f);
+            Bounds bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(canvasRect, root);
+            Vector3 pos = parent.anchoredPosition;
 
-            _rect.anchoredPosition = new Vector2(posX, posY);
+            float minX = -canvasRect.rect.width * canvasRect.pivot.x;
+            float maxX = canvasRect.rect.width * (1 - canvasRect.pivot.x);
+            float minY = -canvasRect.rect.height * canvasRect.pivot.y;
+            float maxY = canvasRect.rect.height * (1 - canvasRect.pivot.y);
+
+            if (bounds.min.x < minX)
+                pos.x += (minX - bounds.min.x);
+            if (bounds.max.x > maxX)
+                pos.x -= (bounds.max.x - maxX);
+            if (bounds.min.y < minY)
+                pos.y += (minY - bounds.min.y);
+            if (bounds.max.y > maxY)
+                pos.y -= (bounds.max.y - maxY);
+
+            parent.anchoredPosition = pos;
         }
     }
 }

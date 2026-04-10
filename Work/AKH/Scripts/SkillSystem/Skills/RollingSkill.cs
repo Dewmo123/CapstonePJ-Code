@@ -24,14 +24,14 @@ namespace Scripts.SkillSystem.Skills
         public override void Init(ComponentContainer container)
         {
             base.Init(container);
-            _defaultLayer = gameObject.layer;
+            _defaultLayer = _owner.gameObject.layer;
             _staminaCompo = container.Get<StaminaCompo>();
             _avoidLayer = LayerMask.NameToLayer("AvoidEntity");
             _movement = container.GetSubclassComponent<ISkillMovement>();
         }
         public override bool CanUseSkill()
         {
-            return base.CanUseSkill() && (_staminaCompo?.CurrentValue ?? 0f) >= staminaUsage;
+            return base.CanUseSkill() && (_staminaCompo?.CurrentValue ?? 0f) >= -staminaUsage;
         }
         public override void StartAndUseSkill()
         {

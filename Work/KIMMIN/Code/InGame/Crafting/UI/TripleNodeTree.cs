@@ -7,13 +7,14 @@ using UnityEngine.UIElements;
 
 namespace Work.Code.Crafting
 {
-    public class TripleNodeTree : MonoBehaviour, IUIElement<CraftTreeSO, RectTransform, bool>
+    public class TripleNodeTree : MonoBehaviour
     {
         private CraftNodeUI[] _nodes = new CraftNodeUI[4];
         private UILineRenderer[] _lines;
         private Coroutine _treeRoutine;
         private PlayerInventory _inventory;
         private WaitForSeconds _delay = new WaitForSeconds(0.04f);
+        private WaitForSeconds _nonDelay = new WaitForSeconds(0f);
 
         [field: SerializeField] public RectTransform Rect { get; set; }
         
@@ -30,7 +31,7 @@ namespace Work.Code.Crafting
             _inventory = inventory;
         }
 
-        public void EnableFor(CraftTreeSO tree, RectTransform rect, bool isRoot = false)
+        public void Init(CraftTreeSO tree, RectTransform rect, bool isNotificate, bool isRoot = false)
         {
             if (tree == null || tree.isBinary) return;
             
@@ -38,7 +39,10 @@ namespace Work.Code.Crafting
             if(_treeRoutine != null)
                 StopCoroutine(_treeRoutine);
             
-            _treeRoutine = StartCoroutine(TreeRoutine(tree, isRoot));
+            if (isNotificate)
+                _treeRoutine = StartCoroutine(TreeRoutine(tree, isRoot));
+            else
+                TreeImmediate(tree, isRoot);
         }
 
         private IEnumerator TreeRoutine(CraftTreeSO tree, bool isRoot)
@@ -46,7 +50,9 @@ namespace Work.Code.Crafting
             for(int i = 0; i < _nodes.Length; i++)
             {
                 int count = _inventory.GetItemCount(tree.nodeList[i].Item);
-                _nodes[i].EnableFor(tree.nodeList[i], count, !((!isRoot && i == 0) || (isRoot && i > 0)));
+                bool isRootNode = !(isRoot ^ (i == 0));
+                CraftNodeData data = new(tree.nodeList[i], count, isRootNode);
+                _nodes[i].InitUI(data, true);
                 if (i < _nodes.Length - 1)
                     _lines[i].gameObject.SetActive(true);
 
@@ -54,6 +60,21 @@ namespace Work.Code.Crafting
             }
             
             _treeRoutine = null;
+        }
+        
+        private void TreeImmediate(CraftTreeSO tree, bool isRoot)
+        {
+            for (int i = 0; i < _nodes.Length; i++)
+            {
+                int count = _inventory.GetItemCount(tree.nodeList[i].Item);
+                bool isRootNode = !(isRoot ^ (i == 0));
+                CraftNodeData data = new(tree.nodeList[i], count, isRootNode);
+
+                _nodes[i].InitUI(data, false);
+
+                if (i < _nodes.Length - 1)
+                    _lines[i].gameObject.SetActive(true);
+            }
         }
 
         public void Clear()

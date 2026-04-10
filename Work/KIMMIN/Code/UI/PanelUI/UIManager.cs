@@ -16,9 +16,11 @@ namespace Code.UI.Core
         Panel,
         Popup,
         Tooltip,
+        ContextMenu,
         None
     }
     
+    [DefaultExecutionOrder(-25)]
     public class UIManager : MonoSingleton<UIManager>
     { 
         [SerializeField] private PlayerInputSO playerInput;
@@ -32,6 +34,7 @@ namespace Code.UI.Core
         private void Awake()
         {
             playerInput.OnToggleUIPressed += HandlePressEsc;
+            DOTween.SetTweensCapacity(500, 100);
         }
 
         private void OnDestroy()
@@ -59,8 +62,8 @@ namespace Code.UI.Core
         
         private void HandleChnageUIState(UIBase ui, bool isFade)
         {
-            HandleStack(ui, ui.IsActive);
             HandleToggle(ui, ui.IsActive, isFade);
+            HandleStack(ui, ui.IsActive);
         }
 
         private void HandleStack(UIBase ui, bool isActive)
@@ -117,13 +120,11 @@ namespace Code.UI.Core
             }
         }
         
-        public UIBase PopUI()
+        public void PopUI()
         {
-            if (_uiStack.Count == 0) return null;
-
+            if (_uiStack.Count == 0) return;
             var top = _uiStack.Pop();
             top.DisableUI();
-            return top;
         }
         
         public void RemoveUI(UIBase target)

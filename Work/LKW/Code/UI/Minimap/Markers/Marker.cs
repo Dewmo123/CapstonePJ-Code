@@ -1,4 +1,3 @@
-
 using Code.UI.Minimap.Core;
 
 namespace Code.UI.Minimap.Markers

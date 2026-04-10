@@ -1,15 +1,18 @@
 ﻿using Chipmunk.ComponentContainers;
 using Code.Players;
 using Scripts.Combat.Datas;
+using Scripts.Enemies.States;
 using UnityEngine;
 using Work.LKW.Code.Items;
 
 namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
 {
-    public class EnemyAttackState : EnemyState
+    public class EnemyAttackState : EnemyExecuteBehaviourState
     {
         private IAttackable _weaponItem;
         private EnemyEquipment _equipment;
+
+        public override float ExecuteTimer => 0;
 
         public EnemyAttackState(ComponentContainer container, int animationHash) : base(container, animationHash)
         {
@@ -31,16 +34,16 @@ namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
 
         public override void Update()
         {
-            base.Update();
             if (_isTriggerCall)
                 _enemy.ChangeState(EnemyStateEnum.Aim);
+            base.Update();
             UpdateMovementAnimation();
         }
 
         private void HandleDamageCast()
         {
-            if (_enemy.TargetProvider.Target != null)
-            _movement.LookAtTarget(_enemy.TargetProvider.Target.transform.position);
+            if (_enemy.TargetProvider.CurrentTarget != null)
+            _movement.LookAtTarget(_enemy.TargetProvider.CurrentTarget.transform.position);
             _weaponItem?.AttackTrigger();
         }
 

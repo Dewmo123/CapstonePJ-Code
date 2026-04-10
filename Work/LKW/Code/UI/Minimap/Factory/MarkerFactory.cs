@@ -2,7 +2,6 @@ using Code.UI.Minimap.Core;
 using UnityEngine;
 using UnityEngine.UI;
 using  Code.UI.Minimap.Markers;
-using DewmoLib.Dependencies;
 using DewmoLib.ObjectPool.RunTime;
 
 namespace Code.UI.Minimap.Factory

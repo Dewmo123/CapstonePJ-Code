@@ -1,4 +1,5 @@
-﻿using DewmoLib.ObjectPool.RunTime;
+﻿using System;
+using DewmoLib.ObjectPool.RunTime;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -13,8 +14,14 @@ namespace Scripts.Effects
         public GameObject GameObject => gameObject;
 
         private Pool _myPool;
+        private Vector3 _originScale;
         [SerializeField] private GameObject effectObject;
         private IPlayableVFX _playableVFX;
+
+        private void Awake()
+        {
+            _originScale = transform.localScale;
+        }
 
         public void SetUpPool(Pool pool)
         {
@@ -29,6 +36,12 @@ namespace Scripts.Effects
             _playableVFX.StopVFX();
         }
 
+        public void PlayVFX(Vector3 position, Quaternion rotation, float scale)
+        {
+            _originScale *= scale;
+            PlayVFX(position, rotation);
+        }
+        
         public void PlayVFX(Vector3 position, Quaternion rotation)
         {
             transform.position = position;

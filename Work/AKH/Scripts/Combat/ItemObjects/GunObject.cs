@@ -19,7 +19,7 @@ namespace Scripts.Combat.ItemObjects
         [SerializeField] private Transform fireTrm;
         [SerializeField] private PoolManagerSO poolManager;
         [SerializeField] private PoolItemSO bulletItem;
-        [SerializeField] private float aimRotateSpeed = 28f;
+        //[SerializeField] private float aimRotateSpeed = 28f;
 
         protected GunItem _gunItem => _item as GunItem;
         private GunDataSO _gunData;

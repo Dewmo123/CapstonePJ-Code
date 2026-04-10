@@ -11,7 +11,6 @@ using Scripts.SkillSystem;
 using TMPro;
 using UnityEngine;
 using Work.LKW.Code.Items;
-using Scripts.SkillSystem.Manage;
 
 namespace Code.UI.Inventory
 {
@@ -22,14 +21,8 @@ namespace Code.UI.Inventory
         [SerializeField] private bool isPlayerInventory;
 
         [Inject] private Player _player;
-        private SkillManager _skillManager;
         private List<ItemSlot> _slots;
         private int _currentSlotCnt;
-        
-        private void Start()
-        {
-            _skillManager = _player.Get<SkillManager>();
-        }
 
         protected override void Awake()
         {
@@ -42,6 +35,12 @@ namespace Code.UI.Inventory
         {
             EventBus.Unsubscribe<UpdateInventoryUIEvent>(HandleUpdateInventoryUI);
             base.OnDestroy();
+        }
+
+        public override void DisableUI(bool isFade = false)
+        {
+            base.DisableUI(isFade);
+            skillUpgradeUI?.DisableUI();
         }
 
         protected override void UpdateSlotUI()
@@ -76,15 +75,15 @@ namespace Code.UI.Inventory
             int existItemSlotCnt = _slots.Count(slot => slot.Item != null);
             bagTitleText.SetText($"용량 ({existItemSlotCnt} / {_currentSlotCnt})");
             
+            skillUpgradeUI?.DisableUI();
             UpdateSlotUI();
         }
 
         protected override void HandleClick(ItemSlot slot)
         {
-            if(slot.Item is not EquipableItem item) return;
-            if (_skillManager.TryGetSkill(item.Skill, out Skill skill))
+            if (slot.Item is EquipableItem item)
             {
-                skillUpgradeUI.EnableFor(skill);
+                skillUpgradeUI.EnableFor(item);
             }
         }
     }

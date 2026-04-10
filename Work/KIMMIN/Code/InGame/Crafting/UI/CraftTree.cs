@@ -80,8 +80,14 @@ namespace Work.Code.Crafting
                 
                 ui.Clear();
                 ui.ItemButton.onClick.AddListener(() => HandleClickItem(node));
-                ui.OnRightClick += HandlePinItem;
+                ui.OnPinItem += HandlePinItem;
+                ui.OnRequestCraft += HandleTryCraft;
             }
+        }
+
+        private void HandleTryCraft(CraftTreeSO tree)
+        {
+            treeUI.CreateItem(tree);
         }
 
         private void HandlePinItem(CraftItemUI item, bool isPinned)
@@ -142,7 +148,7 @@ namespace Work.Code.Crafting
             foreach (var node in tree.list)
             {
                 _items[node.Item].ItemButton.onClick.RemoveAllListeners();
-                _items[node.Item].OnRightClick -= HandlePinItem;
+                _items[node.Item].OnPinItem -= HandlePinItem;
             }
             
             _mapViewButton.OnShowItems -= HandleViewItems;
@@ -196,11 +202,11 @@ namespace Work.Code.Crafting
             RefreshItems();
         }
         
-        private void RefreshItems()
+        private void RefreshItems(bool isNotificate = true)
         {
-            DisableItems();
-            var query = _items.AsEnumerable();
+            ToggleItems(false);
 
+            var query = _items.AsEnumerable();
             if (_type != ItemType.None) query = query.Where(x => x.Key.itemType == _type);
             if (_isFavorite) query = query.Where(x => x.Value.IsFavorite);
 
@@ -216,16 +222,31 @@ namespace Work.Code.Crafting
             {
                 var ui = pair.Value;
                 ui.transform.SetSiblingIndex(idx++);
-                ui.EnableFor(pair.Key);
+                ui.Init(pair.Key, isNotificate);
                 ui.SetTree(_treeLookup[pair.Key]);
             }
         }
 
-        private void DisableItems()
+        public override void EnableUI(bool isFade = false)
+        {
+            base.EnableUI(isFade);
+            ToggleItems(true);
+        }
+
+        public override void DisableUI(bool isFade = false)
+        {
+            base.DisableUI(isFade);
+            ToggleItems(false);
+        }
+
+        private void ToggleItems(bool isActive)
         {
             foreach (var item in _items.Values)
             {
-                item.Clear();
+                if (isActive)
+                    item.EnableUI();
+                else
+                    item.DisableUI();
             }
         }
 

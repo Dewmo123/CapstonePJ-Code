@@ -9,18 +9,21 @@ namespace Code.ETC
     public class Barrier : MonoBehaviour
     {
         [SerializeField] private LayerMask whatIsBullet;
-
-        [SerializeField] private Animator animator;
-        //public event Action<float> OnTakeDamage;
-
+        
+        private Animator _animator;
         private bool _isBreak = false;
 
-        private void OnCollisionEnter(Collision collision)
+        private void Awake()
+        {
+            _animator = GetComponent<Animator>();
+        }
+
+        private void OnTriggerEnter(Collider collision)
         {
             if (_isBreak == false && ((1 << collision.gameObject.layer) & whatIsBullet) != 0)
             {
                 _isBreak = true;
-                animator.SetTrigger("BREAK");
+                _animator.SetTrigger("BREAK");
             }
         }
 

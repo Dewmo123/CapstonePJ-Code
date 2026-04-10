@@ -95,7 +95,7 @@ namespace Scripts.Combat.Datas
 
         public override ItemCreateData CreateItem()
         {
-            return new ItemCreateData(new GunItem(this), 1);
+            return new ItemCreateData(new GunItem(this), maxSpawnCount);
         }
     }
 }

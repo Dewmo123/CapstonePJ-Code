@@ -11,33 +11,41 @@ namespace Scripts.SkillSystem
     {
         [field: SerializeField] public SkillDataSO SkillData { get; private set; }
         public int Level
+            => _level;
+
+        public bool SetLevel(int value)
         {
-            get => _level; set
+            if (value <= 0 || value > SkillData.upgradeList.Count)
             {
-                if (value <= 0 || value >= SkillData.upgradeList.Count)
+                Debug.LogWarning($"Skill Level must be between 1 and {SkillData.upgradeList.Count} but {value}");
+                return false;
+            }
+            
+            if (value < _level)
+            {
+                for (int i = _level - 1; i >= value; i--)
                 {
-                    Debug.LogWarning($"Skill Level must be between 1 and {SkillData.upgradeList.Count}");
-                    return;
-                }
-                if (value < _level)
-                {
-                    for (int i = value; i >= _level; i--)
-                    {
-                        SkillUpgradeSO upgradeSO = SkillData.upgradeList[i];
-                        upgradeSO?.UpgradeSkill(this);
-                    }
-                }
-                else if (value > _level)
-                {
-                    for (int i = _level; i <= value; i++)
-                    {
-                        SkillUpgradeSO upgradeSO = SkillData.upgradeList[i];
-                        upgradeSO?.UpgradeSkill(this);
-                    }
+                    SkillUpgradeSO upgradeSO = SkillData.upgradeList[i];
+                    upgradeSO?.RollbackSkill(this);
                 }
                 
                 _level = value;
+                return true;
             }
+            else if (value > _level)
+            {
+                for (int i = _level; i < value; i++)
+                {
+                    
+                    SkillUpgradeSO upgradeSO = SkillData.upgradeList[i];
+                    upgradeSO?.UpgradeSkill(this);
+                }
+
+                _level = value;
+                return true;
+            }
+
+            return false;
         }
 
         protected ComponentContainer _container;

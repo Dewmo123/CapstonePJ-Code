@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enumName: AimSkill
   className: Scripts.Players.States.PlayerSkillAimState
-  animParamName: AimSkill
-  animationHash: 1938764998
+  animParamName: Aim
+  animationHash: 153482222

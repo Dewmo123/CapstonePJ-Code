@@ -81,7 +81,6 @@ MonoBehaviour:
   whatIsBullet:
     serializedVersion: 2
     m_Bits: 1024
-  animator: {fileID: 5059945195701729767}
 --- !u!65 &8157309094398556106
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -479,7 +478,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1510542076297736576, guid: 314219ba2e0117d4694fa3ffa337c23f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 1510542076297736576, guid: 314219ba2e0117d4694fa3ffa337c23f, type: 3}
       propertyPath: m_LocalScale.z

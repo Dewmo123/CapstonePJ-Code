@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Scripts.SkillSystem.Manage;
 using Code.UI.Core;
@@ -23,6 +24,8 @@ namespace Work.Code.SkillInventory
         private SkillSlot _selectedSkill;
         private SkillEquipModel _model;
 
+        public event Action<Skill[]> OnSkillChanged;
+
         private void Start()
         {
             skillInventory.Initialize(_player);
@@ -37,7 +40,7 @@ namespace Work.Code.SkillInventory
             SetupUI(inventories, SkillType.None);
             
             _model = new SkillEquipModel();
-            _model.OnSkillChanged += RefreshUI;
+            _model.OnSkillChanged += HandleSkillUpdated;
             _model.OnSkillUnequipped += UnEquipSkill;
             playerInput.OnSkillTreePressed += HandleSkillTreePressed;
             skillInventory.OnChangeInventory += HandleChangeInventory;
@@ -48,9 +51,13 @@ namespace Work.Code.SkillInventory
             ToggleUI(true);
         }
 
-        private void UnEquipSkill(Skill skill, int index)
+        private void UnEquipSkill(Skill skill)
         {
-            _player.LocalEventBus.Raise(new UnEquipSkillEvnt(skill, index));
+            skillInventory.RemoveSkill(skill);
+            _model.RemoveSkill(skill);
+
+            HandleSkillUpdated();
+            _player.LocalEventBus.Raise(new UnEquipSkillEvnt(skill));
         }
 
         private void SetupUI(SkillSlot[] skillUI, SkillType type)
@@ -88,19 +95,25 @@ namespace Work.Code.SkillInventory
             _player.LocalEventBus.Raise(new EquipSkillEvent(skill, index));
         }
 
-        private void RefreshUI()
+        private void HandleSkillUpdated()
         {
+            List<Skill> skillList = new();
             foreach (var ui in _skillUis)
             {
                 var skill = _model.GetSkill(ui.Index, ui.SkillType);
                 ui.SetEquip(skill);
+
+                if (skill != null)
+                    skillList.Add(skill);
             }
+            
+            OnSkillChanged?.Invoke(skillList.ToArray());
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            _model.OnSkillChanged -= RefreshUI;
+            _model.OnSkillChanged -= HandleSkillUpdated;
             _model.OnSkillUnequipped -= UnEquipSkill;
             playerInput.OnSkillTreePressed -= HandleSkillTreePressed;
             skillInventory.OnChangeInventory -= HandleChangeInventory;
@@ -147,14 +160,19 @@ namespace Work.Code.SkillInventory
         private void HandleChangeInventory(Skill[] skills)
         {
             var skillSet = new HashSet<Skill>(skills);
-
+            bool isChanged = false;
+            
             foreach (var ui in _skillUis)
             {
-                if (!skillSet.Contains(ui.CurrentSkill))
+                if (ui.CurrentSkill != null && !skillSet.Contains(ui.CurrentSkill))
                 {
+                    _model.RemoveSkill(ui.CurrentSkill); 
                     ui.Clear();
+                    isChanged = true;
                 }
             }
+            
+            if (isChanged) HandleSkillUpdated();
         }
     }
 }

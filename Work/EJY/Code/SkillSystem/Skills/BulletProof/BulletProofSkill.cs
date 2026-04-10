@@ -10,8 +10,9 @@ namespace Code.SkillSystem.Skills.BulletProof
     {
         [SerializeField] private BuffSO shieldBuff;
         [SerializeField] private BuffSO dmgIncreaseByShieldBuff; // temp
-        [SerializeField] private StatusEffectCreateData damageMultyIncreaseData;
+        [SerializeField] private BuffSO damageMultiIncreaseData;
         [SerializeField] private bool isDmgIncreaseByShield;
+        [SerializeField] private bool isDmgIncreaseAtHaveShield;
         private EntityStatusEffect _entityStatusEffect;
         private VFXComponent _vfxComponent;
         private AbstractStatusEffect _bulletProofShieldEffect;
@@ -24,20 +25,27 @@ namespace Code.SkillSystem.Skills.BulletProof
             _entityStatusEffect.OnStatusEffectReleased -= HandleStatusEffectReleased;
             _entityStatusEffect.OnStatusEffectReleased += HandleStatusEffectReleased;
         }
-        [ContextMenu("Dmg Increase By Shield")]
-        public void DmgIncreaseByShield() => isDmgIncreaseByShield = true;
-        [ContextMenu("Dmg Multy Increase")]
-        private void DamageMultyIncrease()
-        {
-            shieldBuff.statusEffectCreateData.Add(damageMultyIncreaseData);
-        }
-        [ContextMenu("Temp Use Skill")]
+        
+        private void UpgradeDmgInCreaseAtHaveShield() => isDmgIncreaseAtHaveShield = true;
+        private void RollbackDmgInCreaseAtHaveShield() => isDmgIncreaseAtHaveShield = false;
+        private void UpgradeDmgIncreaseByShield() => isDmgIncreaseByShield = true;
+        private void RollbackDmgIncreaseByShield() => isDmgIncreaseByShield = false;
+
+        
         public override void StartAndUseSkill()
         {
             if (_isBulletProofVfxPlaying == false)
             {
                 _vfxComponent.PlayVFX("BulletProof", transform.position, Quaternion.identity);
                 _isBulletProofVfxPlaying = true;
+            }
+            // temp
+            if (isDmgIncreaseAtHaveShield)
+            {
+                foreach (var info in damageMultiIncreaseData.GetStatusEffectInfo())
+                {
+                    _entityStatusEffect.AddStatusEffect(info);
+                }
             }
             // temp
             if (isDmgIncreaseByShield)
@@ -47,6 +55,7 @@ namespace Code.SkillSystem.Skills.BulletProof
                     _entityStatusEffect.AddStatusEffect(info);
                 }
             }
+            
             foreach (var info in shieldBuff.GetStatusEffectInfo())
             {
                 var appliedEffect = _entityStatusEffect.AddStatusEffect(info);

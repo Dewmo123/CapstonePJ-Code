@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Work.AKH.Scripts.Entities
+namespace SHS.Scripts.Entities.Players
 {
     public interface IGrabableObject
     {

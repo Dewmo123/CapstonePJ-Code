@@ -68,6 +68,8 @@ namespace Code.UI.Minimap.Markers
         {
             if (Mouse.current.rightButton.wasPressedThisFrame)
             {
+                if(_minimapSystem.IsActiveMinimap == false) return;
+                
                 Vector2 mousePos = Mouse.current.position.ReadValue();
                 
                 if (TryRemoveMarker(mousePos)) return;

@@ -1,10 +1,10 @@
-﻿using Chipmunk.ComponentContainers;
+﻿using AYellowpaper.SerializedCollections;
+using Chipmunk.ComponentContainers;
 using Chipmunk.Library.Utility.GameEvents.Local;
 using Code.SHS.Entities.Enemies;
-using Code.SHS.Entities.Enemies.Behaviors;
 using Code.SHS.Entities.Enemies.Events.Local;
+using Code.SHS.Entities.Enemies.FSM;
 using Sirenix.Utilities;
-using Scripts.SkillSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ namespace Scripts.Enemies.EnemyBehaviours
 {
     public class EnemyBehaviourManager : MonoBehaviour, IContainerComponent, ILocalEventSubscriber<EnemySpawnEvent>
     {
-        private List<EnemyBehaviour> _behaviours = new(10);
+        private SerializedDictionary<EnemyStateEnum, List<EnemyBehaviour>> _behaviours = new();
 
         public ComponentContainer ComponentContainer { get; set; }
         public EnemyBehaviour CurrentBehaviour { get; private set; }
@@ -24,6 +24,10 @@ namespace Scripts.Enemies.EnemyBehaviours
         public void OnInitialize(ComponentContainer componentContainer)
         {
             _enemy = componentContainer.Get<Enemy>(true);
+            foreach (EnemyStateEnum state in Enum.GetValues(typeof(EnemyStateEnum)))
+            {
+                _behaviours[state] = new List<EnemyBehaviour>();
+            }
         }
 
         public void OnLocalEvent(EnemySpawnEvent spawnEvent)
@@ -34,7 +38,8 @@ namespace Scripts.Enemies.EnemyBehaviours
                     continue;
                 EnemyBehaviour behaviour = Instantiate(enemyBehaviorPatch.Value, transform);
                 enemyBehaviorPatch.ApplySetter(behaviour);
-                _behaviours.Add(behaviour);
+                foreach (var state in behaviour.TargetStates)
+                    _behaviours[state].Add(behaviour);
                 behaviour.Init(_enemy);
             }
 
@@ -44,17 +49,19 @@ namespace Scripts.Enemies.EnemyBehaviours
 
         private void RebuildBehaviourCache()
         {
-            _behaviours = _behaviours
-                .Where(behaviour => behaviour != null)
-                .OrderBy(behaviour => behaviour.Priority).ToList();
+            foreach (var behaviours in _behaviours.Values)
+            {
+                behaviours.RemoveAll(b => b == null);
+                behaviours.Sort((a, b) => a.Priority.CompareTo(b.Priority));
+            }
         }
 
-        public EnemyBehaviour GetOptimal()
-            => _behaviours.FirstOrDefault(behaviour => behaviour != null && behaviour.Condition());
+        public EnemyBehaviour GetOptimal(EnemyStateEnum state)
+            => _behaviours[state].FirstOrDefault(behaviour => behaviour != null && behaviour.Condition());
 
-        public void ExecuteOptimal()
+        public void ExecuteOptimalCurrentState()
         {
-            EnemyBehaviour optimalBehaviour = GetOptimal();
+            EnemyBehaviour optimalBehaviour = GetOptimal(_enemy.StateMachineBehavior.StateMachine.CurrentStateEnum);
             optimalBehaviour?.Execute();
             CurrentBehaviour = optimalBehaviour;
         }

@@ -11,7 +11,8 @@ namespace Code.SHS.Targetings.Enemies
     public class TargetProvider : MonoBehaviour, IContainerComponent
     {
         [SerializeField] private float targetForgetDuration = 5f;
-        public Entity Target => _currentTarget;
+        public Entity CurrentTarget => _currentTarget;
+        public Entity Target => _target;
         private Entity _currentTarget;
         private Entity _target;
         public Vector3 LastTargetPosition => _lastPosition;
@@ -53,14 +54,14 @@ namespace Code.SHS.Targetings.Enemies
 
         public float GetTargetDistance()
         {
-            if (Target == null)
+            if (CurrentTarget == null)
                 return float.MaxValue;
-            return Vector3.Distance(transform.position, Target.transform.position);
+            return Vector3.Distance(transform.position, CurrentTarget.transform.position);
         }
 
         public void SetTarget(Entity target)
         {
-            Entity previousTarget = _target;
+            Entity previousTarget = _currentTarget;
             _target = target;
             if (target != null)
             {
@@ -76,7 +77,7 @@ namespace Code.SHS.Targetings.Enemies
 
         public void TargetLost(Vector3 lastKnownPosition)
         {
-            if (Target != null) return;
+            if (CurrentTarget != null) return;
             _lastPosition = lastKnownPosition;
             _targetForgetTimer = 0f;
             _localEventBus.Raise(new TargetLostEvent(lastKnownPosition));

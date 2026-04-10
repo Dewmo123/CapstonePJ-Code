@@ -41,7 +41,8 @@ namespace Scripts.Combat
                 if (!IsPointInArc(position, startDir, endDir, target.position, castRadius, castAngle))
                     continue;
                 Vector3 normal = (position - target.position).normalized;
-                ApplyDamageAndKnockback(target, damageData, position, normal, knockBackData);
+                Vector3 hitPoint = _colliders[i].ClosestPoint(position);
+                ApplyDamageAndKnockback(target, damageData, hitPoint, normal, knockBackData);
                 hitAny = true;
             }
 

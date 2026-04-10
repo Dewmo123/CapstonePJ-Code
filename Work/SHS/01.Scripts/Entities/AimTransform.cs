@@ -3,7 +3,7 @@ using Chipmunk.ComponentContainers;
 using Code.ETC;
 using UnityEngine;
 
-namespace Work.AKH.Scripts.Entities
+namespace SHS.Scripts.Entities.Players
 {
     public class AimTransform : MonoBehaviour, IContainerComponent
     {

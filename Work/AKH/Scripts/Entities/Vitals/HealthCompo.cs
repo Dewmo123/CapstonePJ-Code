@@ -60,7 +60,7 @@ namespace Assets.Work.AKH.Scripts.Entities.Vitals
             if (Mathf.Approximately(CurrentValue, 0))
             {
                 _entity.Dead();
-                _localEventBus.Raise(new EntityDeadEvent(context.HitPoint,context.HitNormal));
+                _localEventBus.Raise(new EntityDeadEvent(_entity, context.HitPoint, context.HitNormal));
             }
 
             OnHit?.Invoke(context);

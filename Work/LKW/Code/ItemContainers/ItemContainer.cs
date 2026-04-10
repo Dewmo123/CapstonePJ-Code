@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Chipmunk.GameEvents;
 using Work.LKW.Code.Events;
 using Code.GameEvents;
@@ -6,6 +7,8 @@ using Code.InventorySystems;
 using Work.LKW.Code.Items.ItemInfo;
 using EPOOutline;
 using Scripts.Entities;
+using TMPro;
+using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -28,20 +31,34 @@ namespace Work.LKW.Code.ItemContainers
         [SerializeField] private LayerMask whatIsPlayer;
         [SerializeField] private int minItems = 1;
         [SerializeField] private int maxItems = 4;
+        [SerializeField] private GameObject helpText;
+        
         [field: SerializeField] public Outlinable Outlinable { get; private set; }
-
         
         private bool _isSubscribe = false;
+        private bool _isSelected = false;
+
+        private Camera _cam;
 
         protected override void Awake()
         {
             base.Awake();
             EventBus.Subscribe<PlayerUIEvent>(HandlePlayerUIEvent);
+            _cam = Camera.main;
         }
 
         private void Start()
         {
             Outlinable.enabled = false;
+            helpText.gameObject.SetActive(false);
+        }
+
+        private void LateUpdate()
+        {
+            if (_isSelected)
+            {
+                helpText.transform.forward = _cam.transform.forward;
+            }
         }
 
         protected override void OnDestroy()
@@ -73,7 +90,6 @@ namespace Work.LKW.Code.ItemContainers
             Bus.Raise(evt);
 
             HandleSubscribe();
-            
             UpdateInventory();
         }
 
@@ -109,11 +125,15 @@ namespace Work.LKW.Code.ItemContainers
 
         public void Select()
         {
+            _isSelected = true;
+            helpText.gameObject.SetActive(true);
             Outlinable.enabled = true;
         }
 
         public void DeSelect()
         {
+            helpText.gameObject.SetActive(false);
+            _isSelected = false;
             Outlinable.enabled = false;
         }
     }

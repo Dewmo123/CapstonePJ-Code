@@ -44,7 +44,7 @@ namespace Code.SHS.Entities.Enemies.Skills
         /// </summary>
         private Vector3 GetDashDirection()
         {
-            Entity target = _enemy.TargetProvider.Target;
+            Entity target = _enemy.TargetProvider.CurrentTarget;
             if (target != null)
             {
                 Vector3 direction = (target.transform.position - _enemy.transform.position).normalized;

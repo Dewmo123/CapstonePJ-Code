@@ -22,7 +22,7 @@ namespace Code.EnemySpawn
 
             SetUpSpawnZone();
             
-            TimeController.Instance.AddRepeatEvent(TimeUtil.Hour(1), SpawnAllEnemies);
+            TimeController.Instance.AddRepeatEvent(TimeUtil.Day(0.5f), SpawnAllEnemies);
         }
 
         private void SetUpSpawnZone()

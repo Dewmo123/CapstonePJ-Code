@@ -1,12 +1,13 @@
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Chipmunk.Library.Utility.GameEvents.Local;
+using Code.SHS.Entities.Enemies.Combat;
 using Scripts.Combat;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Scripts.Entities
 {
-    public abstract class Entity : MonoBehaviour,IContainerComponent, IHitTransform
+    public abstract class Entity : MonoBehaviour,IContainerComponent, IHitTransform, IStunable
     {
         public delegate void OnHitDelegate(Entity dealer, IDamageable target);
         public delegate float OnDamageCalcDelegate(Entity dealer, Transform target);
@@ -18,8 +19,8 @@ namespace Scripts.Entities
         public Transform HitTransform => hitBodyTrm;
 
         public OnDamageCalcDelegate OnDamageCalc;
-        public OnHitDelegate OnHit; // ���� �� ȿ�� (������ ���� ��)
-        public UnityEvent OnHitEvent; // ������ ���� ��
+        public OnHitDelegate OnHit; // 내가 맞출 때
+        public UnityEvent OnHitEvent; // 내가 맞을 때
         public UnityEvent OnDeadEvent;
         
         public LocalEventBus LocalEventBus { get; private set; }
@@ -51,6 +52,11 @@ namespace Scripts.Entities
                 return;
             OnDeadEvent?.Invoke();
         }
-
+        public void DestroyThis()
+        {
+            Destroy(gameObject);
+        }
+        public virtual void Stun(float duration) 
+        {}
     }
 }

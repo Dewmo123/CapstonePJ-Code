@@ -13,5 +13,6 @@ namespace Code.SkillSystem
         [TextArea] public string skillDescription;
         public List<SkillUpgradeSO> upgradeList;
         public GameObject skillPrefab;
+        public bool defaultSkill;
     }
 }

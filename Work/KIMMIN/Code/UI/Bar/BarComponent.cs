@@ -1,4 +1,6 @@
-﻿using DG.Tweening;
+﻿using System;
+using Code.UI.Core;
+using DG.Tweening;
 using Scripts.Entities.Vitals;
 using TMPro;
 using UnityEngine;
@@ -6,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Code.UI.Bar
 {
-    public class BarComponent : MonoBehaviour
+    public class BarComponent : UIBase
     {
         [SerializeField] protected Image fill;
         [SerializeField] protected Image trailFill;
@@ -15,7 +17,7 @@ namespace Code.UI.Bar
         private Tween _trailTween;
 
         
-        public virtual void SetBar(float current, float max)
+        public virtual void SetBar(float current, float max,  Action<float> callback = null)
         {
             float target = current / max;
             

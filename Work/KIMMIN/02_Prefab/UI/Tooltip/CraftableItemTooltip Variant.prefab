@@ -181,23 +181,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7885110132472418772, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_Pivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7885110132472418772, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7885110132472418772, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7885110132472418772, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7885110132472418772, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7885110132472418772, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_SizeDelta.x
@@ -237,11 +237,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7885110132472418772, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 113
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7885110132472418772, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -304.62
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7885110132472418772, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -284,7 +284,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9459d43113c549e0887fefda35951b42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  craftableItemListSO: {fileID: 11400000, guid: 63488831ca7f3a4499cf46d3c45d9a1d, type: 2}
   craftableItemUI: {fileID: 3433665658912653984, guid: b0b0dd86dd478f64da0cda906a5501f7, type: 3}
   root: {fileID: 3069074434031084513}
 --- !u!224 &6659193434197039608 stripped

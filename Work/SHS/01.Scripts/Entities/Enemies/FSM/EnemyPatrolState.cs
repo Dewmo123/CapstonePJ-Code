@@ -1,16 +1,19 @@
 ﻿using Chipmunk.ComponentContainers;
 using Code.SHS.Entities.Enemies.Targetings.Events;
+using Scripts.Enemies.States;
 using UnityEngine;
 
 namespace Code.SHS.Entities.Enemies.FSM
 {
-    public class EnemyPatrolState : EnemyState
+    public class EnemyPatrolState : EnemyExecuteBehaviourState
     {
         private Vector3 _patrolCenter;
         private float _patrolRadius = 5f;
         private float _waitTime = 2f;
         private float _waitTimer;
         private bool _isWaiting;
+
+        public override float ExecuteTimer => 0.1f;
 
         public EnemyPatrolState(ComponentContainer container, int animationHash) : base(container, animationHash)
         {

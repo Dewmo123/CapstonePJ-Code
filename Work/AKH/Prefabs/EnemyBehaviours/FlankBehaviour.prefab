@@ -45,17 +45,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Priority>k__BackingField: 0
+  <TargetStates>k__BackingField: 0200000003000000
   cooldown: 12
   conditionType: 1
   conditions:
   - rid: 2466404181872738749
-  flankDistance: 4
-  minPlayerDistanceForFlank: 5
-  maxPlayerDistanceForFlank: 15
+  flankDistance: 2
   references:
     version: 2
     RefIds:
     - rid: 2466404181872738749
       type: {class: TargetInRangeCondition, ns: Scripts.Enemies.EnemyBehaviourConditions, asm: Assembly-CSharp}
       data:
-        range: 2
+        range: 7

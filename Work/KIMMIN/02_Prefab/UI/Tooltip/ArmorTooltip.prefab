@@ -903,7 +903,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1390917277889533532, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 190
+      value: 210
       objectReference: {fileID: 0}
     - target: {fileID: 1390917277889533532, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_SizeDelta.y
@@ -935,7 +935,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2581010600523577221, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_Name
-      value: ArmorItemTooltip
+      value: ArmorTooltip
       objectReference: {fileID: 0}
     - target: {fileID: 2854607249666183532, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchorMax.y
@@ -955,11 +955,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2854607249666183532, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104
+      value: 113
       objectReference: {fileID: 0}
     - target: {fileID: 2854607249666183532, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -34
+      value: -33
       objectReference: {fileID: 0}
     - target: {fileID: 3292856867616892995, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchorMax.y

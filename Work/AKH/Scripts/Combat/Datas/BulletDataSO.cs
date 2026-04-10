@@ -16,7 +16,7 @@ namespace Scripts.Combat.Datas
         public int defPierceLevel = 0;
         public override ItemCreateData CreateItem()
         {
-            return new ItemCreateData(new BulletItem(this), maxStack);
+            return new ItemCreateData(new BulletItem(this), maxSpawnCount);
         }
     }
 }

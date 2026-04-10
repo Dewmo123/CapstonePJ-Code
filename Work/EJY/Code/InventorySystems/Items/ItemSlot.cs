@@ -9,7 +9,7 @@ namespace Code.InventorySystems.Items
     [Serializable]
     public class ItemSlot
     {
-        [field: SerializeField] public Inventory Owner { get; protected set; }
+        [field: SerializeField] public Inventory OwnerInventory { get; protected set; }
         [field: SerializeReference] public ItemBase Item { get; protected set; }
         [field: SerializeField] public int Stack { get; protected set; }
         public bool IsFull => !IsBlank && Stack == Item.ItemData.maxStack;
@@ -20,12 +20,13 @@ namespace Code.InventorySystems.Items
             SetData(item, stack);
         }
 
-        public void SetOwner(Inventory owner) => Owner = owner;
+        public void SetOwner(Inventory ownerInventory) => OwnerInventory = ownerInventory;
         
         public void SetData(ItemBase item, int stack = 0)
         {
             Item = item;
-            Stack = item == null ? 0 : Mathf.Clamp(stack, 1, item.ItemData.maxStack);
+            bool slotEmpty = item == null;
+            Stack = slotEmpty ? 0 : Mathf.Clamp(stack, 1, item.ItemData.maxStack);
         }
         
         public int AddItem(int amount = 1)

@@ -39,5 +39,10 @@ namespace Code.StatusEffectSystem
 
             return list;
         }
+
+        private void OnValidate()
+        {
+            buffName = name;
+        }
     }
 }

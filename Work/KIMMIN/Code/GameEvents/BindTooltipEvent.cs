@@ -1,18 +1,19 @@
 ﻿using System;
 using Chipmunk.GameEvents;
 using UnityEngine;
+using Work.Code.UI.Core.Interaction;
 
 namespace Work.Code.GameEvents
 {
     public struct BindTooltipEvent : IEvent
     {
-        public GameObject Go { get; }
+        public InteractableUI Owner { get; }
         public Func<object> Data { get; }
         public float Delay { get; }
         
-        public BindTooltipEvent(GameObject go, Func<object> data, float delay = 0f)
+        public BindTooltipEvent(InteractableUI owner, Func<object> data, float delay = 0f)
         {
-            Go = go;
+            Owner = owner;
             Data = data;
             Delay = delay;
         }
@@ -20,13 +21,11 @@ namespace Work.Code.GameEvents
 
     public struct UnBindTooltipEvent : IEvent
     {
-        public GameObject Go { get; }
-        public Func<object> Data { get; }
+        public InteractableUI Owner { get; }
 
-        public UnBindTooltipEvent(GameObject go, Func<object> dataCallback = null)
+        public UnBindTooltipEvent(InteractableUI owner)
         {
-            Go = go;
-            Data = dataCallback;
+            Owner = owner;
         }
     }
 }

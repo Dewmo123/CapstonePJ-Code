@@ -157,7 +157,19 @@ MonoBehaviour:
       m_Calls: []
   OnDeadEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4161815894078036382}
+        m_TargetAssemblyTypeName: SHS.Scripts.Summon.Turrets.Turret, Assembly-CSharp
+        m_MethodName: DestroyThis
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -309,7 +321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0423f9bee4202334b9254ec6b0f171aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ManageStat>k__BackingField: {fileID: 0}
+  <ManageStat>k__BackingField: {fileID: 11400000, guid: 15fc09ad501e2844986107c6459f339e, type: 2}
   <StatPerSecStat>k__BackingField: {fileID: 0}
   defStat: {fileID: 11400000, guid: 458b46c63a1c40d4ab9a6d39717dde19, type: 2}
   damageDemodifyStat: {fileID: 11400000, guid: 7a0d6ceb21222d849ad9defa279caa41, type: 2}
@@ -333,9 +345,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 1.5
+  m_Height: 2.42
   m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 0.74, z: 0}
 --- !u!114 &4740103619856654116
 MonoBehaviour:
   m_ObjectHideFlags: 0

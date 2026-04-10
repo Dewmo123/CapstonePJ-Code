@@ -280,20 +280,27 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
             }
 
             _curveProgress = Mathf.Clamp01(_curveProgress + (missileSpeed * Time.fixedDeltaTime) / _curveLength);
-            float lookAheadT = Mathf.Clamp01(_curveProgress + bezierLookAhead);
-            Vector3 nextPoint = EvaluateQuadraticBezier(_curveStartPoint, _curveControlPoint, _curveEndPoint, lookAheadT);
-            Vector3 desiredDir = nextPoint - _rigidbody.position;
 
-            if (desiredDir.sqrMagnitude < 0.0001f)
-                desiredDir = _curveEndPoint - _rigidbody.position;
+            Vector3 point = EvaluateQuadraticBezier(_curveStartPoint, _curveControlPoint, _curveEndPoint, _curveProgress);
+            Vector3 tangent = EvaluateQuadraticBezierTangent(_curveStartPoint, _curveControlPoint, _curveEndPoint, _curveProgress);
 
-            if (desiredDir.sqrMagnitude < 0.0001f)
+            if (tangent.sqrMagnitude < 0.0001f)
+                tangent = _curveEndPoint - _rigidbody.position;
+
+            if (tangent.sqrMagnitude < 0.0001f)
             {
                 TriggerImpact();
                 return;
             }
 
-            ApplyVelocity(desiredDir.normalized);
+            tangent.Normalize();
+
+            _rigidbody.MovePosition(point);
+            _rigidbody.linearVelocity = tangent * missileSpeed;
+
+            Quaternion rot = Quaternion.LookRotation(tangent);
+            _rigidbody.MoveRotation(rot);
+            _lastMoveDir = tangent;
         }
 
         private void MoveTowardPoint(Vector3 point)
@@ -317,7 +324,17 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
 
             desiredDir.Normalize();
             _rigidbody.linearVelocity = desiredDir * missileSpeed;
-            SmoothRotate(desiredDir, Time.fixedDeltaTime);
+
+            if (_isCurveActive)
+            {
+                Quaternion rot = Quaternion.LookRotation(desiredDir);
+                _rigidbody.MoveRotation(rot);
+                _lastMoveDir = desiredDir;
+            }
+            else
+            {
+                SmoothRotate(desiredDir, Time.fixedDeltaTime);
+            }
         }
 
         private Vector3 GetCurrentDirection()
@@ -371,6 +388,12 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
             return oneMinusT * oneMinusT * p0
                 + 2f * oneMinusT * t * p1
                 + t * t * p2;
+        }
+
+        private Vector3 EvaluateQuadraticBezierTangent(Vector3 p0, Vector3 p1, Vector3 p2, float t)
+        {
+            t = Mathf.Clamp01(t);
+            return 2f * (1f - t) * (p1 - p0) + 2f * t * (p2 - p1);
         }
 
         private float EstimateQuadraticBezierLength(Vector3 p0, Vector3 p1, Vector3 p2)

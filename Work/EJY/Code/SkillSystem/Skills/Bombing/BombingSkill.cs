@@ -67,7 +67,6 @@ namespace Code.SkillSystem.Skills.Bombing
         public void StartAiming()
         {
             decalObject.SetActive(true);
-
             _isAiming = true;
         }
 

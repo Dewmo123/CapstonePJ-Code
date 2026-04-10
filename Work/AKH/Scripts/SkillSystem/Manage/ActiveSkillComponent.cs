@@ -1,9 +1,7 @@
 ﻿using Scripts.SkillSystem.Skills;
 using AYellowpaper.SerializedCollections;
 using Chipmunk.ComponentContainers;
-using Scripts.SkillSystem;
 using UnityEngine;
-using Scripts.SkillSystem.Skills;
 
 namespace Scripts.SkillSystem.Manage
 {
@@ -13,6 +11,7 @@ namespace Scripts.SkillSystem.Manage
         C,
         Q,
         Space,
+        None,
     }
 
     public class ActiveSkillComponent : SkillComponent<ActiveSlotType, ActiveSkillSocket>
@@ -55,7 +54,10 @@ namespace Scripts.SkillSystem.Manage
         public void UseSkill()
         {
             if (CurrentSocket?.CurrentActiveSkill == null)
+            {
+                Debug.LogWarning($"{CurrentSkill}, {CurrentSkill}");
                 return;
+            }
 
             if (CurrentSocket.CurrentActiveSkill is IUseStateSkill stateSkill && _stateEntity != null &&
                 stateSkill.TargetState != null)
@@ -68,6 +70,11 @@ namespace Scripts.SkillSystem.Manage
             }
 
             CurrentSocket.SetCooldown();
+        }
+
+        public void SubscribeCooldown(Skill skill, OnCoolDown callback)
+        {
+            
         }
     }
 }

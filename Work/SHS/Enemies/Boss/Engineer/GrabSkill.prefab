@@ -53,7 +53,6 @@ MonoBehaviour:
     m_Bits: 64
   projectileSpeed: 35
   projectileRange: 20
-  projectileRadius: 0.25
   projectileLifeTime: 2
   spawnForwardOffset: 0.6
   pullMovementData: {fileID: 11400000, guid: cdd2ae17cdabdce488d243585c588689, type: 2}

@@ -1,38 +1,25 @@
-using System;
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
+using Chipmunk.Library.Utility.GameEvents.Local;
+using Code.SHS.Entities.Enemies.Events.Local;
 using Scripts.FSM;
 using UnityEngine;
 
 namespace Code.SHS.Entities.Enemies.FSM
 {
-    public class EnemyStateMachineBehavior : MonoBehaviour, IContainerComponent
+    public class EnemyStateMachineBehavior : MonoBehaviour, IContainerComponent,ILocalEventSubscriber<EnemySpawnEvent>
     {
         [SerializeField] private EnemyStateEnum _initialState;
-        [SerializeField] private StateDataSO[] _stateDatas;
         [SerializeField] private StateMachine<EnemyStateEnum> _stateMachine;
         public ComponentContainer ComponentContainer { get; set; }
         public StateMachine<EnemyStateEnum> StateMachine => _stateMachine;
 
         public void OnInitialize(ComponentContainer componentContainer)
         {
-            if (_stateDatas.Length == 0)
-            {
-                this.enabled = false;
-            }
-
-            _stateMachine = new StateMachine<EnemyStateEnum>(componentContainer, _stateDatas);
-        }
-
-        private void Start()
-        {
-            if (_stateDatas.Length == 0)
-                return;
-            _stateMachine?.ChangeState(_initialState);
         }
 
         private void Update()
         {
-            _stateMachine.UpdateStateMachine();
+            _stateMachine?.UpdateStateMachine();
         }
 
         private void OnDestroy()
@@ -43,6 +30,14 @@ namespace Code.SHS.Entities.Enemies.FSM
         public void ChangeState(EnemyStateEnum newState, bool forced = false)
         {
             _stateMachine?.ChangeState(newState, forced);
+        }
+
+        public void OnLocalEvent(EnemySpawnEvent eventData)
+        {
+            System.Diagnostics.Stopwatch stopwatch = new();
+            stopwatch.Start();
+            _stateMachine = new StateMachine<EnemyStateEnum>(ComponentContainer, eventData.EnemyData.stateDatas);
+            _stateMachine?.ChangeState(_initialState);
         }
     }
 }

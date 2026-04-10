@@ -17,7 +17,7 @@ namespace Scripts.Players
         void ChangeState(StateDataSO stateData);
     }
 
-    public class Player : Entity, IAfterInitialze, IDependencyProvider, IStateEntity, IStunable
+    public class Player : Entity, IAfterInitialze, IDependencyProvider, IStateEntity
     {
         [field: SerializeField] public PlayerInputSO PlayerInput { get; private set; }
         private StateMachine<PlayerStateEnum> _stateMachine;
@@ -61,7 +61,7 @@ namespace Scripts.Players
             }
         }
 
-        public void Stun(float duration)
+        public override void Stun(float duration)
         {
             var stunState = StateMachine.GetState<PlayerStunState>(PlayerStateEnum.Stun);
             stunState?.SetStunDuration(duration);

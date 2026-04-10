@@ -4,16 +4,19 @@ using UnityEngine;
 
 namespace Code.UI.Core
 {
+    [DefaultExecutionOrder(-5)]
     public class UIBase : MonoBehaviour
     {
         public CanvasGroup CanvasGroup { get; protected set; }
-        public bool IsActive { get; protected set; }
+        public RectTransform Rect { get; protected set; }
+        public bool IsActive { get; protected set; } = true;
         public virtual EUILayer Layer => EUILayer.None;
         public event Action<UIBase, bool> OnToggleUI;
 
         protected virtual void Awake()
         {
             CanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
+            Rect = GetComponent<RectTransform>();
             UIManager.Instance?.RegisterUI(this);
         }
 
@@ -54,6 +57,7 @@ namespace Code.UI.Core
             CanvasGroup.alpha = 1;
             CanvasGroup.interactable = true;
             CanvasGroup.blocksRaycasts = true;
+            IsActive = true;
         }
 
         [ContextMenu("Hide UI")]
@@ -63,6 +67,7 @@ namespace Code.UI.Core
             CanvasGroup.alpha = 0;
             CanvasGroup.interactable = false;
             CanvasGroup.blocksRaycasts = false;
+            IsActive = false;
         }
     }
 }

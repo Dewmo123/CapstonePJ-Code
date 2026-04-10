@@ -90,8 +90,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 702dea2ee83b4cccb681eed4abbe0617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startTime: 11
-  timeScale: 5
+  startTime: 9
+  timeScale: 1
   timeUI: {fileID: 1997033693237247949}
   secondsPerDay: 1440
 --- !u!1 &1092545919111177078
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b6c1ea604114ec09ff850cbdfc70cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impulseSource: {fileID: 0}
+  impulseSource: {fileID: 1674309091063394918}
 --- !u!114 &1674309091063394918
 MonoBehaviour:
   m_ObjectHideFlags: 0

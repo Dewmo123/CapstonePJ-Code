@@ -4,6 +4,7 @@ using Code.Players;
 using Code.SHS.Utility.DynamicFieldBinding;
 using Scripts.Combat.Datas;
 using Scripts.Enemies.EnemyBehaviours;
+using Scripts.FSM;
 using Scripts.SkillSystem;
 using Scripts.SkillSystem.Manage;
 using Sirenix.OdinInspector;
@@ -33,7 +34,7 @@ namespace Code.EnemySpawn
 
         [InlineButton("LoadStatsFromPrefab", "Load From Prefab")]
         public List<StatOverride> statOverrides;
-
+        public StateDataSO[] stateDatas;
         [Header("Behavior Settings")] public FieldPatch<EnemyBehaviour>[] behaviourPrefabs;
 
         [Header("Skill Settings")]

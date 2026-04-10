@@ -27,7 +27,7 @@ MonoBehaviour:
   equipmentPrefab: {fileID: 7197752949421457413, guid: a528aa994340c954bac89a86b3a2a7af, type: 3}
   skillDB: {fileID: 0}
   maxDurability: 0
-  attackRange: 2
+  attackRange: 1.5
   defaultDamage: 15
   attackSpeed: 1
   controller: {fileID: 22100000, guid: 30f47553ba5e1b842b5eefb1f3f25f70, type: 2}

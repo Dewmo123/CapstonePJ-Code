@@ -1,29 +1,27 @@
 using System;
 using Code.UI.Core;
 using Code.UI.Core.Interaction;
-using Code.UI.Popup;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Work.Code.UI.ContextMenu;
 using Work.Code.UI.Core.Interaction;
 using Work.LKW.Code.Items.ItemInfo;
 
 namespace Work.Code.Crafting
 {
-    public class CraftItemUI : InteractableUI, IUIElement<ItemDataSO>, IPopupable
+    public class CraftItemUI : InteractableUI
     {
+        [SerializeField] private ContextMenuSO craftItemMenu;
         [SerializeField] private Image icon;
         [SerializeField] private Image pin;
         [SerializeField] private Image background;
         [SerializeField] private Image outline;
         [SerializeField] private Image star;
         [SerializeField] private TextMeshProUGUI title;
-        [SerializeField] private Button favoriteButton;
         
-        private Color _favoriteColor = new Color(1f, 0.8f, 0.25f);
-        private Color _unFavoriteColor = new Color(0.1f, 0.1f, 0.1f);
         private Sequence _enableSeq;
         private float _duration = 0.3f;
         private readonly string _tooltipText = "우클릭으로 조합법 고정";
@@ -31,35 +29,34 @@ namespace Work.Code.Crafting
         [field: SerializeField] public Button ItemButton { get; set; }
         public CraftTreeSO Tree { get; private set; }
         public bool IsFavorite { get; set; }
-        public event Action<CraftItemUI, bool> OnRightClick;
-        public event Action<Func<object>, ICallbackData> OnClickHandler;
-        
-        private readonly ConfirmCallback _callback = new();
-
+        public bool IsPinned { get; set; }
+        public event Action<CraftItemUI, bool> OnPinItem;
+        public event Action<CraftTreeSO> OnRequestCraft;
 
         protected override void Awake()
         {
             base.Awake();
-            favoriteButton.onClick.AddListener(HandleFavoriteClicked);
-            BindTooltip(gameObject, () => _tooltipText, 1f);
-            BindPopup(this);
+            BindTooltip(() => _tooltipText, 1f);
+            BindContextMneu(craftItemMenu, () => this);
         }
 
-        private void HandleFavoriteClicked()
+        public void ToggleFavorite()
         {
             IsFavorite = !IsFavorite;
-            star.color = IsFavorite ? _favoriteColor : _unFavoriteColor;
+            star.gameObject.SetActive(IsFavorite);
         }
 
-        public void EnableFor(ItemDataSO item)
+        public void Init(ItemDataSO item, bool isNotificate)
         {
-            gameObject.SetActive(true);
-            EnableTween();
+            EnableUI();
+
+            if (isNotificate)
+                EnableTween();
 
             icon.sprite = item.itemImage;
             background.color = UIDefine.RarityColors[(int)item.rarity];
             title.text = item.itemName;
-            star.color = IsFavorite ? _favoriteColor : _unFavoriteColor;
+            star.gameObject.SetActive(IsFavorite);
         }
         
         public void SetTree(CraftTreeSO tree) => Tree = tree;
@@ -79,37 +76,36 @@ namespace Work.Code.Crafting
 
             _enableSeq = DOTween.Sequence();
             _enableSeq.Join(background.transform.DOScale(1f, _duration).SetEase(Ease.OutCubic));
-            _enableSeq.Join(icon.transform.DOScale(1f, _duration).SetEase(Ease.OutCubic));
-            _enableSeq.Join(outline.DOFade(1f, _duration).SetEase(Ease.OutCubic));
             _enableSeq.Join(background.DOFade(1f, _duration).SetEase(Ease.OutCubic));
+            _enableSeq.Join(icon.transform.DOScale(1f, _duration).SetEase(Ease.OutCubic));
             _enableSeq.Join(icon.DOFade(1f, _duration).SetEase(Ease.OutCubic));
+            _enableSeq.Join(outline.DOFade(1f, _duration).SetEase(Ease.OutCubic));
             _enableSeq.SetAutoKill(true);
-        }
-
-        public void OnClick(PointerEventData eventData)
-        {
-            if (eventData.button == PointerEventData.InputButton.Right)
-            {
-                bool pinStatus = !pin.gameObject.activeSelf;
-                OnRightClick?.Invoke(this, pinStatus);
-                OnClickHandler?.Invoke(() => "진짜로 하시겠어요?", _callback);
-            }
         }
 
         public void SetPin(bool isPinned)
         {
+            IsPinned = isPinned;
             pin.gameObject.SetActive(isPinned);
         }
 
-        public void Clear()
+        public void TogglePin()
         {
-            gameObject.SetActive(false);
+            OnPinItem?.Invoke(this, !IsPinned);
         }
+
+        public void RequestCraft()
+        {
+            OnRequestCraft?.Invoke(Tree);
+        }
+
+        public void Clear() { }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            UnbindTooltip(gameObject);
+            UnbindTooltip();
+            UnBindContextMneu();
         }
     }
 }

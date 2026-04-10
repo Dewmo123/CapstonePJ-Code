@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Code.UI.Core.Interaction;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Work.Code.UI.Core.Interaction;
 using Work.Code.UI.Interaction;
 
 namespace Code.UI.Core
@@ -12,8 +13,7 @@ namespace Code.UI.Core
         PointerEnter,
         PointerExit,
         PointerClick,
-        PointerDown,
-        PointerUp,
+        RightClick,
         DragBegin,
         Drag,
         DragEnd,
@@ -22,13 +22,24 @@ namespace Code.UI.Core
     }
     
     [DefaultExecutionOrder(-15)]
-    public class UIEventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+    public class UIEventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
+        IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
     {
+        private IClickable _clickable;
+        private IHoverable _hoverable;
+        private IDraggable _draggable;
+        private IDroppable _droppable;
+        
         public Dictionary<EUIEvent, Action<PointerEventData>> EventHandler { get; private set; }
-
+        
         private void Awake()
         {
             EventHandler = new();
+            
+            _clickable = GetComponent<IClickable>();
+            _hoverable = GetComponent<IHoverable>();
+            _draggable = GetComponent<IDraggable>();
+            _droppable = GetComponent<IDroppable>();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -36,8 +47,7 @@ namespace Code.UI.Core
             if(EventHandler.TryGetValue(EUIEvent.PointerEnter, out var evt))
                 evt?.Invoke(eventData);
             
-            if(TryGetComponent<IHoverable>(out var draggable))
-                draggable.OnHoverEnter(eventData);
+            _hoverable?.OnHoverEnter(eventData);
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -45,29 +55,21 @@ namespace Code.UI.Core
             if(EventHandler.TryGetValue(EUIEvent.PointerExit, out var evt))
                 evt?.Invoke(eventData);
             
-            if(TryGetComponent<IHoverable>(out var draggable))
-                draggable.OnHoverExit(eventData);
+            _hoverable?.OnHoverExit(eventData);
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
             if(EventHandler.TryGetValue(EUIEvent.PointerClick, out var evt))
                 evt?.Invoke(eventData);
-
-            if (TryGetComponent<IClickable>(out var clickable))
-                clickable.OnClick(eventData);
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            if(EventHandler.TryGetValue(EUIEvent.PointerDown, out var evt))
-                evt?.Invoke(eventData);
-        }
-
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            if(EventHandler.TryGetValue(EUIEvent.PointerUp, out var evt))
-                evt?.Invoke(eventData);
+            
+            if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                if (EventHandler.TryGetValue(EUIEvent.RightClick, out var rightEvt))
+                    rightEvt?.Invoke(eventData);
+            }
+            
+            _clickable?.OnClick(eventData);
         }
         
         public void OnBeginDrag(PointerEventData eventData)
@@ -75,14 +77,15 @@ namespace Code.UI.Core
             if(EventHandler.TryGetValue(EUIEvent.DragBegin, out var evt)) 
                 evt?.Invoke(eventData);
             
-            if(TryGetComponent<IDraggable>(out var draggable))
-                draggable.OnDragStart(eventData);
+            _draggable?.OnDragStart(eventData);
         }
         
         public void OnDrag(PointerEventData eventData)
         {
             if(EventHandler.TryGetValue(EUIEvent.Drag, out var evt))
                 evt?.Invoke(eventData);
+            
+            _draggable?.OnDrag(eventData);
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -90,51 +93,49 @@ namespace Code.UI.Core
             if(EventHandler.TryGetValue(EUIEvent.DragEnd, out var evt))
                 evt?.Invoke(eventData);
             
-            if(TryGetComponent<IDraggable>(out var draggable))
-                draggable.OnDragEnd(eventData);
+            _draggable?.OnDragEnd(eventData);
         }
         
         public void OnDrop(PointerEventData eventData)
         {
             if(EventHandler.TryGetValue(EUIEvent.Drop, out var evt))
                 evt?.Invoke(eventData);
-            
-            if(TryGetComponent<IDroppable>(out var droppable))
-                droppable.OnDrop(eventData);
+
+            _droppable?.OnDrop(eventData);
         }
         
-        /// <summary>
-        /// UIHandler 이벤트 연결 함수
-        /// </summary>
-        /// <param name="go">연결 대상 UI</param>
-        /// <param name="action">콜백</param>
-        /// <param name="type">핸들러 이벤트 타입</param>
-        public void BindUIEvent(GameObject go, Action<PointerEventData> action, EUIEvent type = EUIEvent.PointerClick)
+        public void BindUIEvent(InteractableUI owner, Action<PointerEventData> action, EUIEvent type = EUIEvent.PointerClick)
         {
-            UIEventHandler evt = UIUtility.GetOrAddComponent<UIEventHandler>(go);
+            UIEventHandler handler = owner.EventHandler;
 
-            if (evt.EventHandler.ContainsKey(type))
+            if (handler.EventHandler.ContainsKey(type))
             {
-                evt.EventHandler[type] -= action;
-                evt.EventHandler[type] += action;
+                handler.EventHandler[type] -= action;
+                handler.EventHandler[type] += action;
             }
-            else if (!evt.EventHandler.ContainsKey(type))
-                evt.EventHandler[type] = action;
+            else if (!handler.EventHandler.ContainsKey(type))
+                handler.EventHandler[type] = action;
         }
         
-        public void UnBindUIEvent(GameObject go, Action<PointerEventData> action, EUIEvent type = EUIEvent.PointerClick)
+        public void UnBindUIEvent(InteractableUI owner, Action<PointerEventData> action, EUIEvent type = EUIEvent.PointerClick)
         {
-            UIEventHandler evt = UIUtility.GetOrAddComponent<UIEventHandler>(go);
+            UIEventHandler handler = owner.EventHandler;
 
-            if (evt.EventHandler.TryGetValue(type, out var existingAction))
+            if (handler.EventHandler.TryGetValue(type, out var existingAction))
             {
                 existingAction -= action;
 
                 if (existingAction == null)
-                    evt.EventHandler.Remove(type);
+                    handler.EventHandler.Remove(type);
                 else
-                    evt.EventHandler[type] = existingAction;
+                    handler.EventHandler[type] = existingAction;
             }
+        }
+
+        public void ClearUIEvent(InteractableUI owner, EUIEvent type = EUIEvent.PointerClick)
+        {
+            UIEventHandler handler = owner.EventHandler;
+            handler.EventHandler[type] = null;
         }
         
         public void ClearAll() => EventHandler?.Clear();

@@ -1,4 +1,4 @@
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using UnityEngine;
 
 namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
@@ -21,7 +21,7 @@ namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
         {
             base.Update();
 
-            if (_targetProvider.Target == null)
+            if (_targetProvider.CurrentTarget == null)
                 return;
 
             if (_movement.IsArrived)
@@ -30,10 +30,10 @@ namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
                 {
                     _behaviourManager.CurrentBehaviour.SetCooldown();
                 }
-                _enemy.ChangeState(EnemyStateEnum.Aim);
+                _enemy.ChangeState(EnemyStateEnum.Chase);
                 return;
             }
-            _movement.SetLookAtTarget(_enemy.TargetProvider.Target.transform);
+            _movement.SetLookAtTarget(_enemy.TargetProvider.CurrentTarget.transform);
             UpdateMovementAnimation();
         }
     }

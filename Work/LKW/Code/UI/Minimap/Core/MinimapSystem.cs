@@ -5,6 +5,7 @@ using Code.Events;
 using Code.UI.Minimap.Core;
 using DewmoLib.Dependencies;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Code.UI.Minimap
 {
@@ -20,6 +21,8 @@ namespace Code.UI.Minimap
 
         public event Action<MinimapElementData> OnDataAdded;
         public event Action<string> OnDataRemoved;
+
+        public bool IsActiveMinimap { get; set; } = false;
 
         private void OnEnable()
         {
@@ -76,6 +79,22 @@ namespace Code.UI.Minimap
             float worldZ = Mathf.Lerp(camPos.z - h, camPos.z + h, ny);
 
             return new Vector3(worldX, 0f, worldZ); 
+        }
+        
+        public bool IsPointInMinimapRect()
+        {
+            if (!MinimapRect.gameObject.activeInHierarchy) return false;
+
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    MinimapRect, 
+                    Mouse.current.position.ReadValue(), 
+                    null, 
+                    out Vector2 localPoint))
+            {
+                return MinimapRect.rect.Contains(localPoint);
+            }
+
+            return false;
         }
     }
 }

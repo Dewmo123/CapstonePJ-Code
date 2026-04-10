@@ -1,14 +1,17 @@
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Scripts.Enemies.EnemyBehaviours;
+using Scripts.Enemies.States;
 using UnityEngine;
 
 namespace Code.SHS.Entities.Enemies.FSM
 {
-    public class MeleeEnemyChaseState : EnemyState
+    public class MeleeEnemyChaseState : EnemyExecuteBehaviourState
     {
         public MeleeEnemyChaseState(ComponentContainer container, int animationHash) : base(container, animationHash)
         {
         }
+
+        public override float ExecuteTimer => 0f;
 
         public override void Enter()
         {
@@ -22,20 +25,22 @@ namespace Code.SHS.Entities.Enemies.FSM
         {
             base.Update();
 
-            if (TargetEntity == null)
-                return;
-
-            float distance = Vector3.Distance(TargetEntity.transform.position,_enemy.transform.position);
-            if (distance <= _attackRange)
+            if (TargetEntity == null && _movement.IsArrived)
             {
-                _enemy.ChangeState(EnemyStateEnum.Aim);
+                _enemy.ChangeState(EnemyStateEnum.Idle);
                 return;
             }
 
-            _movement.SetDestination(_targetProvider.LastTargetPosition);
-            _behaviourManager.ExecuteOptimal();
-
+            Vector3 destination = TargetEntity != null ? TargetEntity.transform.position : _targetProvider.LastTargetPosition;
+            _movement.SetDestination(destination);
             UpdateMovementAnimation();
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            if (TargetEntity == null)
+                _targetProvider.TargetLost(_targetProvider.LastTargetPosition);
         }
     }
 }

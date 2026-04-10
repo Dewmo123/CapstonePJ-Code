@@ -1,6 +1,7 @@
 ﻿using Chipmunk.ComponentContainers;
 using Code.ETC;
 using SHS.Scripts.Crosshairs;
+using SHS.Scripts.Entities.Players;
 using UnityEngine;
 
 namespace Scripts.Players.States
@@ -9,15 +10,15 @@ namespace Scripts.Players.States
     {
         protected MoveType _myMoveType;
 
+        private MovementAnimationController _movementAnimationController;
         protected IAimProvider _aimProvider;
-        protected static int _xHash = Animator.StringToHash("X");
-        protected static int _zHash = Animator.StringToHash("Z");
         protected static float _cursorLimit = 1f;
 
         public PlayerMoveState(ComponentContainer container, int animationHash) : base(container, animationHash)
         {
             _myMoveType = MoveType.Walk;
             _aimProvider = container.GetSubclassComponent<IAimProvider>();
+            _movementAnimationController = container.Get<MovementAnimationController>();
         }
 
         public override void Enter()
@@ -42,7 +43,7 @@ namespace Scripts.Players.States
                 Vector3 dir = (crosshairPos - transform.position).normalized;
                 if (Vector3.Distance(crosshairPos, transform.position) > _cursorLimit)
                     _movement.SetRotationInfo(dir, 15);
-                SetAnimParams(direction, transform);
+                _movementAnimationController.SetMoveDirection(direction);
             }
         }
 
@@ -52,12 +53,5 @@ namespace Scripts.Players.States
             return Quaternion.Euler(0, cameraYRot, 0) * new Vector3(dir.x, 0, dir.y);
         }
 
-        private void SetAnimParams(Vector3 direction, Transform transform)
-        {
-            float forwardDot = Vector3.Dot(transform.forward, direction);
-            float rightDot = Vector3.Dot(transform.right, direction);
-            _animator.SetParam(_xHash, rightDot);
-            _animator.SetParam(_zHash, forwardDot);
-        }
     }
 }

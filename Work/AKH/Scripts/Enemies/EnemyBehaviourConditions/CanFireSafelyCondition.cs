@@ -2,10 +2,9 @@
 using Code.SHS.Entities.Enemies;
 using Scripts.Combat;
 using Scripts.Combat.Datas;
-using Scripts.Enemies.EnemyBehaviourConditions;
 using UnityEngine;
 
-namespace Enemies.EnemyBehaviourConditions
+namespace Scripts.Enemies.EnemyBehaviourConditions
 {
     public class CanFireSafelyCondition : EnemyBehaviourCondition
     {
@@ -20,11 +19,11 @@ namespace Enemies.EnemyBehaviourConditions
         public override bool Condition()
         {
             GunItem gunItem = _attackCompo.GetCurrentWeapon<GunItem>();
-            if (gunItem == null)
+            if (gunItem == null || _enemy.TargetProvider.CurrentTarget==null)
                 return true;
             Transform fireTrm = gunItem.GunObj.FireTrm;
             Vector3 fireDirection = gunItem.GunObj.FireDirection.normalized;
-            Vector3 targetPos = _enemy.TargetProvider.Target.transform.position;
+            Vector3 targetPos = _enemy.TargetProvider.CurrentTarget.transform.position;
             float attackRange = Vector3.Distance(targetPos, fireTrm.position);
             return !Physics.BoxCast(fireTrm.position, halfBox, fireDirection, Quaternion.identity, attackRange, dontShootLayer);
         }

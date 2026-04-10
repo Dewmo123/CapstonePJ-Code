@@ -31,10 +31,10 @@ MonoBehaviour:
   defaultDamage: 3
   attackSpeed: 0.75
   controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
-  fireRate: 0
+  fireRate: 1
   gunType: 4
-  bulletPerShot: 7
-  reloadTime: 1
+  bulletPerShot: 3
+  reloadTime: 3
   bulletSpeed: 35
   maxAmmoCapacity: 3
   aimSpeedMultiplier: 0

@@ -20,6 +20,7 @@ namespace Code.SHS.Entities.Enemies.FSM
             base.Enter();
             _movement.SetStop(true);
             _movement.SetLookAtTarget(null);
+            _movement.enabled = false;
             _targetDetector.enabled = false;
         }
 

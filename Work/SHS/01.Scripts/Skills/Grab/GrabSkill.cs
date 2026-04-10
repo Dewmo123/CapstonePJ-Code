@@ -29,9 +29,6 @@ namespace Scripts.SkillSystem.Skills.Grab
         [Tooltip("Maximum travel distance before the projectile expires.")] [SerializeField]
         private float projectileRange = 20f;
 
-        [Tooltip("SphereCast radius used for hit detection.")] [SerializeField]
-        private float projectileRadius = 0.25f;
-
         [Tooltip("Maximum lifetime in seconds before auto-destroy.")] [SerializeField]
         private float projectileLifeTime = 2f;
 
@@ -119,7 +116,7 @@ namespace Scripts.SkillSystem.Skills.Grab
 
             if (_owner is Enemy enemy)
             {
-                Entity target = enemy.TargetProvider.Target;
+                Entity target = enemy.TargetProvider.CurrentTarget;
                 if (target != null)
                     direction = target.transform.position - origin;
             }
@@ -159,19 +156,14 @@ namespace Scripts.SkillSystem.Skills.Grab
                 projectile = runtimeProjectile.AddComponent<GrabHookProjectile>();
             }
 
-            projectile.Launch(
-                _owner,
-                targetAnchor,
-                direction,
-                hitMask,
-                projectileSpeed,
-                projectileRange,
-                projectileRadius,
-                projectileLifeTime,
-                movementData,
-                pullStopDistance,
-                controlLockDuration,
-                damageData);
+            projectile.HitMask = hitMask;
+            projectile.Speed = projectileSpeed;
+            projectile.MaxDistance = projectileRange;
+            projectile.LifeTime = projectileLifeTime;
+            projectile.PullMovementData = movementData;
+            projectile.PullStopDistance = pullStopDistance;
+            projectile.ControlLockDuration = controlLockDuration;
+            projectile.Launch(_owner, targetAnchor, direction, damageData);
         }
     }
 }

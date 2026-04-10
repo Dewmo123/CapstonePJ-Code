@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Chipmunk.GameEvents;
 using Code.UI.Core;
@@ -6,6 +7,7 @@ using Code.UI.Tooltip;
 using UnityEngine;
 using UnityEngine.UI;
 using Work.Code.GameEvents;
+using Work.Code.UI.Core.Interaction;
 
 namespace Code.UI.Controller
 {
@@ -15,6 +17,7 @@ namespace Code.UI.Controller
         public List<BaseTooltip> Tooltips = new();
     }
     
+    [DefaultExecutionOrder(-10)]
     public class TooltipController : MonoBehaviour
     {
         [SerializeField] private List<BaseTooltip> tooltipTypes; 
@@ -23,7 +26,7 @@ namespace Code.UI.Controller
         
         private Dictionary<Type, BaseTooltip> _tooltipMap = new();
         private Dictionary<Type, Queue<BaseTooltip>> _pool = new();
-        private Dictionary<GameObject, TooltipState> _states = new();
+        private Dictionary<InteractableUI, TooltipState> _states = new();
         
         private bool _rebuildFlag;
         
@@ -32,6 +35,7 @@ namespace Code.UI.Controller
         private void Awake()
         {
             MappingTooltip();
+            tooltipMover.Init(RootRect);
             EventBus.Subscribe<BindTooltipEvent>(HandleBindTooltip);
             EventBus.Subscribe<UnBindTooltipEvent>(HandleUnBindTooltip);
         }
@@ -62,50 +66,60 @@ namespace Code.UI.Controller
         
         private void HandleBindTooltip(BindTooltipEvent evt)
         {
-            UIEventHandler handler = UIUtility.GetOrAddComponent<UIEventHandler>(evt.Go);
-            BindEnterTooltip(evt.Go, evt.Data, evt.Delay, handler);
-            BindExitTooltip(evt.Go, handler);
+            var handler = evt.Owner.EventHandler;
+            BindEnterTooltip(evt.Owner, evt.Data, evt.Delay, handler);
+            BindExitTooltip(evt.Owner, handler);
         }
         
         private void HandleUnBindTooltip(UnBindTooltipEvent evt)
         {
-            UIEventHandler handler = UIUtility.GetOrAddComponent<UIEventHandler>(evt.Go);
-            handler?.ClearAll();
+            var handler = evt.Owner.EventHandler;
+            handler.ClearAll();
             
-            if (_states.TryGetValue(evt.Go, out var state))
+            if (_states.TryGetValue(evt.Owner, out var state))
             {
-                HideTooltip(evt.Go, state);
+                HideTooltip(state);
             }
         }
 
-        public void BindEnterTooltip<TData>(GameObject go, Func<TData> dataCallback, float delay, UIEventHandler handler)
+        public void BindEnterTooltip<TData>(InteractableUI owner, Func<TData> dataCallback, float delay, UIEventHandler handler)
         {
-            handler.BindUIEvent(go, _ => {
-                var state = GetState(go);
-                StopDelayRoutine(go, state);
+            handler.BindUIEvent(owner, _ => {
+                var state = GetState(owner);
+                StopDelayRoutine(state);
 
                 var data = dataCallback.Invoke();
                 if (data == null) return;
-                ShowTooltip(state, data);
+                
+                if (delay > 0)
+                    state.DelayRoutine = StartCoroutine(ShowTooltipRoutine(state, data, delay));
+                else
+                    ShowTooltip(state, data);
             }, EUIEvent.PointerEnter);
         }
 
-        public void BindExitTooltip(GameObject go, UIEventHandler handler)
+        public void BindExitTooltip(InteractableUI owner, UIEventHandler handler)
         {
-            handler.BindUIEvent(go, _ => {
-                if (!_states.TryGetValue(go, out var state)) return;
-                StopDelayRoutine(go, state);
-                HideTooltip(go, state);
+            handler.BindUIEvent(owner, _ => {
+                if (!_states.TryGetValue(owner, out var state)) return;
+                StopDelayRoutine(state);
+                HideTooltip(state);
             }, EUIEvent.PointerExit);
         }
         
-        private void StopDelayRoutine(GameObject go, TooltipState state)
+        private void StopDelayRoutine(TooltipState state)
         {
             if (state.DelayRoutine != null)
             {
                 StopCoroutine(state.DelayRoutine);
                 state.DelayRoutine = null;
             }
+        }
+
+        private IEnumerator ShowTooltipRoutine(TooltipState state, object data, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            ShowTooltip(state, data);
         }
         
         private void ShowTooltip(TooltipState state, object data)
@@ -125,9 +139,9 @@ namespace Code.UI.Controller
             SortTooltips(state);
         }
 
-        private void HideTooltip(GameObject owner, TooltipState state)
+        private void HideTooltip(TooltipState state)
         {
-            StopDelayRoutine(owner, state);
+            StopDelayRoutine(state);
 
             foreach (var tooltip in state.Tooltips)
             {
@@ -143,12 +157,12 @@ namespace Code.UI.Controller
             state.Tooltips.Clear();
         }
         
-        private TooltipState GetState(GameObject go)
+        private TooltipState GetState(InteractableUI owner)
         {
-            if (!_states.TryGetValue(go, out var state))
+            if (!_states.TryGetValue(owner, out var state))
             {
                 state = new TooltipState();
-                _states[go] = state;
+                _states[owner] = state;
             }
             return state;
         }
