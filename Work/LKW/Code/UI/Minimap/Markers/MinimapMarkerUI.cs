@@ -106,9 +106,11 @@ namespace Code.UI.Minimap.Markers
             
             if (!RectTransformUtility.RectangleContainsScreenPoint(_minimapSystem.MinimapRect, mousePos)) return;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(_minimapSystem.MinimapRect, mousePos, null, out var localPos);
-            Debug.Log(_minimapSystem);
 
-            MinimapUtil.AddToMinimap(this,ElementType.Marker , _selectedMarker.markerIcon,false, _minimapSystem.MinimapToWorldPosition(localPos));
+            MinimapUtil.AddToMinimap(
+                this,ElementType.Marker ,
+                _selectedMarker.markerIcon,false, 
+                _minimapSystem.MinimapToWorldPosition(localPos));
             
             _currentCount++;
             UpdateCountText();

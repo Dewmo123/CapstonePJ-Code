@@ -1,4 +1,4 @@
-﻿using Chipmunk.ComponentContainers;
+﻿﻿using Chipmunk.ComponentContainers;
 using Code.StatusEffectSystem;
 using Code.StatusEffectSystem.StatusEffects;
 using Entities;
@@ -22,7 +22,6 @@ namespace Code.SkillSystem.Skills.BulletProof
             base.Init(container);
             _entityStatusEffect = container.Get<EntityStatusEffect>();
             _vfxComponent = container.Get<VFXComponent>();
-            _entityStatusEffect.OnStatusEffectReleased -= HandleStatusEffectReleased;
             _entityStatusEffect.OnStatusEffectReleased += HandleStatusEffectReleased;
         }
         

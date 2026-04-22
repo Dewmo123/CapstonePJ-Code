@@ -22,6 +22,7 @@ MonoBehaviour:
   rarityWeight: 10
   value: 0
   maxStack: 99
+  maxSpawnCount: 30
   gunType: 0
   damageMultiplier: 1
   defPierceLevel: 0

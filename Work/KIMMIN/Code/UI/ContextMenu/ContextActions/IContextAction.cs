@@ -4,7 +4,7 @@ namespace Work.Code.UI.ContextMenu
 {
     public interface IContextAction<T>
     { 
-        public event Action<T> ContextAction; 
+        public event Action<T> OnContextAction; 
         public event Action OnCallbackInvoked;
         public ContextActionSO ContextActionSO { get; }
         public void Init(T data);

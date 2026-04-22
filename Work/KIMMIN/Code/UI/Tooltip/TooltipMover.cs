@@ -43,36 +43,28 @@ namespace Code.UI.Tooltip
             Vector2 mousePos = Input.mousePosition;
 
             Vector2 localPos;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, mousePos,
-                canvas.worldCamera, out localPos);
-
-            localPos += offset;
-            parent.anchoredPosition = localPos;
-            
             Vector2 dir;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, 
+                mousePos, canvas.worldCamera, out localPos);
 
-            float mouseX = mousePos.x;
-            float mouseY = mousePos.y;
-            float centerX = Screen.width / 2f;
-            float centerY = Screen.height / 2f;
+            Vector2 center = new Vector2(
+                (canvasRect.rect.xMin + canvasRect.rect.xMax) * 0.5f,
+                (canvasRect.rect.yMin + canvasRect.rect.yMax) * 0.5f
+            );
 
-            if (mouseX > centerX && mouseY > centerY)
-            {
+            if (localPos.x > center.x && localPos.y > center.y) {
                 _layout.childAlignment = TextAnchor.LowerRight;
                 dir = new Vector2(-1, -1);
             }
-            else if (mouseX < centerX && mouseY > centerY)
-            {
+            else if (localPos.x < center.x && localPos.y > center.y) {
                 _layout.childAlignment = TextAnchor.LowerLeft;
                 dir = new Vector2(1, -1);
             }
-            else if (mouseX < centerX && mouseY < centerY)
-            {
+            else if (localPos.x < center.x && localPos.y < center.y) {
                 _layout.childAlignment = TextAnchor.UpperLeft;
                 dir = new Vector2(1, 1);
             }
-            else
-            {
+            else {
                 _layout.childAlignment = TextAnchor.UpperRight;
                 dir = new Vector2(-1, 1);
             }

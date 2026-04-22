@@ -33,7 +33,7 @@ namespace Code.StatusEffectSystem.StatusEffects
 
         private void HandleOnHit()
         {
-            _health.TakeDamage(_damageData);
+            _health.ApplyDamage(_damageData);
         }
     }
 }

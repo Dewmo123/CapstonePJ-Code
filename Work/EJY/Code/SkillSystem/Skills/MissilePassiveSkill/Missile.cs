@@ -1,3 +1,4 @@
+using Ami.BroAudio;
 using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
 using Code.GameEvents;
@@ -31,6 +32,9 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
         [SerializeField] private LayerMask targetLayer;
         [SerializeField] private ParticleSystem particle;
         [SerializeField] private MeshRenderer meshRenderer;
+        
+        [SerializeField] private SoundID jetSoundID;
+        [SerializeField] private SoundID explosionSoundID;
 
         public PoolItemSO PoolItem => missilePoolItem;
         public GameObject GameObject => gameObject;
@@ -112,9 +116,14 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
             _rigidbody.rotation = Quaternion.LookRotation(_lastMoveDir);
 
             if (TryGetTargetPoint(out Vector3 targetPoint))
-                BuildBezier(position, targetPoint, _targetTrm, _initialCurveControlPoint);
+            {
+                BuildBezierDynamic(position, targetPoint);
+            }
             else
                 _isCurveActive = false;
+
+            if (jetSoundID.IsValid())
+                BroAudio.Play(jetSoundID, transform.position);
 
             _rigidbody.linearVelocity = _lastMoveDir * missileSpeed;
             _isInitialized = true;
@@ -138,38 +147,47 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
             if (TryImpactTrackedTarget())
                 return;
 
-            if (_isCurveActive)
+            if (_isInduction && IsTargetValid())
             {
-                if (_isInduction)
-                {
-                    if (IsTargetValid() == false)
-                    {
-                        _isCurveActive = false;
-                        MoveForward();
-                        return;
-                    }
-
-                    if (_curveTargetTrm != _targetTrm)
-                        BuildBezier(_rigidbody.position, _targetTrm.position, _targetTrm);
-                }
-
+                BuildBezierDynamic(_rigidbody.position, _targetTrm.position);
                 MoveAlongBezier();
-
-                if (_curveProgress >= 1f)
-                    _isCurveActive = false;
-
-                TryImpactTrackedTarget();
                 return;
             }
 
-            if (_isInduction && IsTargetValid())
+            if (_isCurveActive)
             {
-                MoveTowardPoint(_targetTrm.position);
-                TryImpactTrackedTarget();
+                MoveAlongBezier();
                 return;
             }
 
             MoveForward();
+        }
+        
+        private void BuildBezierDynamic(Vector3 start, Vector3 end)
+        {
+            _curveStartPoint = start;
+            _curveEndPoint = end;
+            _curveProgress = 0f;
+            _isCurveActive = true;
+        
+            Vector3 dir = (end - start).normalized;
+        
+            float distance = Vector3.Distance(start, end);
+        
+            float forwardDist = Mathf.Clamp(distance * 0.3f, 1f, 5f);
+            float height = Mathf.Max(2f, distance * 0.2f);
+        
+            Vector3 randomOffset =
+                transform.right * Random.Range(-2f, 2f) +
+                Vector3.up * Random.Range(height * 0.5f, height);
+        
+            _curveControlPoint = start + dir * forwardDist + randomOffset;
+        
+            _curveLength = EstimateQuadraticBezierLength(
+                _curveStartPoint,
+                _curveControlPoint,
+                _curveEndPoint
+            );
         }
 
         private void HandleTarget()
@@ -242,23 +260,6 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
             return false;
         }
 
-        private void BuildBezier(Vector3 startPoint, Vector3 endPoint, Transform targetTransform)
-        {
-            _curveStartPoint = startPoint;
-            _curveEndPoint = endPoint;
-            _curveTargetTrm = targetTransform;
-            _curveProgress = 0f;
-            _isCurveActive = true;
-
-            Vector3 toTarget = endPoint - startPoint;
-            Vector3 targetDir = toTarget.sqrMagnitude > 0.0001f ? toTarget.normalized : GetCurrentDirection();
-            float forwardDistance = Mathf.Clamp(toTarget.magnitude * bezierForwardFactor, minBezierForwardDistance, maxBezierForwardDistance);
-            float riseHeight = Mathf.Max(_launchOffset.y, minimumRiseHeight);
-
-            _curveControlPoint = startPoint + Vector3.up * riseHeight + targetDir * forwardDistance;
-            _curveLength = EstimateQuadraticBezierLength(_curveStartPoint, _curveControlPoint, _curveEndPoint);
-        }
-
         private void BuildBezier(Vector3 startPoint, Vector3 endPoint, Transform targetTransform, Vector3 controlPoint)
         {
             _curveStartPoint = startPoint;
@@ -270,38 +271,41 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
             _curveLength = EstimateQuadraticBezierLength(_curveStartPoint, _curveControlPoint, _curveEndPoint);
         }
 
-        private void MoveAlongBezier()
-        {
-            if (_curveLength < 0.0001f)
-            {
-                _isCurveActive = false;
-                MoveTowardPoint(_curveEndPoint);
-                return;
-            }
-
-            _curveProgress = Mathf.Clamp01(_curveProgress + (missileSpeed * Time.fixedDeltaTime) / _curveLength);
-
-            Vector3 point = EvaluateQuadraticBezier(_curveStartPoint, _curveControlPoint, _curveEndPoint, _curveProgress);
-            Vector3 tangent = EvaluateQuadraticBezierTangent(_curveStartPoint, _curveControlPoint, _curveEndPoint, _curveProgress);
-
-            if (tangent.sqrMagnitude < 0.0001f)
-                tangent = _curveEndPoint - _rigidbody.position;
-
-            if (tangent.sqrMagnitude < 0.0001f)
-            {
-                TriggerImpact();
-                return;
-            }
-
-            tangent.Normalize();
-
-            _rigidbody.MovePosition(point);
-            _rigidbody.linearVelocity = tangent * missileSpeed;
-
-            Quaternion rot = Quaternion.LookRotation(tangent);
-            _rigidbody.MoveRotation(rot);
-            _lastMoveDir = tangent;
-        }
+       private void MoveAlongBezier()
+       {
+           if (_curveLength < 0.0001f)
+               return;
+       
+           _curveProgress += (missileSpeed * Time.fixedDeltaTime) / _curveLength;
+           _curveProgress = Mathf.Clamp01(_curveProgress);
+       
+           Vector3 point = EvaluateQuadraticBezier(
+               _curveStartPoint,
+               _curveControlPoint,
+               _curveEndPoint,
+               _curveProgress
+           );
+       
+           Vector3 tangent = EvaluateQuadraticBezierTangent(
+               _curveStartPoint,
+               _curveControlPoint,
+               _curveEndPoint,
+               _curveProgress
+           );
+       
+           if (tangent.sqrMagnitude < 0.0001f)
+               return;
+       
+           tangent.Normalize();
+       
+           _rigidbody.MovePosition(point);
+           _rigidbody.linearVelocity = tangent * missileSpeed;
+       
+           Quaternion rot = Quaternion.LookRotation(tangent);
+           _rigidbody.MoveRotation(rot);
+       
+           _lastMoveDir = tangent;
+       }
 
         private void MoveTowardPoint(Vector3 point)
         {
@@ -441,6 +445,12 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
             if (_isDead)
                 return;
 
+            if (jetSoundID.IsValid())
+                BroAudio.Stop(jetSoundID);
+            
+            if (explosionSoundID.IsValid())
+                BroAudio.Play(explosionSoundID);
+            
             _isDead = true;
             _isCurveActive = false;
             _rigidbody.linearVelocity = Vector3.zero;
@@ -474,7 +484,7 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
                 }
             }
 
-            var data = _dmgCalcCompo.CalculateDamage(8, 1, 1, DamageType.RANGE);
+            var data = _dmgCalcCompo.CalculateDamage(16, 1, 1, DamageType.RANGE);
             overlapDamageCaster.CastDamage(data, _rigidbody.position, _lastMoveDir, null);
 
             if (missileExplosionPoolItem != null)

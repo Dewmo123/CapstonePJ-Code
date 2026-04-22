@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using UnityEngine;
-using Work.LKW.Code.Items.ItemInfo;
 
 namespace Code.DataSystem
 {
     public static class AutoExcelParser
     {
         private static Dictionary<Type, List<FieldInfo>> fieldCache = new Dictionary<Type, List<FieldInfo>>();
-
         private static Dictionary<Type, List<PropertyInfo>> propertyCache = new Dictionary<Type, List<PropertyInfo>>();
 
         public static void ParseRow(DataRow dataRow, int rowIndex, object instance)
@@ -122,7 +120,6 @@ namespace Code.DataSystem
                 return Enum.Parse(targetType, stringValue.Trim(), ignoreCase: true);
             }
             return JsonUtility.FromJson(stringValue, targetType);
-            //return Convert.ChangeType(value, targetType);
         }
 
         private static object GetDefaultValue(Type targetType)

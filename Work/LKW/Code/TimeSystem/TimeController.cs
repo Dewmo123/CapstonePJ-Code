@@ -1,6 +1,8 @@
-using System;
+﻿using System;
+using Chipmunk.GameEvents;
 using DewmoLib.Dependencies;
 using UnityEngine;
+using Work.Code.GameEvents;
 
 namespace Code.TimeSystem
 {
@@ -64,8 +66,10 @@ namespace Code.TimeSystem
         private void Update()
         {
             if (IsPaused) return;
-
-            float dt = Mathf.Min(Time.deltaTime * timeScale, 0.1f);
+            float cheatTimeScale = timeScale; //빌드본 시연용
+            if (Input.GetKey(KeyCode.F6))
+                cheatTimeScale = 240;
+            float dt = Time.deltaTime * cheatTimeScale;
             TotalTime += dt;
             DayTime += dt;
 
@@ -75,6 +79,8 @@ namespace Code.TimeSystem
                 DayTime = 0;
                 Debug.Log($"Day {DayTime} 시작");
                 timeUI.SetDay($"{CurrentDay}일차");
+                var evt = new DayChangeEvent();
+                EventBus.Raise(evt);
             }
 
             scheduler.Update(TotalTime);

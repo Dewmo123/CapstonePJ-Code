@@ -78,7 +78,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.38, y: -0, z: 3.27}
-  m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3602358268770790575}
@@ -106,6 +106,8 @@ MonoBehaviour:
   Detached: []
   trail: {fileID: 8211625857709795779}
   _bulletImpactEffect: {fileID: 8491214270523815195}
+  bulletHole: {fileID: 11400000, guid: 6cdb5c8c5bf2bd744b6d6579e8fd5646, type: 2}
+  poolManager: {fileID: 11400000, guid: c413011c9deace64aa106d229c06e489, type: 2}
   <PoolItem>k__BackingField: {fileID: 11400000, guid: 09e3f30c6feb3d545b688838c743bedc, type: 2}
 --- !u!33 &6436395167528798006
 MeshFilter:
@@ -346,6 +348,18 @@ PrefabInstance:
     - target: {fileID: 48778837848944930, guid: 3ebcb6b68f963a2409558ef0aeddec1a, type: 3}
       propertyPath: m_Name
       value: MuzzleEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 963211127982744557, guid: 3ebcb6b68f963a2409558ef0aeddec1a, type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 3.07527e+29
+      objectReference: {fileID: 0}
+    - target: {fileID: 963211127982744557, guid: 3ebcb6b68f963a2409558ef0aeddec1a, type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 5.14e-43
+      objectReference: {fileID: 0}
+    - target: {fileID: 963211127982744557, guid: 3ebcb6b68f963a2409558ef0aeddec1a, type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 2.73e-43
       objectReference: {fileID: 0}
     - target: {fileID: 1291811478292132857, guid: 3ebcb6b68f963a2409558ef0aeddec1a, type: 3}
       propertyPath: m_LocalPosition.x

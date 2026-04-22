@@ -18,6 +18,6 @@ MonoBehaviour:
   displayName: 
   baseValue: 100
   minValue: 0
-  maxValue: 3000
+  maxValue: 99999
   <IsPercent>k__BackingField: 0
   <NegativeStat>k__BackingField: 0

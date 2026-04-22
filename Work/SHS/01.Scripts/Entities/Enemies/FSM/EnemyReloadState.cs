@@ -1,4 +1,5 @@
-﻿using Chipmunk.ComponentContainers;
+﻿using Ami.BroAudio;
+using Chipmunk.ComponentContainers;
 using Code.Players;
 using Scripts.Combat.Datas;
 using UnityEngine;
@@ -36,6 +37,7 @@ namespace Code.SHS.Entities.Enemies.FSM
             {
                 _gun = gun;
                 _reloadTime = _gun.GunItemData.reloadTime;
+                BroAudio.Play(_gun.GunItemData.reloadSound, _gun.Owner.transform.position);
             }
             else
             {
@@ -51,7 +53,7 @@ namespace Code.SHS.Entities.Enemies.FSM
             _currentTimer += Time.deltaTime * _entityGunStatInfo.ReloadSpeedMultiplier;
             if (_currentTimer >= _reloadTime)
             {
-                _enemy.ChangeState(TargetEntity ? EnemyStateEnum.Aim : EnemyStateEnum.Patrol);
+                _enemy.ChangeState(Target ? EnemyStateEnum.Aim : EnemyStateEnum.Chase);
             }
 
             UpdateMovementAnimation();

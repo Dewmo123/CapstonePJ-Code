@@ -50,7 +50,7 @@ namespace Work.Code.Crafting
             for(int i = 0; i < _nodes.Length; i++)
             {
                 int count = _inventory.GetItemCount(tree.nodeList[i].Item);
-                bool isRootNode = !(isRoot ^ (i == 0));
+                bool isRootNode = isRoot ? i == 0 : i != 0;
                 CraftNodeData data = new(tree.nodeList[i], count, isRootNode);
                 _nodes[i].InitUI(data, true);
                 if (i < _nodes.Length - 1)
@@ -67,7 +67,7 @@ namespace Work.Code.Crafting
             for (int i = 0; i < _nodes.Length; i++)
             {
                 int count = _inventory.GetItemCount(tree.nodeList[i].Item);
-                bool isRootNode = !(isRoot ^ (i == 0));
+                bool isRootNode = isRoot ? i == 0 : i != 0;
                 CraftNodeData data = new(tree.nodeList[i], count, isRootNode);
 
                 _nodes[i].InitUI(data, false);

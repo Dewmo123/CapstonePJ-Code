@@ -32,7 +32,7 @@ namespace Code.StatusEffectSystem.StatusEffects
 
         private void HandleStoringDamage(float damage)
         {
-            _storedDamage += damage * Value;
+            _storedDamage += damage * _value;
         }
     }
 }

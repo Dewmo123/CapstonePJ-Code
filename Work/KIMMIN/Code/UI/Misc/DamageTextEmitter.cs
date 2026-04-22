@@ -1,11 +1,10 @@
-using System;
 using Chipmunk.GameEvents;
 using DewmoLib.Dependencies;
 using DewmoLib.ObjectPool.RunTime;
 using UnityEngine;
 using Work.Code.GameEvents;
 
-namespace Work.Code.UI.Misc
+namespace Work.Code.UI
 {
     public class DamageTextEmitter : MonoBehaviour
     {

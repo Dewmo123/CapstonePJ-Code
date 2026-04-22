@@ -22,12 +22,12 @@ namespace Code.StatusEffectSystem.StatusEffects
             if (_targetStatSO == null)
             {
                 Debug.Log("Target stat is null");
-                IsApplying = false;
+                _isApplying = false;
                 return;
             }
             
             base.ApplyStatusEffect(entity);
-            _targetStat.GetStat(_targetStatSO).AddValueModifier(this, Value);
+            _targetStat.GetStat(_targetStatSO).AddValueModifier(this, _value);
         }
 
         public override void ReleaseStatusEffect(Entity entity)
@@ -35,7 +35,7 @@ namespace Code.StatusEffectSystem.StatusEffects
             if (_targetStatSO == null)
             {
                 Debug.Log("Target stat is null");
-                IsApplying = false;
+                _isApplying = false;
                 return;
             }
             

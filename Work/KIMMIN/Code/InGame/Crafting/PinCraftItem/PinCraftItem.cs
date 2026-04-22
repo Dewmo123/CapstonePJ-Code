@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Chipmunk.ComponentContainers;
@@ -5,18 +7,23 @@ using Code.Players;
 using Code.UI.Core;
 using DewmoLib.Dependencies;
 using Scripts.Players;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Work.Code.Crafting
 {
     public class PinCraftItem : UIBase
     {
         public const int PIN_CAPACITY = 3;
+
+        [SerializeField] private RectTransform root;
         private Dictionary<CraftTreeSO, PinCraftItemUI> _pinItems = new();
         private List<PinCraftItemUI> _pinCraftItems = new();
         private Queue<CraftTreeSO> _orderQueue = new();
 
         [Inject] private Player _player;
         private PlayerInventory _inventory;
+        private Coroutine _rebuildCoroutine;
 
         private void Start()
         {
@@ -29,11 +36,28 @@ namespace Work.Code.Crafting
             }
         }
 
+        private void LateUpdate()
+        {
+            if (_rebuildCoroutine != null)
+            {
+                StopCoroutine(_rebuildCoroutine);
+                _rebuildCoroutine = null;
+            }
+                
+            _rebuildCoroutine = StartCoroutine(RebuildLayout());
+        }
+        
+        private IEnumerator RebuildLayout()
+        {
+            yield return null;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(root);
+        }
+
         public void PushItem(CraftTreeSO craftTree)
         {
             if (_pinItems.ContainsKey(craftTree)) return;
 
-            var item = _pinCraftItems.First(x => !x.gameObject.activeSelf);
+            var item = _pinCraftItems.First(x => !x.IsActive);
             item.EnableFor(craftTree);
             _pinItems.Add(craftTree, item);
             _orderQueue.Enqueue(craftTree);

@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Work.Code.UI.ContextMenu;
 using Work.Code.UI.Interaction;
 using Work.Code.UI.Misc;
 using Work.LKW.Code.Items;
@@ -17,6 +18,7 @@ namespace InGame.InventorySystem
 {
     public class ItemSlotUI : DraggableUI, IUIElement<ItemSlot>, IHoverable, IDroppable
     {
+        [SerializeField] private ContextMenuSO inventoryMenu;
         [SerializeField] private CraftableItemListSO craftableItemListSO;
         [SerializeField] private DynamicText stackText;
         [SerializeField] private TextMeshProUGUI nameText;
@@ -30,6 +32,7 @@ namespace InGame.InventorySystem
 
         private Color _originColor;
         private Color _defaultColor = new Color32(0, 0, 0, 0);
+
         public ItemSlot ItemSlot { get; private set; }
         public override Sprite DragSprite => ItemSlot.Item?.ItemData.itemImage;
 
@@ -48,12 +51,14 @@ namespace InGame.InventorySystem
         {
             base.Awake();
             button.onClick.AddListener(HandleClick);
+            BindContextMneu(inventoryMenu, () => ItemSlot);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
             button.onClick.RemoveListener(HandleClick);
+            UnBindContextMneu();
         }
 
         public void EnableFor(ItemSlot itemSlot)
@@ -149,8 +154,6 @@ namespace InGame.InventorySystem
         {
             SetHoveringItem(this);
         }
-
-        public void OnHovering(PointerEventData eventData) { }
 
         public void OnHoverExit(PointerEventData eventData)
         {

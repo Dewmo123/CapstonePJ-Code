@@ -31,6 +31,7 @@ namespace Code.UI.Minimap
         private Dictionary<ElementType, MinimapFactory> _factories;
         private Dictionary<string, MinimapElement> _elements = new Dictionary<string, MinimapElement>();
         
+        
         protected void OnEnable()
         {
             _factories = GetComponentsInChildren<MinimapFactory>()
@@ -38,16 +39,16 @@ namespace Code.UI.Minimap
             
             _player.PlayerInput.OnMinimapPressed += HandleMinimapPressed;
             slider.onValueChanged.AddListener(SetSliderValue);
-            _minimapSystem.OnDataAdded += HandleDataAdded;
-            _minimapSystem.OnDataRemoved += HandleDataRemoved;
+            _minimapSystem.OnDataAdded += HandleUIAdded;
+            _minimapSystem.OnDataRemoved += HandleUIRemoved;
         }
 
         protected override void OnDestroy()
         {
             if (_player != null)
                 _player.PlayerInput.OnMinimapPressed -= HandleMinimapPressed;
-            _minimapSystem.OnDataAdded -= HandleDataAdded;
-            _minimapSystem.OnDataRemoved -= HandleDataRemoved;
+            _minimapSystem.OnDataAdded -= HandleUIAdded;
+            _minimapSystem.OnDataRemoved -= HandleUIRemoved;
             base.OnDestroy();
         }
         
@@ -59,15 +60,15 @@ namespace Code.UI.Minimap
         
         #region  Handler
         
-        private void HandleDataAdded(MinimapElementData data)
+        private void HandleUIAdded(MinimapElementData data)
         {
-            if(_factories.ContainsKey(data.Type) == false) return;
+             if(_factories.ContainsKey(data.Type) == false) return;
              _elements.Add(data.Id, _factories[data.Type].CreateUIElement(data));
              _elements[data.Id].transform.SetParent(miniMapRect);
              UpdateElementsPosition();
         }
         
-        private void HandleDataRemoved(string id)
+        private void HandleUIRemoved(string id)
         {
             if(string.IsNullOrEmpty(id)) return;
             _elements.Remove(id);

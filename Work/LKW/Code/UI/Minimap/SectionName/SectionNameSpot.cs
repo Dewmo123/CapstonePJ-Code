@@ -1,6 +1,7 @@
 using System;
 using Code.UI.Minimap.Core;
 using UnityEngine;
+using Work.LKW.Code.Items.ItemInfo;
 
 public enum SectionNameSize
 {
@@ -15,6 +16,7 @@ namespace Code.UI.Minimap.SectionName
     {
         [field:SerializeField] public string Name { get; set; }
         [field:SerializeField] public SectionNameSize Size { get; set; }
+        [field:SerializeField] public SpawnArea Area { get; set; }
 
 
         private void OnValidate()

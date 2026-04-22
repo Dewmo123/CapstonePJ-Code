@@ -25,13 +25,12 @@ namespace Code.SHS.Entities.Enemies.FSM
         {
             base.Update();
 
-            if (TargetEntity == null && _movement.IsArrived)
+            if (RemainTarget == null && _movement.IsArrived)
             {
                 _enemy.ChangeState(EnemyStateEnum.Idle);
                 return;
             }
-
-            Vector3 destination = TargetEntity != null ? TargetEntity.transform.position : _targetProvider.LastTargetPosition;
+            Vector3 destination = Target != null ? Target.transform.position : _targetProvider.LastTargetPosition;
             _movement.SetDestination(destination);
             UpdateMovementAnimation();
         }
@@ -39,7 +38,7 @@ namespace Code.SHS.Entities.Enemies.FSM
         public override void Exit()
         {
             base.Exit();
-            if (TargetEntity == null)
+            if (RemainTarget == null)
                 _targetProvider.TargetLost(_targetProvider.LastTargetPosition);
         }
     }

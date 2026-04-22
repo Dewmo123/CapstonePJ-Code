@@ -7,24 +7,27 @@ using UnityEngine;
 
 namespace Scripts.SkillSystem.PassiveSkills
 {
-    public class AssaultPassiveSkill : PassiveSkill
+    public class AssaultPassiveSkill : PassiveSkill,IAfterInitialze
     {
         [SerializeField] private StatSO damageDemodifyStat;
         [SerializeField] private float shieldCooldown;
         [SerializeField] private float shieldDuration;
         [SerializeField] private float damageDemodifyValue;
-        private StatOverrideBehavior _StatOverrideBehavior;
+        private StatOverrideBehavior _statOverrideBehavior;
         private VFXComponent _vfxCompo;
         private float _cooldownTimer;
+
 
         public override void Init(ComponentContainer container)
         {
             base.Init(container);
-            _StatOverrideBehavior = _owner.Get<StatOverrideBehavior>();
+            _statOverrideBehavior = _owner.Get<StatOverrideBehavior>();
             _vfxCompo = _owner.Get<VFXComponent>();
-            damageDemodifyStat = _StatOverrideBehavior.GetStat(damageDemodifyStat);
         }
-        
+        public void AfterInitialize()
+        {
+            damageDemodifyStat = _statOverrideBehavior.GetStat(damageDemodifyStat);
+        }
         public override void EnableSkill()
         {
             base.EnableSkill();
@@ -63,6 +66,8 @@ namespace Scripts.SkillSystem.PassiveSkills
             _owner.OnHitEvent.RemoveListener(HandleOwnerHit);
             base.DisableSkill();
         }
+
+
     }
 }
 

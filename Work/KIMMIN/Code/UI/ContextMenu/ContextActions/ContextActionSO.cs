@@ -7,6 +7,13 @@ namespace Work.Code.UI.ContextMenu
     {
         public Sprite actionIcon;
         public int sortOrder;
+        
+        [Header("Action Text Settings")]
+        public string actionText;
+        public string inactiveText;
+        [TextArea] public string activeDescription;
+        [TextArea] public string inactiveDescription;
+        
         public BaseContextAction contextAction;
     }
 }

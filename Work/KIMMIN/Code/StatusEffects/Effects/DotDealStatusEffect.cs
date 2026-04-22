@@ -20,8 +20,13 @@ namespace Work.Code.StatusEffects.Effects
         {
             _targetHealth = target.Get<HealthCompo>();
             Debug.Assert(_targetHealth != null, "Target has no health compo");
-            _remainingTicks = Mathf.FloorToInt(ApplyTime / _tick);
-            _damagePerTick = Value / _remainingTicks;
+            CalcTick();
+        }
+
+        private void CalcTick()
+        {
+            _remainingTicks = Mathf.FloorToInt(_applyTime / _tick);
+            _damagePerTick = _value / _remainingTicks;
         }
 
         public override bool UpdateStatusEffect(Entity entity)
@@ -38,15 +43,19 @@ namespace Work.Code.StatusEffects.Effects
                     damageType = DamageType.DOT,
                     defPierceLevel = 1
                 };
-                _targetHealth.TakeDamage(damageData);
+                _targetHealth.ApplyDamage(damageData);
             }
 
             return base.UpdateStatusEffect(entity);
         }
 
+        protected override void ResetStatusEffect()
+        {
+            CalcTick();
+        }
+
         public override void ReleaseStatusEffect(Entity entity)
         {
-
         }
     }
 }

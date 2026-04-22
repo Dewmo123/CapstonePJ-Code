@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Chipmunk.GameEvents;
 using Code.UI.Core;
+using DewmoLib.Dependencies;
+using Scripts.Players;
 using UnityEngine;
-using UnityEngine.UI;
 using Work.Code.UI.Core.Interaction;
 
 namespace Work.Code.UI.ContextMenu
@@ -21,7 +21,8 @@ namespace Work.Code.UI.ContextMenu
         [SerializeField] private RectTransform menuParent;
         [SerializeField] private RectTransform menuRoot;
         [SerializeField] private ContextMenuPanel panel;
-        
+
+        [Inject] private Player _owner;
         private readonly Dictionary<InteractableUI, ContextMenuData> _contextMenus = new();
         private readonly Dictionary<ContextMenuSO, BaseContextMenu> _instances = new();
         private BaseContextMenu _currentMenu;
@@ -29,9 +30,15 @@ namespace Work.Code.UI.ContextMenu
         private void Awake()
         {
             MappingMenus();
-            EventBus.Subscribe<BindContextMenuEvent>(HandleBindMenu);
-            EventBus.Subscribe<UnBindContextMenuEvent>(HandleUnBindMenu);
             panel.PanelButton.onClick.AddListener(HandleClickPanel);
+        }
+
+        private void Start()
+        {
+            foreach (var menu in _instances.Values)
+            {
+                menu.SetOwner(_owner);
+            }
         }
 
         private void HandleClickPanel()
@@ -52,20 +59,7 @@ namespace Work.Code.UI.ContextMenu
 
         private void OnDestroy()
         {
-            EventBus.Unsubscribe<BindContextMenuEvent>(HandleBindMenu);
-            EventBus.Unsubscribe<UnBindContextMenuEvent>(HandleUnBindMenu);
             panel.PanelButton.onClick.RemoveListener(HandleClickPanel);
-        }
-
-        private void HandleBindMenu(BindContextMenuEvent evt)
-        {
-            BindContextMenu(evt.Owner, evt.ContextMenu, evt.Data);
-        }
-
-        private void HandleUnBindMenu(UnBindContextMenuEvent evt)
-        { 
-            HideCurrentMenu();
-            UnbindContextMenu(evt.Owner);
         }
 
         public void BindContextMenu<T>(InteractableUI owner, ContextMenuSO menu, Func<T> data)
@@ -86,6 +80,8 @@ namespace Work.Code.UI.ContextMenu
 
         public void UnbindContextMenu(InteractableUI owner)
         {
+            HideCurrentMenu();
+
             if (_contextMenus.ContainsKey(owner))
                 _contextMenus.Remove(owner);
 

@@ -2,6 +2,7 @@
 using Code.GameEvents;
 using Code.UI.Core;
 using UnityEngine;
+using Work.Code.UI;
 
 namespace InGame.PlayerUI
 {
@@ -12,7 +13,7 @@ namespace InGame.PlayerUI
         [SerializeField] private GameObject hotbarUI;
         [SerializeField] private GameObject lootSlotUI;
         private bool _withLoot;
-
+        
         protected override void Awake()
         {
             base.Awake();
@@ -49,8 +50,6 @@ namespace InGame.PlayerUI
                 _withLoot = false; 
                 UIUtility.FadeUI(lootSlotUI.gameObject, 0.1f, !IsActive);
             }
-            
-            EventBus.Raise(new PlayerUIEvent(IsActive));
         }
 
         public override void DisableUI(bool isFade = false)

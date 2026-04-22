@@ -1,10 +1,9 @@
 ﻿using System;
-using DG.Tweening;
 using UnityEngine;
 
 namespace Code.UI.Core
 {
-    [DefaultExecutionOrder(-5)]
+    [DefaultExecutionOrder(5)]
     public class UIBase : MonoBehaviour
     {
         public CanvasGroup CanvasGroup { get; protected set; }
@@ -51,7 +50,7 @@ namespace Code.UI.Core
         }
         
         [ContextMenu("Show UI")]
-        public void ShowUI()
+        public void ShowUIOnInspector()
         {
             CanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
             CanvasGroup.alpha = 1;
@@ -61,7 +60,7 @@ namespace Code.UI.Core
         }
 
         [ContextMenu("Hide UI")]
-        public void HideUI()
+        public void HideUIOnInspector()
         {
             CanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
             CanvasGroup.alpha = 0;

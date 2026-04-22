@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Ami.BroAudio;
 using DewmoLib.ObjectPool.RunTime;
 using Scripts.Combat;
 using Scripts.Combat.Datas;
@@ -19,6 +20,7 @@ namespace Code.ETC
         [SerializeField] private PoolManagerSO poolManager;
         [SerializeField] private OverlapDamageCaster damageCaster;
         [SerializeField] private MovementDataSO movementData;
+        [SerializeField] private SoundID explosiveSoundID;
         
         
         [Header("Setting")] 
@@ -67,6 +69,7 @@ namespace Code.ETC
                 exp.Explode();
             }
             
+            BroAudio.Play(explosiveSoundID, transform.position);
             Destroy(gameObject, 0.04f);
         }
     }

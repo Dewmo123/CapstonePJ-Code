@@ -1,4 +1,5 @@
 using System;
+using Scripts.Players;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,29 +11,31 @@ namespace Work.Code.UI.ContextMenu
     
     [RequireComponent(typeof(Button))]
     public abstract class BaseContextAction<T> : BaseContextAction, IContextAction<T>
-    {
-        [SerializeField] private TextMeshProUGUI title;
-        [SerializeField] private Image icon;
+    { 
+        protected Player _owner;
+        
+        private TextMeshProUGUI _title;
+        private Image _icon;
         private Button _contextButton;
         private T _data;
         
         [field: SerializeField] public ContextActionSO ContextActionSO { get; private set; }
-        protected virtual string HelpText => CheckCondition(_data) ? ActiveText : InactiveText;
-        protected abstract string ActiveText { get; }
-        protected abstract string InactiveText { get; }
-        public event Action<T> ContextAction;
+        protected string HelpText => CheckCondition(_data) ? 
+                ContextActionSO.actionText : 
+                ContextActionSO.inactiveText;
+        
+        public event Action<T> OnContextAction;
         public event Action OnCallbackInvoked;
 
         protected override void Awake()
         {
             base.Awake();
             _contextButton = GetComponent<Button>();
+            _title = transform.Find("Title").GetComponent<TextMeshProUGUI>();
+            _icon = transform.Find("Icon").GetComponent<Image>();
         }
 
-        private void OnDisable()
-        {
-            UnbindTooltip();
-        }
+        public void InitOwner(Player player) => _owner = player;
 
         public override void DisableUI(bool isFade = false)
         {
@@ -53,35 +56,47 @@ namespace Work.Code.UI.ContextMenu
             EnableUI();
             ResetEvents();
             InitAction(data);
-            BindTooltip(() => HelpText, 0.5f);
+            BindTooltip(data);
             
-            title.text = HelpText;
-            icon.sprite = ContextActionSO.actionIcon;
+            _title.text = HelpText;
+            _icon.sprite = ContextActionSO.actionIcon;
             name = $"{typeof(T).Name}ContextAction";
+        }
+
+        private void BindTooltip(T data)
+        {
+            string tooltipDescription = CheckCondition(data) ? 
+                ContextActionSO.activeDescription : 
+                ContextActionSO.inactiveDescription;
+            
+            BindTooltip(() => tooltipDescription, 0.8f);
         }
 
         public void ResetEvents()
         {
-            UnbindTooltip();
-            ContextAction = null;
+            OnContextAction = null;
             OnCallbackInvoked = null;
+            
+            UnbindTooltip();
+            _contextButton.onClick.RemoveAllListeners();
         }
 
         private void InitAction(T data)
         {
-            if(_contextButton == null) 
-                _contextButton = GetComponent<Button>();
-            
-            _contextButton.onClick.RemoveAllListeners();
+            OnContextAction += OnAction;
             _contextButton.onClick.AddListener(() =>
             {
                 OnCallbackInvoked?.Invoke();
-                ContextAction?.Invoke(data);
+                OnContextAction?.Invoke(data);
             });
-            
-            ContextAction += OnAction;
         }
-        
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            _contextButton.onClick.RemoveAllListeners();
+        }
+
         public abstract bool CheckCondition(T data);
         public abstract void OnAction(T data);
         public virtual bool CanShow(T data) => true;

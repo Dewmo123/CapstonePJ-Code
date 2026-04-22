@@ -16,8 +16,8 @@ namespace Work.Code.Admin
         [SerializeField] private AdminItem itemUI;
         [SerializeField] private ItemDataBaseSO itemDB;
         
-        private PlayerInventory _inventory;
         [Inject] private Player _player;
+        private PlayerInventory _inventory;
 
         private void Start()
         {

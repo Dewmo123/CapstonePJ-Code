@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Chipmunk.GameEvents;
-using UnityEngine;
 using Work.LKW.Code.Items.ItemInfo;
 
 namespace Work.Code.GameEvents

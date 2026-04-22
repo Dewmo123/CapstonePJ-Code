@@ -18,13 +18,13 @@ namespace Work.Code.Crafting
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private Button createButton;
         [SerializeField] private TripleNodeTree tripleTree;
-        [SerializeField] private CraftController craftController;
 
         private List<CraftNodeUI> _nodes = new();
         private List<UILineRenderer> _lines = new();
         private List<TripleNodeTree> _tripleTrees = new();
         private CraftTreeSO _currentTree;
         private Coroutine _binaryRoutine;
+        private CraftController _craftController;
         private WaitForSeconds _delay = new WaitForSeconds(0.05f);
         private WaitForSeconds _nonDelay = new WaitForSeconds(0f);
 
@@ -34,7 +34,6 @@ namespace Work.Code.Crafting
         
         private void Start()
         {
-            Initialize();
             createButton.onClick.AddListener(() => CreateItem(_currentTree));
             EventBus<UpdateInventoryUIEvent>.OnEvent += HandleChangeUI;
         }
@@ -45,10 +44,11 @@ namespace Work.Code.Crafting
             EventBus<UpdateInventoryUIEvent>.OnEvent -= HandleChangeUI;
         }
 
-        private void Initialize()
+        public void Initialize(CraftController craftController)
         {
             _nodes = GetComponentsInChildren<CraftNodeUI>().ToList();
             _lines = GetComponentsInChildren<UILineRenderer>(true).ToList();
+            _craftController = craftController;
             
             for (int i = 0; i < 3; i++)
             {
@@ -97,7 +97,7 @@ namespace Work.Code.Crafting
             if(tree.isBinary)
                 BinaryTree(tree, isNotificate);
             else
-                _tripleTrees[0].Init(tree, _nodes[0].Rect, true);
+                _tripleTrees[0].Init(tree, _nodes[0].Rect, isNotificate, true);
             
             _currentTree = tree;
         }
@@ -173,9 +173,9 @@ namespace Work.Code.Crafting
         private void InitializeNode(NodeData data, CraftNodeUI node, int index, bool isNotificate = true)
         {
             node.Clear();
-            bool isNeedItem = !(index == 0 || index == 1);
-            int count = craftController.Inventory.GetItemCount(data.Item);
-            CraftNodeData nodeData = new CraftNodeData(data, count, isNeedItem);
+            bool isNeedItem = index == 0 || index == 1;
+            int count = _craftController.Inventory.GetItemCount(data.Item);
+            CraftNodeData nodeData = new CraftNodeData(data, count, !isNeedItem);
             node.InitUI(nodeData, isNotificate);
 
             if (node.Data.Tree != null && index >= 0)
@@ -190,9 +190,9 @@ namespace Work.Code.Crafting
 
         public void CreateItem(CraftTreeSO tree)
         {
-            if(craftController.Inventory == null || tree == null) return;
+            if(_craftController.Inventory == null || tree == null) return;
 
-            if (!craftController.Craft(tree))
+            if (!_craftController.Craft(tree))
                 Debug.Log("아이템 부족");
         }
         

@@ -2,6 +2,7 @@
 using Chipmunk.Library.Utility.GameEvents.Local;
 using Chipmunk.Modules.StatSystem;
 using Code.SHS.Entities.Enemies;
+using Code.SHS.Entities.Enemies.Groups;
 using Code.SHS.Entities.Enemies.Targetings.Events;
 using Scripts.Entities;
 using Scripts.Players;
@@ -110,7 +111,6 @@ namespace Code.SHS.Targetings.Enemies
             {
                 if (Physics.Raycast(EyePosition, direction.normalized, distance, obstacleMask))
                 {
-                    Debug.Log("장애물에 가려짐");
                     return false;
                 }
             }

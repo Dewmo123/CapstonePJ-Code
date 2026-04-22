@@ -16,9 +16,10 @@ MonoBehaviour:
   itemName: "\uAE08\uC18D \uC870\uAC01"
   itemType: 0
   spawnArea: 3
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 21300000, guid: 1b3416bbc94d90c4ab6ad2ba60b9d43a, type: 3}
   description: "\uC124\uBA85"
   rarity: 0
   rarityWeight: 10
   value: 0
   maxStack: 99
+  maxSpawnCount: 4

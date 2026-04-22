@@ -39,7 +39,7 @@ namespace Scripts.Entities.Vitals
             OnValueChanged += HandleVitalChanged;
             Debug.Assert(_localEventBus != null, $"{gameObject.name}에게 LocalEventBus가 없음!, 컴포넌트 넣어줘요~");
         }
-        private void Update()
+        protected virtual void Update()
         {
             _stopTimer = Mathf.Max(_stopTimer - Time.deltaTime, 0);
             if (_stopTimer > 0 || StatPerSecStat == null)

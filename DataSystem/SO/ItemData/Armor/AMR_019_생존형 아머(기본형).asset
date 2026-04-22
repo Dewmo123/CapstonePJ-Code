@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: "\uC0DD\uC874\uD615 \uC544\uBA38(\uAE30\uBCF8\uD615)"
   itemType: 3
   spawnArea: 1
-  itemImage: {fileID: 21300000, guid: 9bfd8def30b38cc44a4103fa950e52c8, type: 3}
+  itemImage: {fileID: 21300000, guid: ab2ec6828d3a7884f94058028d75c04f, type: 3}
   description: "\uC0DD\uC874\uC744 \uACE0\uB824\uD55C \uBCF4\uAC15 \uAD6C\uC870\uB85C
     \uC81C\uC791\uB418\uC5B4 \uD30C\uD3B8\uACFC \uD0C0\uACA9\uC73C\uB85C\uBD80\uD130
     \uC0C1\uCCB4\uB97C \uBCF4\uD638\uD558\uBA74\uC11C \uC804\uD22C \uC9C0\uC18D\uC5D0
@@ -25,6 +25,7 @@ MonoBehaviour:
   rarityWeight: 45
   value: 0
   maxStack: 1
+  maxSpawnCount: 1
   addStats:
   - targetStat: {fileID: 11400000, guid: e8d35beaad87d9f48ab996860659e33d, type: 2}
     value: 4

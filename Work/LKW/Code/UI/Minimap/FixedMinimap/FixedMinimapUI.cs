@@ -25,7 +25,7 @@ namespace Code.UI.Minimap.FixedMinimap
 
         private void Start()
         {
-            ShowUI();
+            ShowUIOnInspector();
         }
 
         protected  void OnEnable()

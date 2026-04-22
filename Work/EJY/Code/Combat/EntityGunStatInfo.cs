@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Code.Combat
 {
-    public class EntityGunStatInfo : MonoBehaviour, IContainerComponent
+    public class EntityGunStatInfo : MonoBehaviour, IContainerComponent, IAfterInitialze
     {
         [SerializeField] private StatSO reloadSpeedMultiplierStat;
         [SerializeField] private StatSO fireRateStat;
@@ -21,7 +21,10 @@ namespace Code.Combat
         public void OnInitialize(ComponentContainer componentContainer)
         {
             _statCompo = componentContainer.Get<StatOverrideBehavior>();
-            
+        }
+
+        public void AfterInitialize()
+        {
             var reloadSpeedMultiplier = _statCompo.GetStat(reloadSpeedMultiplierStat);
             ReloadSpeedMultiplier = reloadSpeedMultiplier.Value;
             reloadSpeedMultiplier.OnValueChanged += HandleReloadSpeedValueChanged;
@@ -34,7 +37,7 @@ namespace Code.Combat
             BulletReduceRate = bulletReduceRate.Value;
             bulletReduceRate.OnValueChanged += HandleBulletReduceRateValueChanged;
         }
-
+        
         private void HandleReloadSpeedValueChanged(StatSO stat, float current, float prev)
         {
             ReloadSpeedMultiplier = current;

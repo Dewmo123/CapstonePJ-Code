@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Work.Code.UI.Misc
+namespace Work.Code.UI
 {
     public class DamageText : MonoBehaviour, IPoolable
     {
@@ -62,9 +62,6 @@ namespace Work.Code.UI.Misc
             renderer.sortingOrder = 999;
         }
 
-        public void ResetItem()
-        {
-            
-        }
+        public void ResetItem() { }
     }
 }

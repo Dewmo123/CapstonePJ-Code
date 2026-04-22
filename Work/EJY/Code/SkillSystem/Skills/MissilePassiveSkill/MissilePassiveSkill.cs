@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Ami.BroAudio;
 using DewmoLib.Dependencies;
 using DewmoLib.ObjectPool.RunTime;
 using Scripts.Combat;
@@ -24,13 +25,14 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
         [SerializeField] private float randomSpawnRangeZ = 1.5f;
         [SerializeField] private float spawnHeightOffset = 0f;
         [SerializeField] private float minSpawnSpacing = 0.5f;
-
+        
         [Inject] private PoolManagerMono _poolManager;
         private int _currentHitCnt = 0;
 
         public override void EnableSkill()
         {
             base.EnableSkill();
+            Debug.Log("미사일 작동");
             _owner.OnHit += HandleOnHit;
         }
 

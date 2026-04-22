@@ -22,6 +22,7 @@ MonoBehaviour:
   rarityWeight: 10
   value: 0
   maxStack: 9
+  maxSpawnCount: 4
   addStats: []
   modelOffset: {x: 0, y: 0, z: 0}
   equipmentPrefab: {fileID: 1714967983448266501, guid: a024a6317a022bf4b98c60d3ee288b92, type: 3}
@@ -32,4 +33,8 @@ MonoBehaviour:
   attackSpeed: 0
   controller: {fileID: 0}
   fireRate: 0
+  attackSoundID:
+    _entity: {fileID: 0}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 0}
   healAmount: 10

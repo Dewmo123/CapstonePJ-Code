@@ -122,7 +122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb398504ad754e57b3ef0e8bfcb80152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canCollect: 0
+  orbTrail: {fileID: 3173441116304659111}
+  <PoolItem>k__BackingField: {fileID: 11400000, guid: 7185cd0a7297b5c419e571f2676a770b, type: 2}
 --- !u!96 &3173441116304659111
 TrailRenderer:
   serializedVersion: 3
@@ -168,7 +169,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.5
+  m_Time: 0.25
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3

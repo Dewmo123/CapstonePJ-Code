@@ -1,19 +1,25 @@
+using Code.InventorySystems.Items;
 using UnityEngine;
 using Work.LKW.Code.Items;
 
 namespace Work.Code.UI.ContextMenu.InventoryItemActions
 {
-    public class InventoryItemUseAction : BaseContextAction<UsableItem>
+    public class InventoryItemUseAction : BaseContextAction<ItemSlot>
     {
-        protected override string ActiveText { get; }
-        protected override string InactiveText { get; }
-        public override bool CheckCondition(UsableItem data)
+        public override bool CheckCondition(ItemSlot data)
         {
             return true;
         }
 
-        public override void OnAction(UsableItem data)
+        public override bool CanShow(ItemSlot data)
         {
+            return data.Item is IUsable;
+        }
+
+        public override void OnAction(ItemSlot data)
+        {
+            if(data.Item is IUsable usable)
+                usable.Use(_owner);
         }
     }
 }

@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Glock17
   itemType: 4
   spawnArea: 64
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 21300000, guid: 290944194a485c34da96f4c5cae8843d, type: 3}
   description: "\uC2E0\uB8B0\uC131 \uB192\uC740 \uC131\uB2A5\uACFC \uAC00\uBCBC\uC6B4
     \uBB34\uAC8C\uB97C \uAC16\uCD94\uC5B4 \uBCF4\uC870 \uBB34\uAE30\uB85C \uD65C\uC6A9\uD558\uAE30
     \uC88B\uC740 \uD45C\uC900\uC801\uC778 \uC790\uB3D9 \uAD8C\uCD1D\uC785\uB2C8\uB2E4."
@@ -24,6 +24,7 @@ MonoBehaviour:
   rarityWeight: 25
   value: 30
   maxStack: 1
+  maxSpawnCount: 1
   addStats: []
   modelOffset: {x: 0, y: 0, z: 0}
   equipmentPrefab: {fileID: 9215368985558987372, guid: 1071f8ddf00deff45b83ca35c633fdf3, type: 3}
@@ -34,12 +35,17 @@ MonoBehaviour:
   attackSpeed: 5.7
   controller: {fileID: 22100000, guid: 85ed5e8ca8afdea4c8a5fd11b05ec2bc, type: 2}
   fireRate: 0.39
+  attackSoundID:
+    _entity: {fileID: 11400000, guid: d357c0494a2cda54f8f4de693472aa5d, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 0}
   gunType: 0
   bulletPerShot: 1
   reloadTime: 1.8
   bulletSpeed: 45
   maxAmmoCapacity: 16
   aimSpeedMultiplier: 0.85
+  noiseRadius: 0
   defaultSpread: 0.04
   crosshairData: {fileID: 0}
   maxSpread: 0.32
@@ -57,3 +63,7 @@ MonoBehaviour:
   recoilRecoveryTime: 0.115
   recoilRecovery: 582
   pixelsPerRecoilUnit: 0.45
+  reloadSound:
+    _entity: {fileID: 11400000, guid: 38a1c7b8740f5124e81d110ec08a748f, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 0}

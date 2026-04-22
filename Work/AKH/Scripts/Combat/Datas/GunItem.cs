@@ -3,6 +3,7 @@ using Code.InventorySystems;
 using Scripts.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using Ami.BroAudio;
 using Code.Combat;
 using UnityEngine;
 using Work.LKW.Code.Items;
@@ -27,7 +28,6 @@ namespace Scripts.Combat.Datas
 
         private int _currentBullet;
         private float _lastAttackTime;
-        private Entity _owner;
         private Inventory _inventory;
         private EntityGunStatInfo _entityGunStatInfo;
         private static int _reloadSpeedHash = Animator.StringToHash("ReloadSpeed");
@@ -54,6 +54,9 @@ namespace Scripts.Combat.Datas
         {
             if (_entityGunStatInfo.BulletReduceRate > Random.value)
                 _currentBullet = Mathf.Max(_currentBullet - 1, 0);
+            if (WeaponData.attackSoundID.IsValid())
+                BroAudio.Play(WeaponData.attackSoundID, Dealer.gameObject.transform.position);
+            
             _lastAttackTime = Time.time;
             WeaponObj.Attack();
         }
@@ -70,6 +73,8 @@ namespace Scripts.Combat.Datas
                 int cnt = _inventory.GetItemCount(currentBulletItem.ItemData);
                 if (cnt <= 0)
                     return CanChangeBullet();
+                if (_currentBullet == GunItemData.maxAmmoCapacity)
+                    return false;
                 return true;
             }
         }
@@ -77,8 +82,7 @@ namespace Scripts.Combat.Datas
         public void Reload()
         {
             List<BulletItem> bulletItems = GetValidBullets();
-            if (currentBulletItem == null)
-                currentBulletItem = bulletItems[0];
+            currentBulletItem ??= bulletItems[0];
             int cnt = _inventory.GetItemCount(currentBulletItem.bulletDataSO);
             if (cnt <= 0)
                 currentBulletItem = bulletItems[0];
@@ -111,7 +115,7 @@ namespace Scripts.Combat.Datas
         public override void OnUnequip(Entity entity)
         {
             base.OnUnequip(entity);
-            Debug.Assert(entity == _owner, "entity is not owner");
+            Debug.Assert(entity == _owner, $"entity is not owner entity: {entity} owner: {_owner}");
             entity.Get<EntityAnimator>().SetParam(_reloadSpeedHash, 1);
             _owner = null;
         }

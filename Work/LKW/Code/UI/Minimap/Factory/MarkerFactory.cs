@@ -15,7 +15,6 @@ namespace Code.UI.Minimap.Factory
             Marker marker = _poolManager.Pop<Marker>(markerItem);
             marker.GetComponent<Image>().sprite = data.IconSprite;
             marker.NormalizedPos = data.NormalizedPos;
-
             marker.ID = data.Id;
 
             return marker;

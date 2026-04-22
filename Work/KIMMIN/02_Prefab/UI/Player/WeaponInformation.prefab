@@ -343,6 +343,10 @@ MonoBehaviour:
   replaceBulletParentGO: {fileID: 7326103341044767149}
   playerInput: {fileID: 11400000, guid: 4e3c85c501a7f4e46b46ca7017e2cbd8, type: 2}
   ammoText: {fileID: 4054216874826314321}
+  emptySoundID:
+    _entity: {fileID: 11400000, guid: ad58a205e94c29346916379e1b80b663, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 6935135970726859226}
 --- !u!1 &7326103341044767149
 GameObject:
   m_ObjectHideFlags: 0

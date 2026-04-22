@@ -1,6 +1,7 @@
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Chipmunk.Library.Utility.GameEvents.Local;
 using DewmoLib.ObjectPool.RunTime;
+using Scripts.Combat.Datas;
 using Scripts.Effects;
 using SHS.Scripts.Combats.Events;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace SHS.Scripts.Effects
         public void OnLocalEvent(DamagedEvent eventData)
         {
             PoolingEffect bloodEffect = poolManager.Pop(bloodEffectPoolItem) as PoolingEffect;
-            if (bloodEffect == null)
+            if (bloodEffect == null || eventData.DamageData.damageType == DamageType.DOT)
                 return;
 
             bloodEffect.PlayVFX(eventData.HitPoint, Quaternion.LookRotation(eventData.HitNormal));

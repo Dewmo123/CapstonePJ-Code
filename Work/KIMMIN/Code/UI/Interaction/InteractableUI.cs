@@ -1,9 +1,7 @@
 ﻿using System;
-using Chipmunk.GameEvents;
 using Code.UI.Core;
 using Code.UI.Popup;
 using UnityEngine;
-using Work.Code.GameEvents;
 using Work.Code.UI.ContextMenu;
 
 namespace Work.Code.UI.Core.Interaction
@@ -22,38 +20,39 @@ namespace Work.Code.UI.Core.Interaction
         protected override void OnDestroy()
         {
             ClearInteractEvents();
+            base.OnDestroy();
         }
-        
-        protected void BindTooltip(Func<object> data, float duration = 0f)
+
+        protected void BindTooltip<T>(Func<T> data, float duration = 0f)
         {
-            EventBus.Raise(new BindTooltipEvent(this, data, duration));
+            UIOverlayManager.Instance?.BindTooltip(this, data, duration);
         }
 
         protected void UnbindTooltip()
         {
-            EventBus.Raise(new UnBindTooltipEvent(this));
+            UIOverlayManager.Instance?.UnbindTooltip(this);
         }
         
-        protected void BindContextMneu(ContextMenuSO menu, Func<object> data)
+        protected void BindContextMneu<T>(ContextMenuSO menu, Func<T> data)
         {
-            EventBus.Raise(new BindContextMenuEvent(this, menu, data));
+            UIOverlayManager.Instance?.BindContextMenu(this, menu, data);
         }
 
         protected void UnBindContextMneu()
         {
-            EventBus.Raise(new UnBindContextMenuEvent(this));
+            UIOverlayManager.Instance?.UnbindContextMenu(this);
         }
         
-        protected void BindPopup(IPopupable popup)
+        protected void BindPopup(IPopupable popupable)
         {
-            EventBus.Raise(new BindPopupEvent(popup));
+            UIOverlayManager.Instance?.BindPopup(popupable);
         }
         
-        protected void UnBindPopup(IPopupable popup)
+        protected void UnBindPopup(IPopupable popupable)
         {
-            EventBus.Raise(new UnBindPopupEvent(popup));
+            UIOverlayManager.Instance?.UnbindPopup(popupable);
         }
-        
+
         protected virtual void ClearInteractEvents() { }
     }
 }

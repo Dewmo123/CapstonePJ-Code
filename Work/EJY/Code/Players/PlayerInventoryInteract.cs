@@ -1,4 +1,4 @@
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
 using Code.GameEvents;
 using Code.InventorySystems.Items;
@@ -7,6 +7,7 @@ using InGame.InventorySystem;
 using Scripts.Combat.Datas;
 using Scripts.Players;
 using UnityEngine;
+using Work.Code.GameEvents;
 using Work.LKW.Code.Events;
 using Work.LKW.Code.Items;
 
@@ -29,11 +30,18 @@ namespace Code.Players
             _playerInventory = componentContainer.Get<PlayerInventory>();
             _playerEquipment = componentContainer.Get<PlayerEquipment>();
             
+            EventBus.Subscribe<ItemEquipRequestEvent>(HandleItemEquipRequest);
             EventBus.Subscribe<HoveringSlotEvent>(HandleHoveringItem);
             EventBus.Subscribe<OpenItemContainerEvent>(HandleOpenItemContainer);
             EventBus.Subscribe<PlayerUIEvent>(HandlePlayerUI);
         }
-        
+
+        private void HandleItemEquipRequest(ItemEquipRequestEvent evt)
+        {
+            _hoveringSlot = evt.Slot;
+            HandleItemInteractPressed();
+        }
+
         private void OnDestroy()
         {
             _player.PlayerInput.OnItemInteractPressed -= HandleItemInteractPressed;
@@ -76,8 +84,9 @@ namespace Code.Players
             {
                 if (item is EquipableItem equipalbeItem and not UsableItem and not ThrowableItem)
                 {
-                    if (_playerEquipment.Equip(equipalbeItem).IsSuccess)
-                        _playerInventory.RemoveItem(equipalbeItem, 1, false);
+                    if (_playerInventory.RemoveItem(equipalbeItem, 1, false))
+                        if (!_playerEquipment.Equip(equipalbeItem).IsSuccess)
+                            _playerInventory.TryAddItem(equipalbeItem, 1);
                 }
                 else if (_openedItemContainer != null)
                 {

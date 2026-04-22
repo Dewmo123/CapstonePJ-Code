@@ -5,6 +5,7 @@ using Chipmunk.ComponentContainers;
 using Scripts.Players;
 using Scripts.SkillSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Work.Code.SkillInventory
 {
@@ -19,7 +20,7 @@ namespace Work.Code.SkillInventory
         public void Initialize(Player player)
         {
             _skillUIs = GetComponentsInChildren<SkillSlot>();
-            
+
             _activeSkillCompo = player.Get<ActiveSkillComponent>();
             _passiveSkillCompo = player.Get<PassiveSkillComponent>();
 
@@ -32,6 +33,12 @@ namespace Work.Code.SkillInventory
             }
 
             UpdateSkills();
+        }
+
+        private void Update()
+        {
+            if(Keyboard.current.lKey.wasPressedThisFrame)
+                UpdateSkills();
         }
 
         private void OnDestroy()

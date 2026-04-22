@@ -46,11 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Priority>k__BackingField: 0
   <TargetStates>k__BackingField: 0200000003000000
-  cooldown: 12
+  cooldown: 3
   conditionType: 1
   conditions:
   - rid: 2466404181872738749
-  flankDistance: 2
+  flankDistance: 4
   references:
     version: 2
     RefIds:

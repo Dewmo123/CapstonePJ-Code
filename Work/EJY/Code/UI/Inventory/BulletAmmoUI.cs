@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Ami.BroAudio;
 using Chipmunk.GameEvents;
 using Code.GameEvents;
 using Code.Players;
 using Code.UI.Core;
-using DG.Tweening;
 using Scripts.Combat.Datas;
-using TMPro;
+using Scripts.Players.States;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Work.Code.UI.Misc;
 
@@ -21,6 +19,7 @@ namespace Code.UI.Inventory
         [SerializeField] private GameObject replaceBulletParentGO;
         [SerializeField] private PlayerInputSO playerInput;
         [SerializeField] private DynamicText ammoText;
+        [SerializeField] private SoundID emptySoundID;
         
         private RectTransform Rect => selectedImage.transform as RectTransform;
         private InfoUI[] _infoUIs;
@@ -33,14 +32,23 @@ namespace Code.UI.Inventory
         {
             _infoUIs = GetComponentsInChildren<InfoUI>();
             EventBus.Subscribe<ChangeHandlingEvent>(HandleChangeWeapon);
+            EventBus.Subscribe<NoAmmoSoundEvent>(HandleNoAmmo);
             
             UIUtility.FadeUI(gameObject, 0, true);
             UIUtility.FadeUI(replaceBulletParentGO, 0, true);
         }
 
-        private void OnDestroy()
+        private void HandleNoAmmo(NoAmmoSoundEvent evt)
         {
+            BroAudio.Play(emptySoundID);
+            ammoText.PlayEffect();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
             EventBus.Unsubscribe<ChangeHandlingEvent>(HandleChangeWeapon);
+            EventBus.Unsubscribe<NoAmmoSoundEvent>(HandleNoAmmo);
         }
 
         #region Replace Ammo
@@ -124,14 +132,10 @@ namespace Code.UI.Inventory
             SetAmmoText(element.CurrentBulletCnt, element.GunItemData.maxAmmoCapacity);
         }
 
-        public void Clear()
-        {
-        }
+        public void Clear() { }
         
         private void HandleChangeWeapon(ChangeHandlingEvent evt)
         {
-            EventBus.Unsubscribe<AmmoUpdateEvent>(HandleGunFire);
-            
             if (evt.EquipableItem is GunItem gun)
             {
                 if (!_isActive)
@@ -174,7 +178,7 @@ namespace Code.UI.Inventory
 
         private void SetAmmoText(int currentAmmo, int totalAmmo)
         {
-            ammoText.SetText($"{currentAmmo}/{totalAmmo}", currentAmmo == 0);
+            ammoText.SetText($"{currentAmmo}/{totalAmmo}");
             ammoText.Text.color = currentAmmo == 0 ? UIDefine.RedColor : Color.white;
         }
     }

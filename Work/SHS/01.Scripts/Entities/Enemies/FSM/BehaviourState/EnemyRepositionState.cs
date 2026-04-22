@@ -1,4 +1,4 @@
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using UnityEngine;
 
 namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
@@ -12,7 +12,7 @@ namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
         public override void Enter()
         {
             base.Enter();
-            if (TargetEntity == null)
+            if (RemainTarget == null)
                 return;
 
             _movement.SetStop(false);
@@ -32,7 +32,7 @@ namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
         {
             base.Update();
 
-            if (TargetEntity == null)
+            if (Target == null)
                 return;
 
             if (_movement.IsArrived)

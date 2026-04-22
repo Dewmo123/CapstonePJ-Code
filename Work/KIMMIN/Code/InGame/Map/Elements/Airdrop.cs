@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Chipmunk.GameEvents;
 using DewmoLib.ObjectPool.RunTime;
 using DG.Tweening;
 using UnityEngine;
 using Work.Code.GameEvents;
+using Work.LKW.Code.ItemContainers;
+using Work.LKW.Code.Items.ItemInfo;
 
 namespace Work.Code.MapEvents.Elements
 {
@@ -14,6 +17,8 @@ namespace Work.Code.MapEvents.Elements
         [SerializeField] private GameObject parachute;
         [SerializeField] private ParticleSystem fogEffect;
         [SerializeField] private LayerMask whatIsGround;
+        [SerializeField] private ItemContainer itemContainer;
+        [SerializeField] private List<ItemDataSO> airDropItems;
         
         private bool _isDropping = false;
         private Pool _pool;
@@ -29,6 +34,9 @@ namespace Work.Code.MapEvents.Elements
             transform.position = new Vector3(position.x, height, position.z);
             LandingCallback = landingCallback;
             _isDropping = true;
+            
+            int randomIndex = UnityEngine.Random.Range(0, airDropItems.Count);
+            itemContainer.SetUpItem(airDropItems[randomIndex]);
         }
 
         private void Update()

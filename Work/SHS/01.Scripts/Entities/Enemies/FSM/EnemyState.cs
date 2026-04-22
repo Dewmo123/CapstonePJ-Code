@@ -1,10 +1,12 @@
 ﻿using Chipmunk.ComponentContainers;
 using Chipmunk.Library.Utility.GameEvents.Local;
+using Code.SHS.Entities.Enemies.Targetings.Events;
 using Code.SHS.Targetings.Enemies;
 using Scripts.Combat;
 using Scripts.Enemies.EnemyBehaviours;
 using Scripts.Entities;
 using Scripts.FSM;
+using System;
 using UnityEngine;
 
 namespace Code.SHS.Entities.Enemies.FSM
@@ -35,7 +37,8 @@ namespace Code.SHS.Entities.Enemies.FSM
         protected EnemyInventory _enemyInventory;
         protected TargetProvider _targetProvider;
         protected LocalEventBus _localEventBus;
-        protected Entity TargetEntity => _targetProvider.CurrentTarget;
+        protected Entity RemainTarget => _targetProvider.CurrentTarget;
+        protected Entity Target => _targetProvider.Target;
 
         protected static int _xHash = Animator.StringToHash("X");
         protected static int _zHash = Animator.StringToHash("Z");
@@ -50,6 +53,20 @@ namespace Code.SHS.Entities.Enemies.FSM
             _attackCompo = container.Get<AttackCompo>();
             _targetProvider = container.Get<TargetProvider>();
             _localEventBus = container.Get<LocalEventBus>();
+        }
+        public override void Enter()
+        {
+            base.Enter();
+            _localEventBus.Subscribe<TargetLostEvent>(HandleTargetLost);
+        }
+        public override void Exit()
+        {
+            base.Exit();
+            _localEventBus.Unsubscribe<TargetLostEvent>(HandleTargetLost);
+        }
+        private void HandleTargetLost(TargetLostEvent @event)
+        {
+            _enemy.ChangeState(EnemyStateEnum.Idle);
         }
 
         protected void UpdateMovementAnimation()

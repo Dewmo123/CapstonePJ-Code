@@ -118,7 +118,7 @@ namespace Code.InventorySystem
             if (equipable is IUsable)
                 _player.ChangeState(PlayerStateEnum.ItemUse);
         }
-
+        
         private void HandleInventoryChanged()
         {
             if (SyncHotbarSlots())

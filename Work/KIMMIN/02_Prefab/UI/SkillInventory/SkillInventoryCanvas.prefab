@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5012060412912748577}
   - component: {fileID: 9070750452974360664}
   - component: {fileID: 6137204736876005109}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 3169337363105663331}
   - component: {fileID: 2009170155605405335}
   - component: {fileID: 8997303336619313950}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +244,7 @@ GameObject:
   - component: {fileID: 8180042953561196012}
   - component: {fileID: 5925331975820577898}
   - component: {fileID: 1197759741001185145}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -384,7 +384,7 @@ GameObject:
   - component: {fileID: 8054451070058322774}
   - component: {fileID: 178320716804972419}
   - component: {fileID: 795053418402590954}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: SkillInventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -528,7 +528,7 @@ GameObject:
   - component: {fileID: 1154993033321316420}
   - component: {fileID: 5140520184919384238}
   - component: {fileID: 8364741942377549724}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -627,7 +627,7 @@ GameObject:
   - component: {fileID: 4636868093477147630}
   - component: {fileID: 6295811790469189295}
   - component: {fileID: 3030165568213676727}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: SkillInventoryCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -677,7 +677,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 25
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &1866756448563236215
 MonoBehaviour:
@@ -759,7 +759,7 @@ GameObject:
   - component: {fileID: 8297050549994578449}
   - component: {fileID: 7830816032849859556}
   - component: {fileID: 1788334885485673083}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -856,7 +856,7 @@ GameObject:
   - component: {fileID: 4995457776914425014}
   - component: {fileID: 2687749580985871428}
   - component: {fileID: 3864219565603939054}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1013,7 +1013,7 @@ GameObject:
   - component: {fileID: 485831629309923484}
   - component: {fileID: 6653721444208956989}
   - component: {fileID: 8798774378236385090}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: FKeyTutorial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1170,7 +1170,7 @@ GameObject:
   - component: {fileID: 3927789484695005504}
   - component: {fileID: 1906229546952742335}
   - component: {fileID: 8837089750803646707}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: SkillItems
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1275,7 +1275,7 @@ GameObject:
   - component: {fileID: 4180644287137506510}
   - component: {fileID: 7252778707159540857}
   - component: {fileID: 3879845530711180820}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: SkillItems
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1382,7 +1382,7 @@ GameObject:
   - component: {fileID: 5309847214920512226}
   - component: {fileID: 6504601979131715930}
   - component: {fileID: 5217054861772189709}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: PassiveSkillInventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1513,7 +1513,7 @@ GameObject:
   - component: {fileID: 5287929339684198197}
   - component: {fileID: 4832298659324239046}
   - component: {fileID: 8600539404314703716}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1670,7 +1670,7 @@ GameObject:
   - component: {fileID: 1743557452116002245}
   - component: {fileID: 7180373886575987590}
   - component: {fileID: 2666353607284097330}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1827,7 +1827,7 @@ GameObject:
   - component: {fileID: 4507211769905545860}
   - component: {fileID: 8201362693405958599}
   - component: {fileID: 7414981283552807498}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: SkillItems
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1934,7 +1934,7 @@ GameObject:
   - component: {fileID: 2593591388984362254}
   - component: {fileID: 2265529371690995683}
   - component: {fileID: 196451327853960861}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: ActiveSkillInventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2064,7 +2064,7 @@ GameObject:
   - component: {fileID: 3835488485229022346}
   - component: {fileID: 8786091425750898725}
   - component: {fileID: 4432420450397478092}
-  m_Layer: 5
+  m_Layer: 13
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2197,6 +2197,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4600097268188816619}
     m_Modifications:
+    - target: {fileID: 902439291340021919, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 3347569728626783426, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2293,9 +2297,25 @@ PrefabInstance:
       propertyPath: m_enableAutoSizing
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4559491639612774935, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5148723155361412780, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 5279890108361908291, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
       propertyPath: m_Name
       value: SkillItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 5279890108361908291, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820531951829549747, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 6920172436565413855, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2304,6 +2324,14 @@ PrefabInstance:
     - target: {fileID: 6920172436565413855, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7480866484877823863, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8405378066784856916, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2323,9 +2351,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8869641660858140554}
     m_Modifications:
+    - target: {fileID: 2081621395485432689, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Name
       value: SkillSlot (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269028329390254642, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266002411315902410, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007924314438632405, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 9168693260258228664, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Pivot.x
@@ -2425,9 +2473,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8869641660858140554}
     m_Modifications:
+    - target: {fileID: 2081621395485432689, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Name
       value: SkillSlot (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269028329390254642, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266002411315902410, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007924314438632405, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 9168693260258228664, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Pivot.x
@@ -2527,9 +2595,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 568614208605520123}
     m_Modifications:
+    - target: {fileID: 2081621395485432689, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Name
       value: SkillInventoryItem (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269028329390254642, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266002411315902410, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007924314438632405, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 9168693260258228664, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Pivot.x
@@ -2629,9 +2717,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 568614208605520123}
     m_Modifications:
+    - target: {fileID: 2081621395485432689, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Name
       value: SkillInventoryItem (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269028329390254642, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266002411315902410, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007924314438632405, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 9168693260258228664, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Pivot.x
@@ -2731,9 +2839,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 568614208605520123}
     m_Modifications:
+    - target: {fileID: 2081621395485432689, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Name
       value: SkillInventoryItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269028329390254642, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266002411315902410, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007924314438632405, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 9168693260258228664, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Pivot.x
@@ -2833,6 +2961,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4600097268188816619}
     m_Modifications:
+    - target: {fileID: 902439291340021919, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 3347569728626783426, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2919,9 +3051,33 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 4559491639612774935, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5148723155361412780, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 5279890108361908291, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
       propertyPath: m_Name
       value: SkillItem (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5279890108361908291, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820531951829549747, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7480866484877823863, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8405378066784856916, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2941,9 +3097,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8869641660858140554}
     m_Modifications:
+    - target: {fileID: 2081621395485432689, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Name
       value: SkillSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 3396819254825574905, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6269028329390254642, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7266002411315902410, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007924314438632405, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 9168693260258228664, guid: 215b68b3df1352446a0249bf69bf8ca8, type: 3}
       propertyPath: m_Pivot.x
@@ -3043,6 +3219,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4600097268188816619}
     m_Modifications:
+    - target: {fileID: 902439291340021919, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 3347569728626783426, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3127,9 +3307,33 @@ PrefabInstance:
       propertyPath: m_text
       value: C
       objectReference: {fileID: 0}
+    - target: {fileID: 4559491639612774935, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5148723155361412780, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 5279890108361908291, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
       propertyPath: m_Name
       value: SkillItem (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5279890108361908291, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820531951829549747, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7480866484877823863, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8405378066784856916, guid: 96244c03a3bd8f34581cb36c7de75578, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

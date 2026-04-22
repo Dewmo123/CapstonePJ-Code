@@ -14,6 +14,7 @@ namespace Code.SkillSystem.Skills.TrackingBlade
 {
     public class TrackingBladeSkill : ActiveSkill
     {
+        [SerializeField] private TrackingTargetMark trackingTargetMark;
         [SerializeField] private PoolItemSO trackingBladeItemSO;
         [SerializeField] private LayerMask whatIsEnemy;
         [SerializeField] private Transform firePosTrm;
@@ -21,9 +22,30 @@ namespace Code.SkillSystem.Skills.TrackingBlade
         [SerializeField] private float detectRange = 8f;
         [SerializeField] private int trackingBladeCnt = 1;
         [SerializeField] private int additionalTrackingBladeCnt = 1;
+        [SerializeField] private bool applySlow;
         
         [Inject] private PoolManagerMono _poolManager;
         private Entity _target;
+        
+        private void UpgradeApplySlow()
+        {
+            applySlow = true;
+        }
+
+        private void RollbackApplySlow()
+        {
+            applySlow = false;
+        }
+        
+        private void UpgradeMultiBlade()
+        {
+            trackingBladeCnt += additionalTrackingBladeCnt;    
+        }
+
+        private void RollbackMultiBlade()
+        {
+            trackingBladeCnt -= additionalTrackingBladeCnt;    
+        }
 
         public override bool CanUseSkill()
         {
@@ -45,6 +67,8 @@ namespace Code.SkillSystem.Skills.TrackingBlade
 
             if (success)
             {
+                trackingTargetMark.CancelCharge();
+                
                 for (int i = 0; i < trackingBladeCnt; i++)
                 {
                     Vector3 firePos = firePosTrm.position;
@@ -58,7 +82,8 @@ namespace Code.SkillSystem.Skills.TrackingBlade
                     TrackingBlade tb = _poolManager.Pop<TrackingBlade>(trackingBladeItemSO);
                     
                     Quaternion rotate = Quaternion.Euler(0, Random.Range(-80f, 80f), 0);
-                    tb.Initialize(_target ,firePos, rotate * firePosTrm.forward);
+                    tb.Initialize(_owner,_target ,firePos, rotate * firePosTrm.forward);
+                    tb.SetApplySlow(applySlow);
                 }
             }
             else
@@ -81,6 +106,7 @@ namespace Code.SkillSystem.Skills.TrackingBlade
             }
             catch (Exception e)
             {
+                trackingTargetMark.CancelCharge();
                 return false;
             }
         }
@@ -93,6 +119,7 @@ namespace Code.SkillSystem.Skills.TrackingBlade
              {
                  if (col.TryGetComponent(out Entity target))
                  {
+                     trackingTargetMark.SetTarget(target.transform, delayToFire);
                      return target;
                  }
              }

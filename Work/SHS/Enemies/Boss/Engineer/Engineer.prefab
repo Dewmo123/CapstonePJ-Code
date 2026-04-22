@@ -280,7 +280,6 @@ MonoBehaviour:
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  enemyDropExp: 1
   movingRange: 5
   <OnFound>k__BackingField:
     m_PersistentCalls:
@@ -391,6 +390,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6836de3d369291043832cd011ae12520, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2221710006618520757}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6836de3d369291043832cd011ae12520, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8564108945998390512}
   m_SourcePrefab: {fileID: 100100000, guid: 6836de3d369291043832cd011ae12520, type: 3}
 --- !u!4 &887572829877951010 stripped
 Transform:
@@ -433,6 +435,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77d40f6920e241dfa147f6bb4c4fe9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8564108945998390512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4893606819489542983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b789f97764b45bb8ac17a628ed0efa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footstepSoundID:
+    _entity: {fileID: 11400000, guid: 294d84c460a9aef4b8de302b8a3658a9, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 4893606819489542983}
 --- !u!4 &5233822498233657853 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6836de3d369291043832cd011ae12520, type: 3}

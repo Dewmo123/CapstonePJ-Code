@@ -16,13 +16,14 @@ MonoBehaviour:
   itemName: Shorty
   itemType: 4
   spawnArea: 64
-  itemImage: {fileID: 0}
+  itemImage: {fileID: 21300000, guid: e847d202303fd5d40911a545204d1a5a, type: 3}
   description: "\uCD1D\uC5F4\uACFC \uAC1C\uBA38\uB9AC\uD310\uC744 \uADF9\uB2E8\uC801\uC73C\uB85C
     \uC904\uC5EC \uD734\uB300\uC131\uC744 \uADF9\uB300\uD654\uD55C \uC0B0\uD0C4\uCD1D\uC785\uB2C8\uB2E4."
   rarity: 2
   rarityWeight: 5
   value: 31
   maxStack: 1
+  maxSpawnCount: 1
   addStats: []
   modelOffset: {x: 0, y: 0, z: 0}
   equipmentPrefab: {fileID: 168361770237977466, guid: 659e57d7035ba9e4a9c8691ed6c72418, type: 3}
@@ -33,12 +34,17 @@ MonoBehaviour:
   attackSpeed: 6.6
   controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
   fireRate: 0.22
+  attackSoundID:
+    _entity: {fileID: 0}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 0}
   gunType: 4
   bulletPerShot: 8
   reloadTime: 1.8
   bulletSpeed: 45
   maxAmmoCapacity: 3
   aimSpeedMultiplier: 0.848
+  noiseRadius: 0
   defaultSpread: 1.075
   crosshairData: {fileID: 0}
   maxSpread: 1.271
@@ -56,3 +62,7 @@ MonoBehaviour:
   recoilRecoveryTime: 0.129
   recoilRecovery: 607
   pixelsPerRecoilUnit: 0.45
+  reloadSound:
+    _entity: {fileID: 11400000, guid: 38a1c7b8740f5124e81d110ec08a748f, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 0}

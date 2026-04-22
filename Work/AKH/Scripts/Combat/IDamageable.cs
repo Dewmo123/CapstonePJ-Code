@@ -11,7 +11,7 @@ namespace Scripts.Combat
         public Vector3 HitPoint;
         public Vector3 HitNormal;
 
-        public GameObject Source;
+        public GameObject Source { get; set; }
         public Entity Attacker;
     }
     
@@ -19,8 +19,8 @@ namespace Scripts.Combat
     {
         public event Action<float> OnTakeDamage;
 
-        public void TakeDamage(DamageData damageData);
-        
+        public void ApplyDamage(DamageData damageData, Entity dealer = null);
+
         public void ApplyDamage(DamageContext context);
     }
 }

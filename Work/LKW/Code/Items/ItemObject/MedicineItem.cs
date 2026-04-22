@@ -2,6 +2,7 @@
 using Work.LKW.Code.Items.ItemInfo;
 using Chipmunk.ComponentContainers;
 using Assets.Work.AKH.Scripts.Entities.Vitals;
+using UnityEngine;
 
 namespace Work.LKW.Code.Items
 {
@@ -17,6 +18,7 @@ namespace Work.LKW.Code.Items
         {
             if (user.TryGet<HealthCompo>(out var healthCompo))
                 healthCompo.CurrentValue += HealAmount;
+            
             base.Use(user);
         }
     }

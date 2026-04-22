@@ -8,21 +8,21 @@ namespace Code.UI.Minimap.Core
         Marker,
         Enemy,
         SupplyIcon,
-        SectionName
+        SectionName,
+        ShowItem
     }
     
     public class MinimapElementData
     {
         public ElementType Type { get; private set; }
-        
-        public string Id { get; } = Guid.NewGuid().ToString(); // 고유 식별자
+        public string Id { get; } = Guid.NewGuid().ToString();
         public Vector2 NormalizedPos { get; set; }
         public Sprite IconSprite { get; }
         public bool SyncChildScale { get; }
         public object Owner { get; set; }
 
-
-        public MinimapElementData(object owner, ElementType type,Sprite iconSprite, bool syncChildScale, bool initPosWithWorldPos = false)
+        public MinimapElementData(object owner, ElementType type,Sprite iconSprite
+            , bool syncChildScale, bool initPosWithWorldPos = false)
         {
             Owner = owner;
             Type = type;

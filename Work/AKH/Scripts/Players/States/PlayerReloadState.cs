@@ -1,4 +1,5 @@
-﻿using Chipmunk.ComponentContainers;
+﻿using Ami.BroAudio;
+using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
 using Code.GameEvents;
 using Code.Players;
@@ -39,6 +40,7 @@ namespace Scripts.Players.States
             {
                 _gun = gun;
                 _reloadTime = _gun.GunItemData.reloadTime / _entityGunStatInfo.ReloadSpeedMultiplier;
+                BroAudio.Play(_gun.GunItemData.reloadSound, _gun.ItemObject.transform.position);
                 EventBus.Raise(new OffReplaceBulletUI());
                 EventBus.Raise(new PlayerGageEvent(_reloadText, _reloadTime, HandleCompleteReload));
             }

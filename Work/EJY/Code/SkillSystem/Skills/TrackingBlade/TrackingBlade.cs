@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
 using Code.GameEvents;
 using Code.StatusEffectSystem;
 using DewmoLib.ObjectPool.RunTime;
 using Scripts.Combat;
+using Scripts.Combat.Datas;
 using Scripts.Entities;
 using UnityEngine;
 
@@ -16,17 +17,23 @@ namespace Code.SkillSystem.Skills.TrackingBlade
         [SerializeField] private PoolItemSO trackingBladeHitItemSO;
         [SerializeField] private BuffSO bleedingBuff;
         [SerializeField] private TrailRenderer trailRenderer;
+        [SerializeField] private StatusEffectCreateData slowStatusEffectCreateData;
         [SerializeField] private float moveSpeed = 8f;
         [SerializeField] private float rotationSpeed = 120f;
         [SerializeField] private float delayToRotate = 0.5f;
+        [SerializeField] private float lifeTime = 6f;
+        [SerializeField] private float additionalRotationSpeedMultiplier = 30f;
 
         public PoolItemSO PoolItem => trackingBladeItemSO;
         public GameObject GameObject => gameObject;
 
+        private Entity _owner;
         private Rigidbody _rigidbody;
         private Pool _myPool;
         private Entity _target;
         private float _currentTime;
+        private bool _applySlow;
+        private float _additionalRotateSpeed = 0;
 
         private void Awake()
         {
@@ -37,11 +44,14 @@ namespace Code.SkillSystem.Skills.TrackingBlade
         {
             _myPool = pool;
         }
+        
+        public void SetApplySlow(bool applySlow) => _applySlow = applySlow;
 
-        public void Initialize(Entity target ,Vector3 position, Vector3 direction)
+        public void Initialize(Entity owner, Entity target ,Vector3 position, Vector3 direction)
         {
             trailRenderer?.Clear();
             
+            _owner = owner;
             _target = target;
             transform.position = position;
             transform.forward = direction;
@@ -51,9 +61,11 @@ namespace Code.SkillSystem.Skills.TrackingBlade
         {
             _currentTime += Time.fixedDeltaTime;
             
+            _additionalRotateSpeed = _currentTime / lifeTime;
+            
             CalcMovement();
             
-            if(_currentTime >= delayToRotate)
+            if(_currentTime >= delayToRotate && _target != null && !_target.IsDead)
                 RotateToTarget();
         }
 
@@ -68,7 +80,7 @@ namespace Code.SkillSystem.Skills.TrackingBlade
             Quaternion rotationToTarget = Quaternion.LookRotation(dir);
             Quaternion rotation = transform.rotation;
 
-            Quaternion goalRotation = Quaternion.Lerp(rotation, rotationToTarget,Time.fixedDeltaTime * rotationSpeed);
+            Quaternion goalRotation = Quaternion.Lerp(rotation, rotationToTarget,Time.fixedDeltaTime * (rotationSpeed + _additionalRotateSpeed * _additionalRotateSpeed));
             
             transform.rotation = goalRotation;
         }
@@ -77,14 +89,29 @@ namespace Code.SkillSystem.Skills.TrackingBlade
         {
             if (other.TryGetComponent(out Entity entity))
             {
-                if(entity.TryGetSubclassComponent(out IDamageable damageable))
-                    damageable.ApplyDamage(new DamageContext());
-                
-                if(entity.TryGetSubclassComponent(out EntityStatusEffect statusEffect))
-                    foreach (var info in bleedingBuff.GetStatusEffectInfo())
+                if(entity.TryGetComponent(out IDamageable damageable))
+                    damageable.ApplyDamage(new DamageData
                     {
-                        statusEffect.AddStatusEffect(info);
-                    }
+                        damage = 3,
+                        defPierceLevel = 1,
+                        damageType = DamageType.DOT
+                    },
+                    _owner);
+
+                var bleedingBuffInfos = bleedingBuff.GetStatusEffectInfo();
+                
+                if(_applySlow)
+                    bleedingBuffInfos.Add(new StatusEffectInfo(bleedingBuff, slowStatusEffectCreateData));
+
+                if (entity.TryGet(out EntityStatusEffect statusEffect))
+                {
+                    if(statusEffect != null)
+                        foreach (var info in bleedingBuffInfos)
+                        {
+                            statusEffect.AddStatusEffect(info);
+                        }
+                }
+                    
                 
                 Bus.Raise(new PlayEffectEvent(trackingBladeHitItemSO ,transform.position, Quaternion.LookRotation(transform.forward)));
                 _myPool.Push(this);

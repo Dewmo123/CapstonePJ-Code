@@ -1,25 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Code.UI.Core;
+using Scripts.Players;
 using UnityEngine;
 
 namespace Work.Code.UI.ContextMenu
 {
     public abstract class BaseContextMenu : UIBase
     {
+        protected Player _owner;
+
         [field: SerializeField] public ContextActionSO[] ContextActions { get; private set; }
         public override EUILayer Layer => EUILayer.ContextMenu;
         public Action OnAction;
 
         public abstract void ShowMenu(object data);
         public virtual void CloseMenu() => DisableUI(true);
+        public void SetOwner(Player player) => _owner = player;
     }
     
-    public abstract class BaseContextMenu<T> : BaseContextMenu
+    public class BaseContextMenu<T> : BaseContextMenu
     {
         [SerializeField] private Transform root;
-        private readonly List<BaseContextAction<T>> _actions = new();
-        private readonly Dictionary<Type, Queue<BaseContextAction<T>>> _pool = new();
+        private readonly Dictionary<ContextActionSO, BaseContextAction<T>> _cache = new();
         
         public sealed override void ShowMenu(object data)
         {
@@ -34,7 +38,12 @@ namespace Work.Code.UI.ContextMenu
             foreach (var actionSO in ContextActions)
             {
                 var action = GetOrCreateAction(actionSO);
-                if(!action.CanShow(data)) continue;
+                if (!action.CanShow(data))
+                {
+                    action.DisableUI();
+                    continue;
+                }
+                
                 InitAction(action, data);
             }
         }
@@ -43,7 +52,6 @@ namespace Work.Code.UI.ContextMenu
         {
             action.Init(dataType);
             action.OnCallbackInvoked += HandleActionCalled;
-            _actions.Add(action);
         }
 
         private void HandleActionCalled()
@@ -54,27 +62,36 @@ namespace Work.Code.UI.ContextMenu
 
         private BaseContextAction<T> GetOrCreateAction(ContextActionSO action)
         {
-            var prefab = action.contextAction as BaseContextAction<T>;
-            if (_pool.TryGetValue(prefab.GetType(), out var queue) && queue.Count > 0)
-                return queue.Dequeue();
+            if (_cache.TryGetValue(action, out var result)) return result;
             
-            return Instantiate(prefab, root);
+            var prefab = action.contextAction as BaseContextAction<T>;
+            var instance = Instantiate(prefab, root);
+            instance.InitOwner(_owner);
+            _cache[action] = instance;
+            SortActions();
+
+            return instance;
         }
 
         private void Clear()
         {
-            foreach (var action in _actions)
+            foreach (var action in _cache.Values)
             {
-                var type = action.GetType();
-                if (!_pool.ContainsKey(type))
-                    _pool[type] = new();
-
                 action.OnCallbackInvoked -= HandleActionCalled;
                 action.DisableUI();
-                _pool[type].Enqueue(action);
             }
+        }
+
+        private void SortActions()
+        {
+
+            var sorted = _cache.Values.ToList();
+            sorted.Sort((a, b) => b.ContextActionSO.sortOrder.CompareTo(a.ContextActionSO.sortOrder));
             
-            _actions.Clear();
+            for (int i = 0; i < sorted.Count; i++)
+            {
+                sorted[i].transform.SetSiblingIndex(i);
+            }
         }
     }
 }

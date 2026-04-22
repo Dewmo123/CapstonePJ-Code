@@ -33,6 +33,7 @@ Transform:
   m_Children:
   - {fileID: 4881267328754676783}
   - {fileID: 7746535229231131428}
+  - {fileID: 4603194419270470427}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2544934270007708319
@@ -47,11 +48,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 576ccebc7c2e69e408fdc9ef9146319b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <GrabableObjectBehavior>k__BackingField: {fileID: 0}
   _noiseGenerator: {fileID: 3578129211603784705}
   fireTrm: {fileID: 7746535229231131428}
   poolManager: {fileID: 11400000, guid: c413011c9deace64aa106d229c06e489, type: 2}
   bulletItem: {fileID: 11400000, guid: 09e3f30c6feb3d545b688838c743bedc, type: 2}
-  aimRotateSpeed: 28
+  shellEjectEffect: {fileID: 4408638768082620877}
 --- !u!114 &3578129211603784705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,4 +161,71 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: bf2593fe0c804b84688e307cfb1ddfae, type: 3}
   m_PrefabInstance: {fileID: 4881267328754544303}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &9194814517937851766
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6736846067370108193}
+    m_Modifications:
+    - target: {fileID: 4643801351660256123, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+      propertyPath: m_Name
+      value: Gun Shell Ejection
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646412967874070125, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646412967874070125, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.035
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646412967874070125, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.063
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646412967874070125, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071066
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646412967874070125, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646412967874070125, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.70710707
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646412967874070125, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646412967874070125, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646412967874070125, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646412967874070125, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+--- !u!198 &4408638768082620877 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4806513485240261819, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+  m_PrefabInstance: {fileID: 9194814517937851766}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4603194419270470427 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4646412967874070125, guid: 4534ae3fa0461ce40b3d48d676dbeb68, type: 3}
+  m_PrefabInstance: {fileID: 9194814517937851766}
   m_PrefabAsset: {fileID: 0}

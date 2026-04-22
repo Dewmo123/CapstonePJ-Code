@@ -51,6 +51,7 @@ MonoBehaviour:
   conditions:
   - rid: 2466404181872738748
   - rid: 1504945668886364282
+  - rid: 1504945841587355853
   references:
     version: 2
     RefIds:
@@ -61,6 +62,9 @@ MonoBehaviour:
           serializedVersion: 2
           m_Bits: 4096
         halfBox: {x: 0.09, y: 0.89, z: 1}
+    - rid: 1504945841587355853
+      type: {class: IsTargetExistCondition, ns: Scripts.Enemies.EnemyBehaviourConditions, asm: Assembly-CSharp}
+      data: 
     - rid: 2466404181872738748
       type: {class: TargetInAttackRangeCondition, ns: Scripts.Enemies.EnemyBehaviourConditions, asm: Assembly-CSharp}
       data: 

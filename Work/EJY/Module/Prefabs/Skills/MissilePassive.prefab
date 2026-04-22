@@ -79,7 +79,9 @@ MonoBehaviour:
   <SkillData>k__BackingField: {fileID: 11400000, guid: 22c1b30926a30ac419f543287ea866c9, type: 2}
   firePosTrm: {fileID: 2498069466715466253}
   hitCntToFireMissile: 5
-  multiShotMissile: 3
+  shotMissile: 1
+  additionalMissile: 2
+  downHitCnt: 2
   missilePoolItem: {fileID: 11400000, guid: 2acd60f329d166b48b8bd0a830b2e851, type: 2}
   isDmgRangIncrease: 0
   isInduction: 0

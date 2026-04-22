@@ -155,6 +155,14 @@ MonoBehaviour:
     m_Bits: 4096
   particle: {fileID: 3132780776184652311}
   meshRenderer: {fileID: 8299731913506008625}
+  jetSoundID:
+    _entity: {fileID: 11400000, guid: 2693562635f0fd645986d81543828a0a, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 634567069838836715}
+  explosionSoundID:
+    _entity: {fileID: 11400000, guid: 6089fad4b788be64da0ac1e1020c2ee3, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 634567069838836715}
 --- !u!54 &3663094941691769798
 Rigidbody:
   m_ObjectHideFlags: 0

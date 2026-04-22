@@ -1,18 +1,16 @@
-using UnityEngine;
+using Code.InventorySystems.Items;
 using Work.LKW.Code.Items;
 
 namespace Work.Code.UI.ContextMenu.InventoryItemActions
 {
-    public class InventoryItemDropAction : BaseContextAction<ItemBase>
+    public class InventoryItemDropAction : BaseContextAction<ItemSlot>
     {
-        protected override string ActiveText { get; }
-        protected override string InactiveText { get; }
-        public override bool CheckCondition(ItemBase data)
+        public override bool CheckCondition(ItemSlot data)
         {
             return true;
         }
 
-        public override void OnAction(ItemBase data)
+        public override void OnAction(ItemSlot data)
         {
             
         }

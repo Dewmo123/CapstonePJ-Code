@@ -30,19 +30,19 @@ namespace Code.SHS.Entities.Enemies.FSM
 
         public override void Update()
         {
-            if(TargetEntity == null)
+            if(Target == null)
             {
                 _enemy.ChangeState(EnemyStateEnum.Chase);
                 return;
             }
-            float distance = Vector3.Distance(_enemy.transform.position, TargetEntity.transform.position);
+            float distance = Vector3.Distance(_enemy.transform.position, Target.transform.position);
             if (distance > _attackRange)
             {
                 _enemy.ChangeState(EnemyStateEnum.Chase);
                 return;
             }
 
-            _movement.SetLookAtTarget(TargetEntity.transform);
+            _movement.SetLookAtTarget(Target.transform);
             UpdateMovementAnimation();
             base.Update();
         }

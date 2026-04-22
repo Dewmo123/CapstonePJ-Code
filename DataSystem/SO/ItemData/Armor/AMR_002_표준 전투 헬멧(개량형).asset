@@ -25,6 +25,7 @@ MonoBehaviour:
   rarityWeight: 45
   value: 0
   maxStack: 1
+  maxSpawnCount: 1
   addStats:
   - targetStat: {fileID: 11400000, guid: e8d35beaad87d9f48ab996860659e33d, type: 2}
     value: 5

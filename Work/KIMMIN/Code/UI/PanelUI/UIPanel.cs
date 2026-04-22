@@ -1,9 +1,9 @@
-using System;
-using UnityEngine;
+using Chipmunk.GameEvents;
+using Code.GameEvents;
 
 namespace Code.UI.Core
 {
-    public class UIPanel : UIBase
+    public abstract class UIPanel : UIBase
     {
         public override EUILayer Layer => EUILayer.Panel;
 
@@ -11,6 +11,12 @@ namespace Code.UI.Core
         {
             base.Awake();
             DisableUI();
+        }
+
+        public override void ToggleUI(bool isFade = false)
+        {
+            base.ToggleUI(isFade);
+            EventBus.Raise(new PlayerUIEvent(IsActive));
         }
     }
 }

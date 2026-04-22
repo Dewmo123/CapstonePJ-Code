@@ -33,5 +33,13 @@ namespace Work.Code.UI.Misc
                 effect.PlayEffect(Text);
             }
         }
+
+        public void PlayEffect()
+        {
+            foreach (var effect in _effects)
+            {
+                effect.PlayEffect(Text);
+            }
+        }
     }
 }

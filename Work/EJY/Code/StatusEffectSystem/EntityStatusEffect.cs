@@ -19,6 +19,19 @@ namespace Code.StatusEffectSystem
         public bool IsPercent;
         public bool CanOverlap;
         public bool IsOverWrite;
+        
+        public StatusEffectInfo(BuffSO keySO, StatusEffectCreateData data, int valueLevel = 0)
+        {
+            KeySO = keySO;
+            StatusEffect = data.statusEffect;
+            Level = data.level;
+            ApplyTime = keySO.applyTime;
+            if(valueLevel >= data.effectValue.Length) valueLevel = data.effectValue.Length - 1;
+            Value = data.effectValue[valueLevel];
+            IsPercent = data.isPercent;
+            CanOverlap = false;
+            IsOverWrite = false;
+        }
     }
     public class EntityStatusEffect : MonoBehaviour, IContainerComponent
     {

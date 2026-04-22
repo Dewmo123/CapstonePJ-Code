@@ -13,7 +13,7 @@ namespace InGame.PlayerUI
         {
             fill.fillAmount = amount;
             
-            float t = Mathf.InverseLerp(0f, 0.5f, amount);
+            float t = Mathf.InverseLerp(0.15f, 0.65f, amount);
             fill.color = Color.Lerp(_endColor, Color.white, t);
         }
     }

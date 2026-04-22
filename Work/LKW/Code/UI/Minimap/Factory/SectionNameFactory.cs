@@ -18,6 +18,7 @@ namespace Code.UI.Minimap.Factory
             {
                 sectionNameText.NameText.SetText(spot.Name);;
                 sectionNameText.NameText.fontSize = (int)spot.Size;
+                sectionNameText.Area = spot.Area;
             }
             
             return sectionNameText;

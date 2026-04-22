@@ -1,4 +1,4 @@
-using Assets.Work.AKH.Scripts.Entities.Vitals;
+﻿using Assets.Work.AKH.Scripts.Entities.Vitals;
 using Chipmunk.ComponentContainers;
 using DewmoLib.Dependencies;
 using DewmoLib.ObjectPool.RunTime;
@@ -41,6 +41,8 @@ namespace Work.Code.Skills
 
         private bool HandleBeforeHit(DamageContext context)
         {
+            if (context.Source == null)
+                return false;
             if (context.Source.TryGetComponent(out Bullet bullet))
             {
                 var shooter = bullet.ProjectileShooter;

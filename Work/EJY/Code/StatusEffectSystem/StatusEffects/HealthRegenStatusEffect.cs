@@ -19,9 +19,9 @@ namespace Code.StatusEffectSystem.StatusEffects
             _targetHealth = target.Get<HealthCompo>();
             Debug.Assert(_targetHealth != null, "Target has no health compo");
 
-            _remainingTicks = Mathf.FloorToInt(ApplyTime / _tick);
+            _remainingTicks = Mathf.FloorToInt(_applyTime / _tick);
 
-            _restoreAmountPerTick = Value / _remainingTicks;
+            _restoreAmountPerTick = _value / _remainingTicks;
         }
 
         public override bool UpdateStatusEffect(Entity entity)

@@ -1,14 +1,15 @@
-﻿using System;
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Chipmunk.Library.Utility.GameEvents.Local;
 using Code.SHS.Entities.Enemies.Events;
+using Code.SHS.Entities.Enemies.Groups;
 using Code.SHS.Entities.Enemies.Targetings.Events;
 using Scripts.Entities;
+using System;
 using UnityEngine;
 
 namespace Code.SHS.Targetings.Enemies
 {
-    public class TargetProvider : MonoBehaviour, IContainerComponent
+    public class TargetProvider : MonoBehaviour, IContainerComponent, ILocalEventSubscriber<LeaveGroupEvent>, ILocalEventSubscriber<JoinGroupEvent>
     {
         [SerializeField] private float targetForgetDuration = 5f;
         public Entity CurrentTarget => _currentTarget;
@@ -21,6 +22,7 @@ namespace Code.SHS.Targetings.Enemies
 
         private LocalEventBus _localEventBus;
         public ComponentContainer ComponentContainer { get; set; }
+        private Group _group;
 
         public void OnInitialize(ComponentContainer componentContainer)
         {
@@ -44,6 +46,10 @@ namespace Code.SHS.Targetings.Enemies
                     TargetLost(_lastPosition);
                 }
             }
+            else
+            {
+                _targetForgetTimer = 0;
+            }
         }
 
         private void UpdateLastTargetPosition()
@@ -56,7 +62,9 @@ namespace Code.SHS.Targetings.Enemies
         {
             if (CurrentTarget == null)
                 return float.MaxValue;
-            return Vector3.Distance(transform.position, CurrentTarget.transform.position);
+            if (Target == null)
+                return Vector3.Distance(transform.position, _lastPosition);
+            return Vector3.Distance(transform.position, Target.transform.position);
         }
 
         public void SetTarget(Entity target)
@@ -65,6 +73,8 @@ namespace Code.SHS.Targetings.Enemies
             _target = target;
             if (target != null)
             {
+                _group?.TargetDetect(target);
+                UpdateLastTargetPosition();
                 if (previousTarget == null)
                     _localEventBus.Raise(new TargetDetectedEvent(target));
                 _currentTarget = target;
@@ -82,5 +92,29 @@ namespace Code.SHS.Targetings.Enemies
             _targetForgetTimer = 0f;
             _localEventBus.Raise(new TargetLostEvent(lastKnownPosition));
         }
+        public void OnLocalEvent(JoinGroupEvent eventData)
+        {
+            _group = eventData.group;
+            _group.OnTargetDetected += HandleTargetDetected;
+        }
+        public void OnLocalEvent(LeaveGroupEvent eventData)
+        {
+            _group.OnTargetDetected -= HandleTargetDetected;
+            _group = null;
+        }
+        private void HandleTargetDetected(Entity entity)
+        {
+            Entity previousTarget = _currentTarget;
+            _target = entity;
+            if (entity != null)
+            {
+                UpdateLastTargetPosition();
+                if (previousTarget == null)
+                    _localEventBus.Raise(new TargetDetectedEvent(entity));
+                _currentTarget = entity;
+            }
+        }
+
+
     }
 }

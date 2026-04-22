@@ -9,6 +9,7 @@ using Work.Code.GameEvents;
 using SHS.Scripts;
 using SHS.Scripts.Effects;
 using Work.Code.Entities;
+using Work.Code.Misc;
 
 namespace Scripts.Combat.Projectiles
 {
@@ -23,6 +24,8 @@ namespace Scripts.Combat.Projectiles
         [SerializeField] private GameObject[] Detached;
         [SerializeField] private TrailRenderer trail;
         [SerializeField] private BulletImpactEffect _bulletImpactEffect;
+        [SerializeField] private PoolItemSO bulletHole;
+        [SerializeField] private PoolManagerSO poolManager;
         
         [field: SerializeField] public PoolItemSO PoolItem { get; private set; }
         public GameObject GameObject => gameObject;
@@ -138,7 +141,7 @@ namespace Scripts.Combat.Projectiles
                 await PlayHitEffect(pos, normal);
             }
 
-            if (damageable != null)
+            if (damageable != null && ProjectileShooter !=null)
             {
                 DamageCalcCompo calcCompo = _owner.Get<DamageCalcCompo>();
                 DamageData damageData;
@@ -172,7 +175,8 @@ namespace Scripts.Combat.Projectiles
             }
             else
             {
-                EventBus.Raise(new BulletHoleEvent(pos, normal));
+                BulletHole hole = poolManager.Pop(bulletHole) as BulletHole;
+                hole?.InitHole(pos, normal);
             }
 
             _bulletImpactEffect?.PlayEffect(pos, normal);

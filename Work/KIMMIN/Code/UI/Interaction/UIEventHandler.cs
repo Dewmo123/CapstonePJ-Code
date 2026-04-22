@@ -23,7 +23,7 @@ namespace Code.UI.Core
     
     [DefaultExecutionOrder(-15)]
     public class UIEventHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
-        IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+        IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerDownHandler
     {
         private IClickable _clickable;
         private IHoverable _hoverable;
@@ -63,13 +63,16 @@ namespace Code.UI.Core
             if(EventHandler.TryGetValue(EUIEvent.PointerClick, out var evt))
                 evt?.Invoke(eventData);
             
+            _clickable?.OnClick(eventData);
+        }
+        
+        public void OnPointerDown(PointerEventData eventData)
+        {
             if (eventData.button == PointerEventData.InputButton.Right)
             {
                 if (EventHandler.TryGetValue(EUIEvent.RightClick, out var rightEvt))
                     rightEvt?.Invoke(eventData);
             }
-            
-            _clickable?.OnClick(eventData);
         }
         
         public void OnBeginDrag(PointerEventData eventData)
@@ -135,7 +138,7 @@ namespace Code.UI.Core
         public void ClearUIEvent(InteractableUI owner, EUIEvent type = EUIEvent.PointerClick)
         {
             UIEventHandler handler = owner.EventHandler;
-            handler.EventHandler[type] = null;
+            handler.EventHandler.Remove(type);
         }
         
         public void ClearAll() => EventHandler?.Clear();

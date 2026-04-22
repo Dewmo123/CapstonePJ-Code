@@ -210,7 +210,7 @@ namespace Code.Players
         private void RefreshHandItem(EquipableItem newItem)
         {
             if (_equips[EquipType.Hand] != null)
-                (_equips[EquipType.Hand] as IEquipable).Unequip(_player);
+                _equips[EquipType.Hand].Unequip(_player);
 
             _equips[EquipType.Hand] = newItem;
 

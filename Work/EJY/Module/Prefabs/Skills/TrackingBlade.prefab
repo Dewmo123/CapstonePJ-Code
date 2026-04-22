@@ -5090,6 +5090,14 @@ MonoBehaviour:
   trackingBladeHitItemSO: {fileID: 11400000, guid: 3278e02b4d1eced4593db6558c5a2195, type: 2}
   bleedingBuff: {fileID: 11400000, guid: d4fe2ddaef8c0534fa404859dfb44c3e, type: 2}
   trailRenderer: {fileID: 521412856238064020}
+  slowStatusEffectCreateData:
+    statusEffect: 4
+    isPercent: 1
+    level: 1
+    effectValue:
+    - -0.4
+    isOverrideApplyTime: 0
+    overrideTime: 0
   moveSpeed: 16
   rotationSpeed: 7
   delayToRotate: 0.3

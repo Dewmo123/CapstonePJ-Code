@@ -18,7 +18,6 @@ namespace InGame.PlayerUI
         [Inject] private Player _player;
         private LocalEventBus _eventBus;
         private Camera _cam;
-        private bool _isActive;
         
         private void Start()
         {
@@ -27,6 +26,7 @@ namespace InGame.PlayerUI
             
             _eventBus = _player.LocalEventBus;
             _eventBus.Subscribe<StaminaChangeEvent>(HandleStaminaChange);
+            staminaUI.DisableUI();
         }
 
         private void OnDestroy()
@@ -36,17 +36,17 @@ namespace InGame.PlayerUI
 
         private void HandleStaminaChange(StaminaChangeEvent evt)
         {
-            if (Mathf.Approximately(evt.CurrentStamina, evt.MaxStamina))
+            if (evt.CurrentStamina >= evt.MaxStamina)
             {
-                staminaUI.DisableUI(true);
-                _isActive = false;
+                if (staminaUI.IsActive)
+                    staminaUI.DisableUI(true);
+                
                 return;
             }
 
-            if (!_isActive)
+            if (!staminaUI.IsActive)
             {
                 staminaUI.EnableUI(true);
-                _isActive = true;
             }
             
             staminaUI.SetFill(evt.CurrentStamina / evt.MaxStamina);

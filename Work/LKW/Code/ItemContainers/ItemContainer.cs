@@ -11,6 +11,8 @@ using TMPro;
 using Unity.AppUI.UI;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Work.Code.UI;
+using Work.Code.UI.Misc;
 using Random = UnityEngine.Random;
 
 namespace Work.LKW.Code.ItemContainers
@@ -31,7 +33,7 @@ namespace Work.LKW.Code.ItemContainers
         [SerializeField] private LayerMask whatIsPlayer;
         [SerializeField] private int minItems = 1;
         [SerializeField] private int maxItems = 4;
-        [SerializeField] private GameObject helpText;
+        [SerializeField] private AppearEffect helpText;
         
         [field: SerializeField] public Outlinable Outlinable { get; private set; }
         
@@ -50,7 +52,7 @@ namespace Work.LKW.Code.ItemContainers
         private void Start()
         {
             Outlinable.enabled = false;
-            helpText.gameObject.SetActive(false);
+            helpText.Disappear();
         }
 
         private void LateUpdate()
@@ -78,6 +80,15 @@ namespace Work.LKW.Code.ItemContainers
             
             UpdateInventory();
         }
+        
+        public void SetUpItem(ItemDataSO item)
+        {
+           var createData = item.CreateItem();
+                itemSlots[0].SetData(createData.Item, createData.Stack);
+            
+            UpdateInventory();
+        }
+
 
         public List<ItemType> GetAllowedTypes() => allowedTypes;
         public int GetRandomCount() => Random.Range(minItems, maxItems + 1);
@@ -126,13 +137,13 @@ namespace Work.LKW.Code.ItemContainers
         public void Select()
         {
             _isSelected = true;
-            helpText.gameObject.SetActive(true);
+            helpText.Appear();
             Outlinable.enabled = true;
         }
 
         public void DeSelect()
         {
-            helpText.gameObject.SetActive(false);
+            helpText.Disappear();
             _isSelected = false;
             Outlinable.enabled = false;
         }

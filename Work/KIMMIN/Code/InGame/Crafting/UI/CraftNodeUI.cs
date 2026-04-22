@@ -1,5 +1,4 @@
-﻿using Chipmunk.GameEvents;
-using Code.UI.Core;
+﻿using Code.UI.Core;
 using Code.UI.Core.Interaction;
 using DG.Tweening;
 using TMPro;
@@ -7,7 +6,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Work.Code.GameEvents;
 using Work.Code.UI.Core.Interaction;
 
 namespace Work.Code.Crafting

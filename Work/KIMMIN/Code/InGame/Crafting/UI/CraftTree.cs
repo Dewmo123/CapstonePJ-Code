@@ -24,6 +24,7 @@ namespace Work.Code.Crafting
         [SerializeField] private Transform root;
         [SerializeField] private TextMeshProUGUI typeText;
         [SerializeField] private PinCraftItem pinItemUI;
+        [SerializeField] private CraftController craftController;
 
         [SerializeField] private FavoriteSelectUI unfavoriteButton;
         [SerializeField] private FavoriteSelectUI favoriteButton;
@@ -41,7 +42,7 @@ namespace Work.Code.Crafting
         private CraftTreeSO _prevTree;
         private ItemType _type = ItemType.None;
         private bool _isFavorite = false;
-        
+
         protected override void Awake()
         {
             base.Awake();
@@ -49,6 +50,11 @@ namespace Work.Code.Crafting
             Init();
             InitUI();
             HandleUnFavorite();
+        }
+
+        private void Start()
+        {
+            treeUI.Initialize(craftController);
         }
 
         private void Init()
@@ -78,7 +84,7 @@ namespace Work.Code.Crafting
                 _items.TryAdd(node.Item, ui);
                 _treeLookup.TryAdd(node.Item, node);
                 
-                ui.Clear();
+                ui.DisableUI();
                 ui.ItemButton.onClick.AddListener(() => HandleClickItem(node));
                 ui.OnPinItem += HandlePinItem;
                 ui.OnRequestCraft += HandleTryCraft;
@@ -163,12 +169,6 @@ namespace Work.Code.Crafting
             RefreshItems();
         }
 
-        public override void ToggleUI(bool hasTween = false)
-        {
-            base.ToggleUI(hasTween);
-            EventBus.Raise(new PlayerUIEvent(IsActive));
-        }
-
         private void HandleUnFavorite()
         {
             SetFavoriteState(false);
@@ -222,8 +222,8 @@ namespace Work.Code.Crafting
             {
                 var ui = pair.Value;
                 ui.transform.SetSiblingIndex(idx++);
-                ui.Init(pair.Key, isNotificate);
                 ui.SetTree(_treeLookup[pair.Key]);
+                ui.Init(pair.Key, craftController, isNotificate);
             }
         }
 

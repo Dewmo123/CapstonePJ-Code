@@ -28,7 +28,7 @@ namespace Code.SHS.Entities.Enemies.FSM
             _aimSkill = _skillComponent.CurrentSkill as IAimSkill;
             _aimSkill.StartAiming();
             aimTimer = aimDuration;
-            if (TargetEntity == null)
+            if (RemainTarget == null)
             {
                 _aimSkill.CancelSkill();
                 return;
@@ -38,7 +38,7 @@ namespace Code.SHS.Entities.Enemies.FSM
         public override void Update()
         {
             base.Update();
-            if (TargetEntity == null)
+            if (RemainTarget == null)
             {
                 _aimSkill.CancelSkill();
                 return;

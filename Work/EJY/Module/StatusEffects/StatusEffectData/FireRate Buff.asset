@@ -15,7 +15,7 @@ MonoBehaviour:
   buffName: FireRate Buff
   buffIcon: {fileID: 0}
   statusEffectCreateData:
-  - statusEffect: 8192
+  - statusEffect: 4096
     isPercent: 0
     level: 1
     effectValue:

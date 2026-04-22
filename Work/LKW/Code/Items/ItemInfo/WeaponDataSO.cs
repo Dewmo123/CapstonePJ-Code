@@ -1,4 +1,5 @@
-﻿using Code.DataSystem;
+﻿using Ami.BroAudio;
+using Code.DataSystem;
 using Scripts.Entities;
 using UnityEngine;
 
@@ -17,5 +18,7 @@ namespace Work.LKW.Code.Items.ItemInfo
         public AnimatorOverrideController controller;
         [ExcelColumn("fireRate")] // 연사 속도
         public float fireRate;
+        
+        public SoundID attackSoundID;
     }
 }

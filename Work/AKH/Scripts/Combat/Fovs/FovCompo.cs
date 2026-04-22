@@ -1,6 +1,5 @@
 ﻿using Chipmunk.ComponentContainers;
 using Code.ETC;
-using SHS.Scripts.Crosshairs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,7 +29,7 @@ namespace Scripts.Combat.Fovs
         public LayerMask _enemyMask;
         public LayerMask _obstacleMask;
     }
-    public class FovCompo : MonoBehaviour,IContainerComponent
+    public class FovCompo : MonoBehaviour, IContainerComponent
     {
         [Serializable]
         private struct BoundaryPoint
@@ -39,7 +38,9 @@ namespace Scripts.Combat.Fovs
             public bool isWallSide;
             public bool isTransition;
         }
-        public Vector3 FovDirection { get
+        public Vector3 FovDirection
+        {
+            get
             {
                 if (aimProvider == null)
                     return transform.forward;
@@ -49,7 +50,8 @@ namespace Scripts.Combat.Fovs
                     aimDir.y = 0;
                     return aimDir.normalized;
                 }
-            } }
+            }
+        }
 
         public ComponentContainer ComponentContainer { get; set; }
 
@@ -88,18 +90,22 @@ namespace Scripts.Combat.Fovs
                 _viewMesh[i] = new Mesh { name = "View Mesh" };
                 _viewMeshFilter[i].mesh = _viewMesh[i];
             }
-            aimProvider = componentContainer.GetSubclassComponent<IAimProvider>();
+            aimProvider = componentContainer?.GetSubclassComponent<IAimProvider>();
         }
 
         private void Start()
         {
+#if UNITY_EDITOR //testCode
+            if (transform.parent == null)
+                OnInitialize(null);
+#endif
             SetEnable(true);
         }
         private void Update()
         {
             transform.localRotation = Quaternion.identity; // 회전 고정
         }
-        
+
         private void LateUpdate()
         {
             for (int i = 0; i < fovInfos.Length; i++)
@@ -142,7 +148,7 @@ namespace Scripts.Combat.Fovs
 
             for (int i = 0; i <= stepCount; i++)
             {
-                
+
                 float angle = Quaternion.LookRotation(FovDirection).eulerAngles.y - fovInfo.viewAngle * 0.5f + stepAngleSize * i;
                 ViewCastInfo info = ViewCast(fovInfo, angle);
 
@@ -486,6 +492,6 @@ namespace Scripts.Combat.Fovs
             }
         }
 
-        
+
     }
 }

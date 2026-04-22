@@ -24,7 +24,7 @@ namespace Code.StatusEffectSystem
         public List<StatusEffectCreateData> statusEffectCreateData;
         public float applyTime;
         
-        public IEnumerable<StatusEffectInfo> GetStatusEffectInfo(int level = 0, float additionalTime = 0) 
+        public List<StatusEffectInfo> GetStatusEffectInfo(int level = 0, float additionalTime = 0) 
         {
             List<StatusEffectInfo> list = new List<StatusEffectInfo>();
 

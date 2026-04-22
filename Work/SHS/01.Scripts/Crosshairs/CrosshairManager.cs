@@ -59,7 +59,7 @@ namespace SHS.Scripts.Crosshairs
         private void HandleCrosshairChange(CrosshairChangeEvent eventData)
         {
             GunDataSO gunData = eventData.GunData;
-            CrosshairSO targetData = gunData == null || gunData.crosshairData != null ? gunData.crosshairData : defaultCrosshair;
+            CrosshairSO targetData = gunData != null && gunData.crosshairData != null ? gunData.crosshairData : defaultCrosshair;
             SetCurrentCrosshair(targetData, eventData.GunData);
         }
 

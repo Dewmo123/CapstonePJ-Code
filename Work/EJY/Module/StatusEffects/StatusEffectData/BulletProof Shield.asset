@@ -15,7 +15,7 @@ MonoBehaviour:
   buffName: BulletProof Shield
   buffIcon: {fileID: 0}
   statusEffectCreateData:
-  - statusEffect: 2048
+  - statusEffect: 1024
     isPercent: 1
     level: 1
     effectValue:

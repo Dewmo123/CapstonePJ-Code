@@ -134,11 +134,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6950383978548714853, guid: be812277035d30947987e0cf12709d5e, type: 3}
   m_PrefabInstance: {fileID: 3343303902449121361}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6155677010419205107 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8865501411693788066, guid: be812277035d30947987e0cf12709d5e, type: 3}
+--- !u!114 &8041857984508983291 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4755702341681008554, guid: be812277035d30947987e0cf12709d5e, type: 3}
   m_PrefabInstance: {fileID: 3343303902449121361}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30d660c0c3a44d4f90dd61093e629840, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8960004319073923510
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -295,7 +301,7 @@ MonoBehaviour:
     m_Bits: 64
   minItems: 1
   maxItems: 4
-  helpText: {fileID: 6155677010419205107}
+  helpText: {fileID: 8041857984508983291}
   <Outlinable>k__BackingField: {fileID: 3231430584070405538}
   references:
     version: 2

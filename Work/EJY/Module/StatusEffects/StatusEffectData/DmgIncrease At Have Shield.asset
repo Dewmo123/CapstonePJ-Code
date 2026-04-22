@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5aafaebd814478d84755322022c151a, type: 3}
   m_Name: DmgIncrease At Have Shield
   m_EditorClassIdentifier: 
-  buffName: Has Shield
+  buffName: DmgIncrease At Have Shield
   buffIcon: {fileID: 0}
   statusEffectCreateData:
-  - statusEffect: 4096
+  - statusEffect: 2048
     isPercent: 0
     level: 1
     effectValue:

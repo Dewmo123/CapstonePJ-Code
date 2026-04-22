@@ -21,6 +21,8 @@ namespace Scripts.Players.States
                 _player.ChangeState(PlayerStateEnum.Sprint);
             else if (movement.magnitude > _inputThreshold)
                 _player.ChangeState(PlayerStateEnum.Walk);
+            else if (movement.magnitude <= _inputThreshold)
+                _player.ChangeState(PlayerStateEnum.Idle);
         }
     }
 }

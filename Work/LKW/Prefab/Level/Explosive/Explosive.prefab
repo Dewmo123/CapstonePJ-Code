@@ -104,7 +104,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5391958093160237281, guid: 40a02b2f9de65874bb4bc88d6d4bd890, type: 3}
       propertyPath: m_Name
-      value: barrel_003 Variant
+      value: Explosive
       objectReference: {fileID: 0}
     - target: {fileID: 5391958093160237281, guid: 40a02b2f9de65874bb4bc88d6d4bd890, type: 3}
       propertyPath: m_Layer
@@ -157,4 +157,9 @@ MonoBehaviour:
   poolManager: {fileID: 11400000, guid: c413011c9deace64aa106d229c06e489, type: 2}
   damageCaster: {fileID: 2511233381994188717}
   movementData: {fileID: 11400000, guid: 5f485a687fe7c184abe27363b82e6f96, type: 2}
-  damage: 10
+  explosiveSoundID:
+    _entity: {fileID: 11400000, guid: ea4825251a3351c4f9d6eff9b587178d, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 5386388446182941850}
+  damage: 60
+  nearbyExplosives: []

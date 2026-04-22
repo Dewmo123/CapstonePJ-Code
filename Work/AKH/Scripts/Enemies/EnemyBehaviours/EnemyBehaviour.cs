@@ -2,6 +2,7 @@
 using Code.SHS.Entities.Enemies.FSM;
 using Scripts.Enemies.EnemyBehaviourConditions;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Scripts.Enemies.EnemyBehaviours
@@ -24,6 +25,7 @@ namespace Scripts.Enemies.EnemyBehaviours
         public virtual void Init(Enemy enemy)
         {
             _enemy = enemy;
+            conditions = conditions.Where(item => item != null).ToList();
             foreach (var condition in conditions)
                 condition.Init(enemy);
         }

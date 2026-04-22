@@ -16,6 +16,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 using Code.Combat;
+using Code.SHS.Entities.Enemies.Groups;
 
 namespace Code.SHS.Entities.Enemies
 {
@@ -29,11 +30,11 @@ namespace Code.SHS.Entities.Enemies
         public EnemyStateMachineBehavior StateMachineBehavior { get; private set; }
         public EnemySO EnemyData { get; private set; }
         public NavMovement NavMovement { get; private set; }
+        public GroupProvider GroupProvider { get; private set; }
         public int SightCount { get; set; }
         [field: SerializeField] public UnityEvent<bool> OnFound { get; private set; }
         [field: SerializeField] public Vector3 SpawnPos { get; private set; }
 
-        private bool _isDead = false;
         private EnemyStunState _stunState;
         private LocalEventBus _localEventBus;
 
@@ -43,6 +44,7 @@ namespace Code.SHS.Entities.Enemies
             TargetProvider = ComponentContainer.GetComponent<TargetProvider>();
             NavMovement = ComponentContainer.GetComponent<NavMovement>(true);
             StateMachineBehavior = ComponentContainer.GetComponent<EnemyStateMachineBehavior>(true);
+            GroupProvider = ComponentContainer.GetComponent<GroupProvider>();
             _localEventBus = ComponentContainer.GetComponent<LocalEventBus>();
             OnDeadEvent.AddListener(HandleEnemyDead);
         }
@@ -53,7 +55,7 @@ namespace Code.SHS.Entities.Enemies
 
         private void HandleEnemyDead()
         {
-            _isDead = true;
+            IsDead = true;
             gameObject.layer = LayerMask.NameToLayer("AvoidEntity");
             ChangeState(EnemyStateEnum.Dead);
         }

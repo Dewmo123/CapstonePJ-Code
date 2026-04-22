@@ -17,17 +17,14 @@ namespace Code.Players
         [SerializeField] private StatSO invenSlotCountStat;
         [SerializeField] private PoolItemSO previewItem;
         [Inject] private PoolManagerMono _poolManagerMono;
-        private Player _player;
         private StatOverrideBehavior _StatOverrideBehavior;
 
         public override void OnInitialize(ComponentContainer componentContainer)
         {
             base.OnInitialize(componentContainer);
-            _player = ComponentContainer.GetCompo<Player>();
             _StatOverrideBehavior = ComponentContainer.Get<StatOverrideBehavior>();
 
             EventBus.Subscribe<SwapItemSlotEvent>(HandleSwapItemSlot);
-            
             InventoryChanged += UpdateUI;
         }
 

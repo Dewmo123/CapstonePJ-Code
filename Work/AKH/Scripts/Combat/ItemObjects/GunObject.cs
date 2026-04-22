@@ -19,6 +19,7 @@ namespace Scripts.Combat.ItemObjects
         [SerializeField] private Transform fireTrm;
         [SerializeField] private PoolManagerSO poolManager;
         [SerializeField] private PoolItemSO bulletItem;
+        [SerializeField] private ParticleSystem shellEjectEffect;
         //[SerializeField] private float aimRotateSpeed = 28f;
 
         protected GunItem _gunItem => _item as GunItem;
@@ -30,9 +31,12 @@ namespace Scripts.Combat.ItemObjects
 
         public float CurrentSpreadAngleDeg => GetCurrentAdsSpreadAngleDeg();
         public Vector3 FirePosition => fireTrm != null ? fireTrm.position : transform.position;
-        public Vector3 FireDirection => fireTrm != null ? _aimProvider.GetAimPosition() - fireTrm.position : Vector3.zero;
+
+        public Vector3 FireDirection =>
+            fireTrm != null ? _aimProvider.GetAimPosition() - fireTrm.position : Vector3.zero;
 
         public Transform FireTrm => fireTrm;
+
         public override void InitObject(Entity owner, EquipableItem item)
         {
             base.InitObject(owner, item);
@@ -66,6 +70,7 @@ namespace Scripts.Combat.ItemObjects
             _lastShootTime = Time.time;
 
             _noiseGenerator.GenerateNoise(_owner, _gunData.noiseRadius);
+            shellEjectEffect?.Play();
         }
 
         private void Update()

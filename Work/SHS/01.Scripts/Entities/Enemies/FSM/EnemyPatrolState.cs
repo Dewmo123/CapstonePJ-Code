@@ -35,7 +35,7 @@ namespace Code.SHS.Entities.Enemies.FSM
         {
             base.Update();
 
-            if (TargetEntity != null)
+            if (Target != null)
             {
                 _enemy.ChangeState(EnemyStateEnum.Chase);
                 return;

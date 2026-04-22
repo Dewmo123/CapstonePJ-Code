@@ -20,7 +20,7 @@ namespace Code.StatusEffectSystem.StatusEffects
         public override void ApplyStatusEffect(Entity entity)
         {
             base.ApplyStatusEffect(entity);
-            _shieldInstance = _shieldCompo.AddShield(_shieldAmount, () => IsApplying = false);
+            _shieldInstance = _shieldCompo.AddShield(_shieldAmount, () => _isApplying = false);
         }
 
         public override void ReleaseStatusEffect(Entity entity)

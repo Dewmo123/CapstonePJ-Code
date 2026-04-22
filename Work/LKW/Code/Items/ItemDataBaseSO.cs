@@ -36,7 +36,9 @@ namespace Work.LKW.Code.Items
 
         //상자중에 모든 등급이 포함된 특정 아이템 상자등이 나오면 필요함
         public List<ItemDataSO> GetItemByType(ItemType itemType)
-            => itemDataByType[itemType];
+        {
+            return itemDataByType.GetValueOrDefault(itemType);
+        }
 
         // 상자 중에 특정등급에 무작위 카테고리 아이템이 나오는 상자에 필요함
         public List<ItemDataSO> GetItemByRarity(Rarity rarity)

@@ -1,4 +1,5 @@
-﻿using Code.DataSystem;
+﻿using Ami.BroAudio;
+using Code.DataSystem;
 using DewmoLib.ObjectPool.RunTime;
 using Scripts.SkillSystem;
 using UnityEngine;
@@ -92,6 +93,8 @@ namespace Scripts.Combat.Datas
 
         [ExcelColumn("pixelsPerRecoilUnit")] // 반동 픽셀 변환 계수
         public float pixelsPerRecoilUnit = 0.45f;
+
+        public SoundID reloadSound;
 
         public override ItemCreateData CreateItem()
         {

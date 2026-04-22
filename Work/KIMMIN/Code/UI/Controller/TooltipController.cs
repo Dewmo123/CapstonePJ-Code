@@ -1,12 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Chipmunk.GameEvents;
 using Code.UI.Core;
 using Code.UI.Tooltip;
 using UnityEngine;
 using UnityEngine.UI;
-using Work.Code.GameEvents;
 using Work.Code.UI.Core.Interaction;
 
 namespace Code.UI.Controller
@@ -29,6 +27,7 @@ namespace Code.UI.Controller
         private Dictionary<InteractableUI, TooltipState> _states = new();
         
         private bool _rebuildFlag;
+        private Coroutine _rebuildCoroutine;
         
         public RectTransform RootRect => tooltipRoot as RectTransform;
 
@@ -36,21 +35,19 @@ namespace Code.UI.Controller
         {
             MappingTooltip();
             tooltipMover.Init(RootRect);
-            EventBus.Subscribe<BindTooltipEvent>(HandleBindTooltip);
-            EventBus.Subscribe<UnBindTooltipEvent>(HandleUnBindTooltip);
-        }
-
-        private void OnDestroy()
-        {
-            EventBus.Unsubscribe<BindTooltipEvent>(HandleBindTooltip);
-            EventBus.Unsubscribe<UnBindTooltipEvent>(HandleUnBindTooltip);
         }
 
         private void LateUpdate()
         {
             if (_rebuildFlag)
             {
-                RebuildLayout();
+                if (_rebuildCoroutine != null)
+                {
+                    StopCoroutine(_rebuildCoroutine);
+                    _rebuildCoroutine = null;
+                }
+                
+                _rebuildCoroutine = StartCoroutine(RebuildLayout());
                 _rebuildFlag = false;
             }
         }
@@ -64,19 +61,22 @@ namespace Code.UI.Controller
             }
         }
         
-        private void HandleBindTooltip(BindTooltipEvent evt)
+        public void BindTooltip<T>(InteractableUI owner, Func<T> data, float delay)
         {
-            var handler = evt.Owner.EventHandler;
-            BindEnterTooltip(evt.Owner, evt.Data, evt.Delay, handler);
-            BindExitTooltip(evt.Owner, handler);
+            var handler = owner.EventHandler;
+            BindEnterTooltip(owner, data, delay, handler);
+            BindExitTooltip(owner, handler);
         }
         
-        private void HandleUnBindTooltip(UnBindTooltipEvent evt)
+        public void UnbindTooltip(InteractableUI owner)
         {
-            var handler = evt.Owner.EventHandler;
-            handler.ClearAll();
+            if(owner == null || owner.EventHandler == null) return;
             
-            if (_states.TryGetValue(evt.Owner, out var state))
+            var handler = owner.EventHandler;
+            handler.ClearUIEvent(owner, EUIEvent.PointerEnter);
+            handler.ClearUIEvent(owner, EUIEvent.PointerExit);
+            
+            if (_states.TryGetValue(owner, out var state))
             {
                 HideTooltip(state);
             }
@@ -167,8 +167,9 @@ namespace Code.UI.Controller
             return state;
         }
         
-        private void RebuildLayout()
+        private IEnumerator RebuildLayout()
         {
+            yield return null;
             LayoutRebuilder.ForceRebuildLayoutImmediate(RootRect);
         }
         

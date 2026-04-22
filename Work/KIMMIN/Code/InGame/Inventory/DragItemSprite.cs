@@ -1,13 +1,12 @@
-using System;
 using Chipmunk.GameEvents;
-using DewmoLib.Dependencies;
+using Code.UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 using Work.Code.SkillInventory.GameEvents;
 
 namespace InGame.InventorySystem
 {
-    public class DragItemSprite : MonoBehaviour
+    public class DragItemSprite : UIBase
     {
         [SerializeField] private float strength = 0.03f;
         [SerializeField] private float maxStrength = 25f;
@@ -19,12 +18,14 @@ namespace InGame.InventorySystem
         private Vector3 _velocity;
         
         private bool _isDragging;
-        
-        private void Awake()
+
+        protected override void Awake()
         {
+            base.Awake();
             _icon = GetComponent<Image>();
             _rect = GetComponent<RectTransform>();
             _prevMousePos = Input.mousePosition;
+            DisableUI();
             
             EventBus.Subscribe<DragEvent>(HandleDrag);
         }
@@ -33,7 +34,10 @@ namespace InGame.InventorySystem
         {
             _icon.sprite = evt.Sprite;
             _isDragging = evt.IsDragStart;
-            gameObject.SetActive(evt.IsDragStart);
+            if (_isDragging)
+                EnableUI();
+            else
+                DisableUI();
             
             _icon.transform.position = Input.mousePosition;
         }

@@ -8,6 +8,36 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 159666773098063494, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
+      propertyPath: m_text
+      value: "\uC870\uD569\uBC95\uC744 \uACE0\uC815\uD569\uB2C8\uB2E4. \uC6B0\uCE21
+        \uC0C1\uB2E8\uC5D0 \uD45C\uC2DC\uB418\uACE0 \uBB50 \uC5B4\uCA4C\uB77C\uACE0
+        \uADF8\uB0E5\n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 159666773098063494, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
+      propertyPath: m_fontSize
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 159666773098063494, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
+      propertyPath: m_lineSpacing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 159666773098063494, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
+      propertyPath: m_wordSpacing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 159666773098063494, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 159666773098063494, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 159666773098063494, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
+      propertyPath: m_characterSpacing
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 473401970036422331, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -79,6 +109,10 @@ PrefabInstance:
     - target: {fileID: 2854607249666183532, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -33
+      objectReference: {fileID: 0}
+    - target: {fileID: 6577573517139286812, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
+      propertyPath: m_PreferredWidth
+      value: 220
       objectReference: {fileID: 0}
     - target: {fileID: 7885110132472418772, guid: a847ab26d491a4845ae1e6029e5658b8, type: 3}
       propertyPath: m_Pivot.x
