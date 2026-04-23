@@ -11,6 +11,7 @@ namespace Scripts.Combat.Projectiles
     {
         [field:SerializeField]public PoolItemSO PoolItem { get; set; }
         [SerializeField] protected Rigidbody _rigidbody;
+        [SerializeField] protected Collider _collider;
 
         public GameObject GameObject => gameObject;
         protected Pool _myPool;
@@ -18,6 +19,7 @@ namespace Scripts.Combat.Projectiles
         public void InitProjectile(Entity owner, IProjectileShooter projectileShooter, Vector3 initPos, Vector3 direction, LayerMask excludeLayer)
         {
             transform.position = initPos;
+            _collider.excludeLayers = excludeLayer;
             _rigidbody.AddForce(direction, ForceMode.Impulse);
             _rigidbody.AddTorque(direction);
             _owner = owner;
