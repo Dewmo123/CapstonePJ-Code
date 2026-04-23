@@ -2,10 +2,11 @@
 
 namespace SHS.Scripts
 {
-    public interface IBulletShooter
+    public interface IProjectileShooter
     {
         float DefaultDamage { get; }
         float ProjectileSpeed { get; }
-        BulletDataSO BulletData { get; }
+        float DamageMultiplier { get; }
+        int DefPierceLevel { get; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
 using Code.GameEvents;
+using Code.InventorySystems.Equipments;
 using Scripts.Combat.Datas;
 using Scripts.Players;
 using Scripts.Players.States;
@@ -30,16 +31,18 @@ namespace Code.Players
             _equipment = componentContainer.Get<PlayerEquipment>();
             
             _player.PlayerInput.OnBulletShowPressed += HandleShowBullet;
+            EventBus.Subscribe<ReplaceBulletEvent>(HandleReplaceBullet);
         }
 
         private void OnDestroy()
         {
             _player.PlayerInput.OnBulletShowPressed -= HandleShowBullet;
+            EventBus.Unsubscribe<ReplaceBulletEvent>(HandleReplaceBullet);
         }
         
         public void HandleShowBullet()
         {
-            if (_equipment.GetEquippedItem(EquipType.Hand) is not GunItem currentGun || _player.StateMachine.CurrentState is PlayerReloadState) return;
+            if (_equipment.GetEquippedItem(EquipPartType.Hand) is not GunItem currentGun || _player.StateMachine.CurrentState is PlayerReloadState) return;
 
             List<ReplaceBulletData> data = new List<ReplaceBulletData>();
             HashSet<BulletDataSO> dataHash = new HashSet<BulletDataSO>();
@@ -108,6 +111,17 @@ namespace Code.Players
         private void HandleOffReplaceBulletUI(OffReplaceBulletUI evt)
         {
             HandleCloseReplaceBulletUI();
+        }
+        
+        private void HandleReplaceBullet(ReplaceBulletEvent evt)
+        {
+            var currentHandleItem = _equipment.GetEquippedItem(EquipPartType.Hand);
+
+            if (currentHandleItem is GunItem gun && evt.Bullet.bulletDataSO != gun.currentBulletItem?.bulletDataSO)
+            {
+                gun.ChangeBullet(evt.Bullet);
+                _player.ChangeState(PlayerStateEnum.Reload, true);
+            }
         }
     }
 }

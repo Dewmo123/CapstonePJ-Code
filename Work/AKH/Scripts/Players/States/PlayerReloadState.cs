@@ -8,6 +8,7 @@ using Scripts.Combat.Datas;
 using Scripts.Entities;
 using UnityEngine;
 using Code.Combat;
+using Code.InventorySystems.Equipments;
 using SHS.Scripts.Entities.Players;
 using Work.Code.GameEvents;
 using Work.LKW.Code.Items;
@@ -36,7 +37,7 @@ namespace Scripts.Players.States
         {
             base.Enter();
 
-            if (_equipment.TryGetEquippedItem(EquipType.Hand, out EquipableItem item) && item is GunItem gun)
+            if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) && item is GunItem gun)
             {
                 _gun = gun;
                 _reloadTime = _gun.GunItemData.reloadTime / _entityGunStatInfo.ReloadSpeedMultiplier;

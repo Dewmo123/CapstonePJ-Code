@@ -97,7 +97,7 @@ namespace Code.UI.Inventory
                 aSlotUI?.PlayAnim();
             }
             
-            EventBus.Raise(SwapItemEvent.SwapItemSlotEvent.Init(bSlotUI.ItemSlot, aSlotUI.ItemSlot, false));
+            EventBus.Raise(new SwapItemSlotEvent(bSlotUI.ItemSlot, aSlotUI.ItemSlot));
         }
 
         protected abstract void UpdateSlotUI();

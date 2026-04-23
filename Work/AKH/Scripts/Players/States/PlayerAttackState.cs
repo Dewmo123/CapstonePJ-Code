@@ -1,6 +1,7 @@
 using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
 using Code.GameEvents;
+using Code.InventorySystems.Equipments;
 using Code.Players;
 using Scripts.Combat.Datas;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace Scripts.Players.States
         {
             base.Enter();
             _animatorTrigger.OnDamageCastTrigger += HandleDamageCast;
-            if (_equipment.TryGetEquippedItem(EquipType.Hand, out EquipableItem item) && item is IAttackable attackable)
+            if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) && item is IAttackable attackable)
                 _weaponItem = attackable;
             _weaponItem.EnterAttack();
         }

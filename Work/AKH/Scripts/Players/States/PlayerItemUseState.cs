@@ -1,7 +1,6 @@
 ﻿using Chipmunk.ComponentContainers;
-using Code.InventorySystem;
+using Code.InventorySystems.Equipments;
 using Code.Players;
-using UnityEngine;
 using Work.LKW.Code.Items;
 
 namespace Scripts.Players.States
@@ -21,7 +20,7 @@ namespace Scripts.Players.States
         {
             base.Enter();
 
-            if (_equipment.TryGetEquippedItem(EquipType.Hand, out EquipableItem item) && item is UsableItem usable)
+            if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) && item is UsableItem usable)
                 _item = usable;
         }
         public override void Update()
@@ -39,7 +38,7 @@ namespace Scripts.Players.States
                 _item.Use(_player);
             }
 
-            _equipment.ChangeHandlingItem(_equipment.HandledSlotType, _equipment.GetEquipSlotItem((EquipSlotType)_equipment.HandledSlotType));
+            _equipment.RestoreHandledEquip();
         }
     }
 }

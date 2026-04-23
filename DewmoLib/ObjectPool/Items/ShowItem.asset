@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91a14d24a80d4b9d80c6a3713e423739, type: 3}
-  m_Name: SniperAim
+  m_Script: {fileID: 11500000, guid: 0186317e820cf7746910ded45306b8de, type: 3}
+  m_Name: ShowItem
   m_EditorClassIdentifier: 
-  enumName: Aim
-  className: Code.SHS.Enemies.FSM.SniperEnemy.SniperAimState
-  animParamName: Aim
-  animationHash: 153482222
+  poolingName: ShowItem
+  prefab: {fileID: 3632037268656757884, guid: 76b3c482d39772b40a866c0adb928c53, type: 3}
+  initCount: 5

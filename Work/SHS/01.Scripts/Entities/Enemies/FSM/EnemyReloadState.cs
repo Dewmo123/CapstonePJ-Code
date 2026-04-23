@@ -4,6 +4,7 @@ using Code.Players;
 using Scripts.Combat.Datas;
 using UnityEngine;
 using Code.Combat;
+using Code.InventorySystems.Equipments;
 using SHS.Scripts.Entities.Players;
 using Work.LKW.Code.Items;
 
@@ -33,7 +34,7 @@ namespace Code.SHS.Entities.Enemies.FSM
             _currentTimer = 0;
             _gun = null;
 
-            if (_equipment.TryGetEquippedItem(EquipType.Hand, out EquipableItem item) && item is GunItem gun)
+            if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) && item is GunItem gun)
             {
                 _gun = gun;
                 _reloadTime = _gun.GunItemData.reloadTime;

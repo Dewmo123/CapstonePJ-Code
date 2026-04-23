@@ -7,51 +7,58 @@ using Chipmunk.GameEvents;
 using Code.GameEvents;
 using Scripts.Entities;
 using UnityEngine;
+
 namespace Code.StatusEffectSystem
 {
     public struct StatusEffectInfo
     {
         public BuffSO KeySO;
         public StatusEffectEnum StatusEffect;
-        public int Level;
+        public int Priority;
         public float ApplyTime;
         public float Value;
         public bool IsPercent;
         public bool CanOverlap;
         public bool IsOverWrite;
-        
+
         public StatusEffectInfo(BuffSO keySO, StatusEffectCreateData data, int valueLevel = 0)
         {
             KeySO = keySO;
             StatusEffect = data.statusEffect;
-            Level = data.level;
+            Priority = data.priority;
             ApplyTime = keySO.applyTime;
-            if(valueLevel >= data.effectValue.Length) valueLevel = data.effectValue.Length - 1;
+            if (valueLevel >= data.effectValue.Length) valueLevel = data.effectValue.Length - 1;
             Value = data.effectValue[valueLevel];
             IsPercent = data.isPercent;
             CanOverlap = false;
             IsOverWrite = false;
         }
     }
+
     public class EntityStatusEffect : MonoBehaviour, IContainerComponent
     {
         [SerializeField] private StatusEffectListSO statusEffectList;
         public event Action<AbstractStatusEffect> OnStatusEffectApplied;
         public event Action<AbstractStatusEffect> OnStatusEffectReleased;
         public ComponentContainer ComponentContainer { get; set; }
+
         private Dictionary<StatusEffectEnum, AbstractStatusEffect> _noneOverlapStatusEffects =
             new Dictionary<StatusEffectEnum, AbstractStatusEffect>();
+
         private Dictionary<BuffSO, List<AbstractStatusEffect>> _statusEffects = new();
         private Entity _target;
         private List<AbstractStatusEffect> _appliedStatusEffects = new List<AbstractStatusEffect>();
+
         public void OnInitialize(ComponentContainer componentContainer)
         {
             _target = componentContainer.Get<Entity>(true);
         }
+
         private void OnDestroy()
         {
             ClearStatusEffect();
         }
+
         private void Update()
         {
             for (int i = _appliedStatusEffects.Count - 1; i >= 0; i--)
@@ -63,6 +70,107 @@ namespace Code.StatusEffectSystem
                 }
             }
         }
+
+        public AbstractStatusEffectDataSO GetStatusEffect(StatusEffectEnum statusEffect)
+            => statusEffectList.GetStatusEffect(statusEffect);
+
+        private AbstractStatusEffect CreateStatusEffect(StatusEffectInfo info)
+        {
+            var data = GetStatusEffect(info.StatusEffect);
+            AbstractStatusEffect newStatusEffect = data.CreateStatusEffect(_target, info);
+            return newStatusEffect;
+        }
+
+        private StatusEffectInfo ApplyStatusEffectFlags(StatusEffectInfo info)
+        {
+            var data = GetStatusEffect(info.StatusEffect);
+            if (data == null)
+                return info;
+
+            info.CanOverlap = data.canOverlap;
+            info.IsOverWrite = data.isOverWrite;
+            return info;
+        }
+
+        #region About StatusEffect Apply and Release
+
+        private List<AbstractStatusEffect> GetOrCreateStatusEffectsList(StatusEffectInfo info)
+        {
+            var list = _statusEffects.GetValueOrDefault(info.KeySO);
+            if (list == null)
+            {
+                list = new List<AbstractStatusEffect>();
+                _statusEffects.Add(info.KeySO, list);
+            }
+
+            return list;
+        }
+
+        private bool ResetIfAlreadyApplied(IEnumerable<AbstractStatusEffect> list, StatusEffectInfo info, out AbstractStatusEffect activeStatusEffect)
+        {
+            activeStatusEffect = list.FirstOrDefault(statusEffect =>
+                info.StatusEffect == statusEffect.StatusEffectEnum);
+            if (activeStatusEffect == null)
+                return false;
+
+            float nextDuration = Mathf.Max(info.ApplyTime, activeStatusEffect.RemainingTime);
+            activeStatusEffect.SetRemainingTime(nextDuration);
+            return true;
+        }
+
+        private bool TryRegisterNoneOverlapStatusEffect(StatusEffectInfo info, AbstractStatusEffect newStatusEffect, out AbstractStatusEffect keptEffect)
+        {
+            keptEffect = null;
+
+            if (info.CanOverlap)
+                return true;
+
+            if (_noneOverlapStatusEffects.TryGetValue(info.StatusEffect, out var oldEffect))
+            {
+                bool shouldReplace = info.IsOverWrite || oldEffect.Priority <= newStatusEffect.Priority;
+                if (!shouldReplace)
+                {
+                    keptEffect = oldEffect;
+                    return false;
+                }
+
+                RemoveFromDictionaryAndFlag(oldEffect);
+            }
+
+            _noneOverlapStatusEffects[info.StatusEffect] = newStatusEffect;
+            return true;
+        }
+
+        private void ApplyStatusEffect(AbstractStatusEffect newStatusEffect)
+        {
+            newStatusEffect.ApplyStatusEffect(_target);
+            _appliedStatusEffects.Add(newStatusEffect);
+            OnStatusEffectApplied?.Invoke(newStatusEffect);
+        }
+
+        public AbstractStatusEffect AddStatusEffect(StatusEffectInfo info)
+        {
+            info = ApplyStatusEffectFlags(info);
+            var list = GetOrCreateStatusEffectsList(info);
+
+            if (!info.CanOverlap && ResetIfAlreadyApplied(list, info, out AbstractStatusEffect appliedStatusEffect))
+                return appliedStatusEffect;
+
+            var newStatusEffect = CreateStatusEffect(info);
+
+            if (!TryRegisterNoneOverlapStatusEffect(info, newStatusEffect, out AbstractStatusEffect keptEffect))
+            {
+                if (list.Count == 0)
+                    _statusEffects.Remove(info.KeySO);
+
+                return keptEffect;
+            }
+
+            list.Add(newStatusEffect);
+            ApplyStatusEffect(newStatusEffect);
+            return newStatusEffect;
+        }
+
         private void RemoveFromDictionaryAndFlag(AbstractStatusEffect effect)
         {
             if (_noneOverlapStatusEffects.TryGetValue(effect.StatusEffectEnum, out var noneOverlapEffect))
@@ -72,58 +180,19 @@ namespace Code.StatusEffectSystem
                     _noneOverlapStatusEffects.Remove(effect.StatusEffectEnum);
                 }
             }
+
             if (effect.KeySO != null && _statusEffects.TryGetValue(effect.KeySO, out var list))
             {
                 list.Remove(effect);
                 if (list.Count == 0)
                     _statusEffects.Remove(effect.KeySO);
             }
+
             effect.ReleaseStatusEffect(_target);
             _appliedStatusEffects.Remove(effect);
             OnStatusEffectReleased?.Invoke(effect);
         }
-        public AbstractStatusEffectDataSO GetStatusEffect(StatusEffectEnum statusEffect)
-            => statusEffectList.GetStatusEffect(statusEffect);
-        public AbstractStatusEffect AddStatusEffect(StatusEffectInfo statusEffectInfo)
-        {
-            if (_statusEffects.TryGetValue(statusEffectInfo.KeySO, out var list))
-            {
-                var appliedStatusEffect = list.FirstOrDefault(statusEffect =>
-                    statusEffectInfo.StatusEffect == statusEffect.StatusEffectEnum);
-                if (appliedStatusEffect != null)
-                {
-                    appliedStatusEffect.SetRemainingTime(Mathf.Max(statusEffectInfo.ApplyTime, appliedStatusEffect.CurrentTime));
-                    return appliedStatusEffect;
-                }
-            }
-            var data = GetStatusEffect(statusEffectInfo.StatusEffect);
-            AbstractStatusEffect newStatusEffect = data.CreateStatusEffect(_target, statusEffectInfo);
-            if (!data.canOverlap)
-            {
-                if (_noneOverlapStatusEffects.TryGetValue(statusEffectInfo.StatusEffect, out var oldEffect))
-                {
-                    if (statusEffectInfo.IsOverWrite || oldEffect.Level <= newStatusEffect.Level)
-                    {
-                        RemoveFromDictionaryAndFlag(oldEffect);
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                _noneOverlapStatusEffects[statusEffectInfo.StatusEffect] = newStatusEffect;
-            }
-            if (!_statusEffects.TryGetValue(statusEffectInfo.KeySO, out var newList))
-            {
-                newList = new List<AbstractStatusEffect>();
-                _statusEffects.Add(statusEffectInfo.KeySO, newList);
-            }
-            newList.Add(newStatusEffect);
-            newStatusEffect.ApplyStatusEffect(_target);
-            _appliedStatusEffects.Add(newStatusEffect);
-            OnStatusEffectApplied?.Invoke(newStatusEffect);
-            return newStatusEffect;
-        }
+
         public void RemoveStatusEffect(BuffSO buff)
         {
             if (_statusEffects.TryGetValue(buff, out List<AbstractStatusEffect> effectList))
@@ -135,6 +204,7 @@ namespace Code.StatusEffectSystem
                 }
             }
         }
+
         public void ClearStatusEffect()
         {
             for (int i = _appliedStatusEffects.Count - 1; i >= 0; i--)
@@ -143,10 +213,14 @@ namespace Code.StatusEffectSystem
                 effect.ReleaseStatusEffect(_target);
                 OnStatusEffectReleased?.Invoke(effect);
             }
+
             _appliedStatusEffects.Clear();
             _noneOverlapStatusEffects.Clear();
             _statusEffects.Clear();
         }
+
+        #endregion
+
         public bool IsStatusEffectExist(StatusEffectEnum statusEffect)
             => _noneOverlapStatusEffects.ContainsKey(statusEffect);
     }

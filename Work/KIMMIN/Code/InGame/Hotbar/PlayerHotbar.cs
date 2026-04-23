@@ -1,4 +1,4 @@
-﻿using AYellowpaper.SerializedCollections;
+﻿﻿using AYellowpaper.SerializedCollections;
 using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
 using Code.GameEvents;
@@ -113,8 +113,7 @@ namespace Code.InventorySystem
             if (!TryResolveSlot(index, out EquipableItem equipable))
                 return;
 
-            HotbarSlotType hotbarSlotType = (HotbarSlotType)index;
-            _equipment.ChangeHandlingItem(hotbarSlotType, equipable);
+            _equipment.ChangeHandlingHotbarItem(equipable as Weapon);
             if (equipable is IUsable)
                 _player.ChangeState(PlayerStateEnum.ItemUse);
         }
@@ -223,7 +222,7 @@ namespace Code.InventorySystem
         {
             HotbarType.Gun => item is GunItem,
             HotbarType.Melee => item is MeleeWeaponItem,
-            HotbarType.Item => item is UsableItem,
+            HotbarType.Item => item is UsableItem or ThrowableItem,
             _ => false
         };
     }

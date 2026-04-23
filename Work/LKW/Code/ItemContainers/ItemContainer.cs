@@ -109,7 +109,6 @@ namespace Work.LKW.Code.ItemContainers
             if(!_isSubscribe)
             {
                 InventoryChanged += UpdateUI;
-                EventBus.Subscribe<SwapItemSlotEvent>(HandleSwapItemSlot);
                 _isSubscribe = true;
             }
         }
@@ -119,7 +118,6 @@ namespace Work.LKW.Code.ItemContainers
             if (_isSubscribe)
             {
                 InventoryChanged -= UpdateUI;
-                EventBus.Unsubscribe<SwapItemSlotEvent>(HandleSwapItemSlot);
                 _isSubscribe = false;
             }
         }

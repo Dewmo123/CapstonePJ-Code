@@ -45,6 +45,7 @@ namespace Code.Players
         private void OnDestroy()
         {
             _player.PlayerInput.OnItemInteractPressed -= HandleItemInteractPressed;
+            EventBus.Unsubscribe<ItemEquipRequestEvent>(HandleItemEquipRequest);
             EventBus.Unsubscribe<HoveringSlotEvent>(HandleHoveringItem);
             EventBus.Unsubscribe<OpenItemContainerEvent>(HandleOpenItemContainer);
             EventBus.Unsubscribe<PlayerUIEvent>(HandlePlayerUI);
@@ -64,11 +65,11 @@ namespace Code.Players
 
             int itemStack = _hoveringSlot.Stack;
             
-            if (_hoveringSlot is EquipSlot && item is EquipableItem equipped)
+            if (_hoveringSlot is EquipSlot equipSlot && item is EquipableItem equipped)
             {
                 if (_playerInventory.InventoryHasBlankSlot())
                 {
-                    _playerEquipment.UnEquip(equipped, true);
+                    _playerEquipment.UnEquip(equipped, equipSlot);
                 }
 
                 return;
@@ -84,9 +85,13 @@ namespace Code.Players
             {
                 if (item is EquipableItem equipalbeItem and not UsableItem and not ThrowableItem)
                 {
-                    if (_playerInventory.RemoveItem(equipalbeItem, 1, false))
-                        if (!_playerEquipment.Equip(equipalbeItem).IsSuccess)
-                            _playerInventory.TryAddItem(equipalbeItem, 1);
+                    bool isSuccess = _playerEquipment.EquipByKey(equipalbeItem, _hoveringSlot);
+                    if (isSuccess)
+                    {
+                        // 장착 성공하면 아이템 삭제
+                        _playerInventory.RemoveItem(equipalbeItem, 1, false);
+                    }
+                        
                 }
                 else if (_openedItemContainer != null)
                 {

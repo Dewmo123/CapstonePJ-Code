@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using Chipmunk.Modules.StatSystem;
 using Code.EnemySpawn;
+using Code.InventorySystems.Equipments;
 using Code.SHS.Entities.Enemies.Events.Local;
 using UnityEngine;
 using Work.LKW.Code.Items;
@@ -23,11 +24,11 @@ namespace Code.SHS.Entities.Enemies
     public class EnemyEquipSlot
     {
         public EquipableItem Item { get; private set; }
-        public EquipType Type { get; private set; }
+        public EquipPartType PartType { get; private set; }
 
-        public EnemyEquipSlot(EquipType type)
+        public EnemyEquipSlot(EquipPartType partType)
         {
-            Type = type;
+            PartType = partType;
             Item = null;
         }
 
@@ -44,7 +45,7 @@ namespace Code.SHS.Entities.Enemies
 
     public class EnemyEquipment : MonoBehaviour, IContainerComponent, ILocalEventSubscriber<EnemySpawnEvent>
     {
-        [SerializeField] private SerializedDictionary<EquipType, Transform> equipTrms;
+        [SerializeField] private SerializedDictionary<EquipPartType, Transform> equipTrms;
 
         public ComponentContainer ComponentContainer { get; set; }
         public bool IsInitialized => ComponentContainer != null;
@@ -52,19 +53,19 @@ namespace Code.SHS.Entities.Enemies
         private Entity _entity;
         private StatOverrideBehavior _stat;
         private Inventory _enemyInventory;
-        private Dictionary<EquipType, EnemyEquipSlot> _equips = new Dictionary<EquipType, EnemyEquipSlot>();
+        private Dictionary<EquipPartType, EnemyEquipSlot> _equips = new Dictionary<EquipPartType, EnemyEquipSlot>();
 
         public void OnInitialize(ComponentContainer componentContainer)
         {
             // store the container so IsInitialized becomes true and GetCompo calls use the correct container
             ComponentContainer = componentContainer;
             _enemyInventory = componentContainer.GetSubclassComponent<Inventory>();
-            int equipSlotCnt = Enum.GetValues(typeof(EquipType)).Length;
+            int equipSlotCnt = Enum.GetValues(typeof(EquipPartType)).Length;
             for (int i = 0; i < equipSlotCnt; i++)
             {
-                EquipType type = (EquipType)i;
-                var equipSlot = new EnemyEquipSlot(type);
-                _equips.Add(type, equipSlot);
+                EquipPartType partType = (EquipPartType)i;
+                var equipSlot = new EnemyEquipSlot(partType);
+                _equips.Add(partType, equipSlot);
             }
 
             _entity = ComponentContainer.GetCompo<Entity>(true);
@@ -72,9 +73,9 @@ namespace Code.SHS.Entities.Enemies
 
             // Ensure equipTrms exists and has a valid transform for each slot type.
             if (equipTrms == null)
-                equipTrms = new SerializedDictionary<EquipType, Transform>();
+                equipTrms = new SerializedDictionary<EquipPartType, Transform>();
 
-            foreach (EquipType slotType in Enum.GetValues(typeof(EquipType)))
+            foreach (EquipPartType slotType in Enum.GetValues(typeof(EquipPartType)))
             {
                 // If inspector didn't provide a transform for this slot, create a child GameObject and use it.
                 if (!equipTrms.ContainsKey(slotType) || equipTrms[slotType] == null)
@@ -115,20 +116,20 @@ namespace Code.SHS.Entities.Enemies
 
                 if (item != null)
                 {
-                    Equip(item, equipData.itemData, equipData.type);
+                    Equip(item, equipData.itemData, equipData.partType);
                 }
             }
         }
 
-        public bool Equip(EquipableItem equipable, EquipItemDataSO itemData, EquipType type)
+        public bool Equip(EquipableItem equipable, EquipItemDataSO itemData, EquipPartType partType)
         {
-            EquipType targetType = type;
-            EquipType itemType = itemData.itemType.GetEquipSlotType().GetEquipType();
+            EquipPartType targetPartType = partType;
+            EquipPartType itemPartType = itemData.itemType.GetEquipSlotType().GetEquipType();
 
-            if (itemType != targetType || targetType == EquipType.None)
+            if (itemPartType != targetPartType || targetPartType == EquipPartType.None)
                 return false;
 
-            var itemSlot = _equips[targetType];
+            var itemSlot = _equips[targetPartType];
 
             // �̹� �����Ȱ� �ִ��� Ȯ��, ������ ����
             if (itemSlot.Item != null && itemSlot.Item.ItemData is EquipItemDataSO equipItemData)
@@ -143,7 +144,7 @@ namespace Code.SHS.Entities.Enemies
             Transform parentTrm = _entity != null ? _entity.transform : this.transform;
             if (equipTrms != null)
             {
-                if (equipTrms.TryGetValue(targetType, out Transform mapped))
+                if (equipTrms.TryGetValue(targetPartType, out Transform mapped))
                     parentTrm = mapped;
             }
 
@@ -154,11 +155,11 @@ namespace Code.SHS.Entities.Enemies
 
         public bool UnEquip(EquipableItem equipped, EquipItemDataSO itemData)
         {
-            EquipType itemType = GetEquippedSlotType(equipped);
+            EquipPartType itemPartType = GetEquippedSlotType(equipped);
 
-            if (itemType == EquipType.None) return false;
+            if (itemPartType == EquipPartType.None) return false;
 
-            if (_equips.TryGetValue(itemType, out EnemyEquipSlot slot))
+            if (_equips.TryGetValue(itemPartType, out EnemyEquipSlot slot))
             {
                 equipped.Unequip(_entity);
                 StatRemoveModify(itemData);
@@ -189,7 +190,7 @@ namespace Code.SHS.Entities.Enemies
             }
         }
 
-        private EquipType GetEquippedSlotType(EquipableItem equipable)
+        private EquipPartType GetEquippedSlotType(EquipableItem equipable)
         {
             foreach (var kvp in _equips)
             {
@@ -197,12 +198,12 @@ namespace Code.SHS.Entities.Enemies
                     return kvp.Key;
             }
 
-            return EquipType.None;
+            return EquipPartType.None;
         }
 
-        public bool TryGetEquippedItem(EquipType type, out EquipableItem item)
+        public bool TryGetEquippedItem(EquipPartType partType, out EquipableItem item)
         {
-            EnemyEquipSlot slot = _equips[type];
+            EnemyEquipSlot slot = _equips[partType];
             item = null;
             if (slot.Item == null)
                 return false;
@@ -210,6 +211,6 @@ namespace Code.SHS.Entities.Enemies
             return true;
         }
 
-        public EnemyEquipSlot GetEquipSlot(EquipType type) => _equips.GetValueOrDefault(type);
+        public EnemyEquipSlot GetEquipSlot(EquipPartType partType) => _equips.GetValueOrDefault(partType);
     }
 }

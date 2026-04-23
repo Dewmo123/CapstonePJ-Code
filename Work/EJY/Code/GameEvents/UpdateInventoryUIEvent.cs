@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Chipmunk.GameEvents;
+using Code.InventorySystems.Equipments;
 using Code.InventorySystems.Items;
 using Code.Players;
 using InGame.InventorySystem;
@@ -23,9 +24,9 @@ namespace Code.GameEvents
     }
     public struct UpdateEquipUIEvent : IEvent
     {
-        public List<KeyValuePair<EquipSlotType, EquipSlot>> EquipSlots;
+        public List<EquipSlot> EquipSlots;
 
-        public UpdateEquipUIEvent(List<KeyValuePair<EquipSlotType, EquipSlot>> equipSlots)
+        public UpdateEquipUIEvent(List<EquipSlot> equipSlots)
         {
             EquipSlots = equipSlots;
         }

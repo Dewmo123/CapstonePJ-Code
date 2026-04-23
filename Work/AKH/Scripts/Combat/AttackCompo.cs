@@ -1,4 +1,5 @@
 ﻿using Chipmunk.ComponentContainers;
+using Code.InventorySystems.Equipments;
 using Code.Players;
 using Code.SHS.Entities.Enemies;
 using Scripts.Combat.Datas;
@@ -16,7 +17,7 @@ namespace Scripts.Combat
         {
             get
             {
-                if (_enemyEquipment != null && _enemyEquipment.TryGetEquippedItem(EquipType.Hand, out var weapon))
+                if (_enemyEquipment != null && _enemyEquipment.TryGetEquippedItem(EquipPartType.Hand, out var weapon))
                 {
                     if (weapon is Weapon gunItem)
                     {
@@ -30,7 +31,7 @@ namespace Scripts.Combat
         }
         public T GetCurrentWeapon<T>() where T : Weapon
         {
-            _enemyEquipment.TryGetEquippedItem(EquipType.Hand, out var weapon);
+            _enemyEquipment.TryGetEquippedItem(EquipPartType.Hand, out var weapon);
             if (weapon is T target)
                 return target;
             return null;

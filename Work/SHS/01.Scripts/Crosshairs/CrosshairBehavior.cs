@@ -10,6 +10,7 @@ using Code.Players;
 using Work.LKW.Code.Items;
 using Chipmunk.GameEvents;
 using Chipmunk.Library.Utility.GameEvents.Local;
+using Code.InventorySystems.Equipments;
 using DewmoLib.Dependencies;
 using Scripts.Players.States;
 using SHS.Scripts.Combats.Events;
@@ -193,7 +194,7 @@ namespace SHS.Scripts.Crosshairs
             _currentGunData = null;
             _currentGunObject = null;
 
-            if (_equipment.TryGetEquippedItem(EquipType.Hand, out EquipableItem item) && item is GunItem gunItem)
+            if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) && item is GunItem gunItem)
             {
                 _currentGunData = gunItem.GunItemData;
                 _currentGunObject = gunItem.WeaponObj as GunObject;

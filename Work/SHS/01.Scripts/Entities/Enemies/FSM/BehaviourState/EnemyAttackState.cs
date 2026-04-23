@@ -1,4 +1,5 @@
 ﻿using Chipmunk.ComponentContainers;
+using Code.InventorySystems.Equipments;
 using Code.Players;
 using Scripts.Combat.Datas;
 using Scripts.Enemies.States;
@@ -24,7 +25,7 @@ namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
             base.Enter();
             _animatorTrigger.OnDamageCastTrigger += HandleDamageCast;
 
-            if (_equipment.TryGetEquippedItem(EquipType.Hand, out EquipableItem item) &&
+            if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) &&
                 item is IAttackable attackable)
                 _weaponItem = attackable;
             _weaponItem?.EnterAttack();

@@ -1,5 +1,6 @@
 ﻿using Scripts.SkillSystem.Manage;
 using Chipmunk.ComponentContainers;
+using Code.InventorySystems.Equipments;
 using Code.Players;
 using Scripts.Combat.Datas;
 using Work.LKW.Code.Items;
@@ -22,7 +23,7 @@ namespace Scripts.Players.States
             base.Enter();
             _player.PlayerInput.OnSkillPressed += HandleSkillPressed;
             _player.PlayerInput.OnReloadPressed += HandleReloadPressed;
-            if (_equipment.TryGetEquippedItem(EquipType.Hand, out EquipableItem item) && item is Weapon weapon)
+            if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) && item is Weapon weapon)
                 _weapon = weapon;
         }
 

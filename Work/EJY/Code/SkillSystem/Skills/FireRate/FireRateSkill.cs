@@ -59,7 +59,7 @@ namespace Code.SkillSystem.Skills.FireRate
             {
                 var cts = this.GetCancellationTokenOnDestroy();   
                 
-                _owner.OnHit += OnHitAddFireRate;
+                _owner.OnAttack += OnHitAddFireRate;
                 
                 try 
                 {
@@ -72,7 +72,7 @@ namespace Code.SkillSystem.Skills.FireRate
                 }
                 finally 
                 {
-                    _owner.OnHit -= OnHitAddFireRate;
+                    _owner.OnAttack -= OnHitAddFireRate;
                     _totalFireRate = 0;
                 }
             }

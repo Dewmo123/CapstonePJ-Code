@@ -10,6 +10,7 @@ using Scripts.SkillSystem.Manage;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using Code.InventorySystems.Equipments;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Work.LKW.Code.Items.ItemInfo;
@@ -19,7 +20,7 @@ namespace Code.EnemySpawn
     [Serializable]
     public struct EnemyEquipData
     {
-        [FormerlySerializedAs("slotType")] public EquipType type;
+        public EquipPartType partType;
         public EquipItemDataSO itemData;
     }
 

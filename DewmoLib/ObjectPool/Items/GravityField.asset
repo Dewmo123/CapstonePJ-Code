@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0b0235907aa4399a4952d18f46fd023, type: 3}
-  m_Name: InventoryItemEquipAction
+  m_Script: {fileID: 11500000, guid: 0186317e820cf7746910ded45306b8de, type: 3}
+  m_Name: GravityField
   m_EditorClassIdentifier: 
-  actionName: "\uC7A5\uCC29"
-  actionIcon: {fileID: 0}
-  sortOrder: 0
-  contextAction: {fileID: 0}
+  poolingName: GravityField
+  prefab: {fileID: 1289505975566786146, guid: 7692b43ea7d5ab546ba9ae653a7679df, type: 3}
+  initCount: 1

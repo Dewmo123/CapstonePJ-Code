@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Chipmunk.ComponentContainers
 {
@@ -27,10 +28,10 @@ namespace Chipmunk.ComponentContainers
             }
             catch (ArgumentException e)
             {
+                Object errorObject = component as Object ?? gameObject;
                 Debug.LogError(
                     $"ComponentContainer::AddComponentToDictionary : Component of type {component.GetType()} already exists in the container. " +
-                    $"Please ensure that each component is unique within the container. Exception: {e.Message}");
-                throw;
+                    $"Please ensure that each component is unique within the container. Exception: {e.Message}", errorObject);
             }
         }
 
