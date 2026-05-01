@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Chipmunk.ComponentContainers;
+using Chipmunk.GameEvents;
 using UnityEngine;
 using Chipmunk.Library.Utility.GameEvents.Local;
 using DewmoLib.Dependencies;
+using InGame.PlayerUI;
 using Scripts.Combat.Datas;
 
 namespace SHS.Scripts.Crosshairs
@@ -25,6 +27,7 @@ namespace SHS.Scripts.Crosshairs
         {
             _localEventBus = _crosshairBehavior.Get<LocalEventBus>();
             _localEventBus.Subscribe<CrosshairChangeEvent>(HandleCrosshairChange);
+            EventBus.Subscribe<ChangeCursorEvent>(HandleCursorStateChange);
 
             RegisterCrosshair(defaultCrosshair);
 
@@ -34,9 +37,11 @@ namespace SHS.Scripts.Crosshairs
             SetCurrentCrosshair(defaultCrosshair);
         }
 
+
         private void OnDestroy()
         {
             _localEventBus.Unsubscribe<CrosshairChangeEvent>(HandleCrosshairChange);
+            EventBus.Unsubscribe<ChangeCursorEvent>(HandleCursorStateChange);
         }
 
         private void LateUpdate()
@@ -48,18 +53,20 @@ namespace SHS.Scripts.Crosshairs
             CurrentCrosshair.SetRangeText(_crosshairBehavior.GetDistance());
         }
 
-
-        public Vector2 GetCrosshairScreenPosition()
+        private void HandleCursorStateChange(ChangeCursorEvent evt)
         {
-            return _crosshairBehavior != null
-                ? _crosshairBehavior.GetCrosshairScreenPosition()
-                : new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+            if (evt.IsLocked)
+                _crosshairBehavior.MoveCursorToMouse();
+            else
+                _crosshairBehavior.MoveMouseToCursor();
         }
 
         private void HandleCrosshairChange(CrosshairChangeEvent eventData)
         {
             GunDataSO gunData = eventData.GunData;
-            CrosshairSO targetData = gunData != null && gunData.crosshairData != null ? gunData.crosshairData : defaultCrosshair;
+            CrosshairSO targetData = gunData != null && gunData.crosshairData != null
+                ? gunData.crosshairData
+                : defaultCrosshair;
             SetCurrentCrosshair(targetData, eventData.GunData);
         }
 
@@ -69,7 +76,7 @@ namespace SHS.Scripts.Crosshairs
 
             VirtualCrosshair targetCrosshair = _crosshairs[crosshairData];
             targetCrosshair?.SetGunData(gunData);
-            
+
             if (CurrentCrosshair == targetCrosshair)
                 return;
 

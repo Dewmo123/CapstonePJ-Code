@@ -43,18 +43,6 @@ namespace Work.LKW.Code.Items
                     _statCompo.AddModifier(addStat.targetStat, this,addStat.value);
                 }
             }
-            
-            _skillManager = entity.Get<SkillManager>();
-            
-            if (_skillManager != null)
-            {
-                _skillManager.AddSkill(Skill);
-            
-                if (_skillManager.TryGetSkill(Skill, out Scripts.SkillSystem.Skill skill))
-                {
-                    skill.SetLevel(SkillLevel);
-                }
-            }
         }
 
         public virtual void OnUnequip(Entity entity)
@@ -70,9 +58,7 @@ namespace Work.LKW.Code.Items
                     _statCompo.RemoveModifier(addStat.targetStat, this);
                 }
             }
-            
-            _skillManager?.RemoveSkill(Skill);
-            _skillManager = null;
+           
         }
         public virtual bool LevelUpSkill()
         {
@@ -85,6 +71,49 @@ namespace Work.LKW.Code.Items
                 return true;
             }
             return false;
+        }
+
+        public void RegisterSkill()
+        {
+            _skillManager = _owner.Get<SkillManager>();
+            
+            if (_skillManager != null)
+            {
+                _skillManager.AddSkill(Skill);
+            
+                if (_skillManager.TryGetSkill(Skill, out Scripts.SkillSystem.Skill skill))
+                {
+                    skill.SetLevel(SkillLevel);
+                }
+            }
+        }
+
+        public void SetSkill(SkillDataSO skill, int level = 1)
+        {
+            bool wasRegistered = _skillManager != null;
+
+            if (wasRegistered)
+                DeregisterSkill();
+
+            Skill = skill;
+            SkillLevel = Mathf.Max(1, level);
+
+            if (wasRegistered)
+                RegisterSkill();
+        }
+
+        public void CopySkillFrom(EquipableItem source)
+        {
+            if (source == null)
+                return;
+
+            SetSkill(source.Skill, source.SkillLevel);
+        }
+
+        public void DeregisterSkill()
+        {
+            _skillManager?.RemoveSkill(Skill);
+            _skillManager = null;
         }
     }
 }

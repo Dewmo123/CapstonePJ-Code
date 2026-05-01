@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Work.LKW.Code.Items;
+using static Code.InventorySystems.InventoryUtility;
 
 namespace Code.InGame.Hotbar
 {
@@ -37,11 +38,12 @@ namespace Code.InGame.Hotbar
         public void OnPressed()
         {
             _hotbarTween.Kill();
+            
             transform.localScale = Vector3.one;
             _hotbarTween = transform.DOScale(0.9f, 0.07f)
                 .SetLoops(2, LoopType.Yoyo);
             
-            EventBus.Raise(new HotbarUseEvent(Index));
+            EventBus.Raise(new HotbarUseEvent(GetLocalIndex(Index)));
         }
 
         public void EnableFor(ItemSlot slot)
@@ -52,32 +54,32 @@ namespace Code.InGame.Hotbar
             {
                 countText.gameObject.SetActive(true);
                 icon.gameObject.SetActive(true);
+                
                 icon.sprite = equipableItem.ItemData.itemImage;
                 countText.text = slot.Stack.ToString();
+                background.color = _activeColor;
             }
-            
-            background.color = _activeColor;
         }
 
-        public void Clear()
+        public void ClearUI()
         {
             icon.gameObject.SetActive(false);
             countText.gameObject.SetActive(false);
             background.color = _inActiveColor;
         }
         
-        private void SetIndexText()
+        private void SetIndexText(int idx)
         {
             if (keyText != null)
             {
-                keyText.text = Index.ToString();
+                keyText.text = (idx + 1).ToString();
             }
         }
 
         public void SetIndex(int idx)
         {
-            Index = idx;
-            SetIndexText();
+            SetIndexText(idx);
+            Index = idx + (int)SlotType.Hotbar;
         }
     }
 }

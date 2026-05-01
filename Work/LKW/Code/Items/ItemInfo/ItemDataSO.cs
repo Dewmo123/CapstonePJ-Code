@@ -5,7 +5,7 @@ using Code.DataSystem;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Work.Code.Crafting;
+using Work.Code.Craft;
 
 namespace Work.LKW.Code.Items.ItemInfo
 {
@@ -55,6 +55,18 @@ namespace Work.LKW.Code.Items.ItemInfo
         None = 64
     }
     
+    public enum SpawnSection
+    {
+        Section1 = 1,
+        Section2 = 2,
+        Section3 = 4,
+        Section4 = 8,
+        Section5 = 16,
+        Section6 = 32,
+        None = 64,
+    }
+    
+    
     public abstract class ItemDataSO : ScriptableObject
     {
         [Header("Item Info")]
@@ -67,6 +79,8 @@ namespace Work.LKW.Code.Items.ItemInfo
         public ItemType itemType;
         [ExcelColumn("spawnArea")]
         public SpawnArea spawnArea;
+        [ExcelColumn("spawnSection")]
+        public SpawnSection spawnSection;
         
         public Sprite itemImage;
         
@@ -86,5 +100,6 @@ namespace Work.LKW.Code.Items.ItemInfo
         public int maxSpawnCount;
 
         public abstract ItemCreateData CreateItem();
+
     }
 }

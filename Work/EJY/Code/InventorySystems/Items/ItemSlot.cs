@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using Code.InventorySystems;
 using DewmoLib.Utiles;
 using UnityEngine;
 using Work.LKW.Code.Items;
@@ -6,6 +7,14 @@ using Work.LKW.Code.Items.ItemInfo;
 
 namespace Code.InventorySystems.Items
 {
+    public enum SlotType
+    {
+        None = -1,
+        Inventory = 0,
+        Equip = 5000,
+        Hotbar = 10000,
+    }
+    
     [Serializable]
     public class ItemSlot
     {
@@ -14,19 +23,29 @@ namespace Code.InventorySystems.Items
         [field: SerializeField] public int Stack { get; protected set; }
         public bool IsFull => !IsBlank && Stack == Item.ItemData.maxStack;
         public bool IsBlank => Item == null;
+        public int Index { get; set; }
 
         public ItemSlot(ItemBase item, int stack = 0)
         {
             SetData(item, stack);
         }
 
+        public void SetIndex(int idx) => Index = idx;
+        
         public void SetOwner(Inventory ownerInventory) => OwnerInventory = ownerInventory;
         
         public void SetData(ItemBase item, int stack = 0)
         {
             Item = item;
             bool slotEmpty = item == null;
-            Stack = slotEmpty ? 0 : Mathf.Clamp(stack, 1, item.ItemData.maxStack);
+            if (slotEmpty)
+            {
+                Stack = 0;
+                return;
+            }
+            
+            Stack = Mathf.Clamp(stack, 1, item.ItemData.maxStack);
+            Item.SetOwner(OwnerInventory.Owner);
         }
         
         public int AddItem(int amount = 1)

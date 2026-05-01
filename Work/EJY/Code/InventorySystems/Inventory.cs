@@ -1,8 +1,8 @@
 ﻿using Chipmunk.ComponentContainers;
-using Code.InventorySystems.Items;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Code.InventorySystems.Items;
 using Scripts.Entities;
 using UnityEngine;
 using Work.LKW.Code.Items;
@@ -23,10 +23,9 @@ namespace Code.InventorySystems
             {
                 if (value > itemSlots.Count)
                 {
-                    int loop = value - itemSlots.Count;
-                    for (int i = 0; i < loop; i++)
+                    for (int i = itemSlots.Count; i < value; i++)
                     {
-                        CreateSlot();
+                        CreateSlot(i);
                     }
                 }
 
@@ -42,14 +41,15 @@ namespace Code.InventorySystems
         {
             for (int i = 0; i < CurrentInventorySize; ++i)
             {
-                CreateSlot();
+                CreateSlot(i);
             }
         }
 
-        private void CreateSlot()
+        protected virtual void CreateSlot(int idx)
         {
             ItemSlot slot = new ItemSlot(null);
             slot.SetOwner(this);
+            slot.SetIndex(idx);
             itemSlots.Add(slot);
         }
 
@@ -114,7 +114,7 @@ namespace Code.InventorySystems
         }
 
         // 실질적으로 넣을 수 있는 아이템의 개수 구하기
-        public int GetAddableItemCount(ItemBase item, int requestCount)
+        private int GetAddableItemCount(ItemBase item, int requestCount)
         {
             // 타겟 인벤토리의 같은 아이템 슬롯들의 남은 공간
             List<ItemSlot> targetSlots = GetItemSlots(item.ItemData).ToList();
@@ -208,6 +208,23 @@ namespace Code.InventorySystems
             InventoryChanged?.Invoke();
         }
 
+        public void ClearInventory(bool clearOwners = true)
+        {
+            for (int i = 0; i < CurrentInventorySize; i++)
+            {
+                ItemSlot slot = itemSlots[i];
+                if (slot.Item != null && clearOwners &&
+                    (slot.Item is EquipableItem equipableItem && equipableItem.IsEquipped) == false)
+                {
+                    slot.Item.SetOwner(null);
+                }
+
+                slot.Clear();
+            }
+
+            UpdateInventory();
+        }
+
         public virtual void OnInitialize(ComponentContainer componentContainer)
         {
             Owner = componentContainer.GetSubclassComponent<Entity>();
@@ -234,46 +251,92 @@ namespace Code.InventorySystems
             return createData.Item;
         }
 
-        private int AddItemInternal(ItemBase item, int count, bool allowReuseSourceReference = false)
+        private bool CanAddItemToSlot(ItemSlot targetSlot, ItemBase item)
+        {
+            if (targetSlot == null || item == null)
+                return false;
+
+            if (targetSlot.OwnerInventory != this)
+                return false;
+
+            return targetSlot.IsBlank ||
+                   (!targetSlot.IsFull && targetSlot.Item.ItemData == item.ItemData);
+        }
+
+        private int GetAddableItemCountForSlot(ItemSlot targetSlot, ItemBase item, int count)
+        {
+            if (count <= 0 || !CanAddItemToSlot(targetSlot, item))
+                return 0;
+
+            int remainCapacity = targetSlot.IsBlank
+                ? item.ItemData.maxStack
+                : item.ItemData.maxStack - targetSlot.Stack;
+
+            return Mathf.Min(count, remainCapacity);
+        }
+
+        private int AddItemToSlotInternal(ItemSlot targetSlot, ItemBase item, int count, ref bool allowReuseSourceReference)
+        {
+            int addAmount = GetAddableItemCountForSlot(targetSlot, item, count);
+            if (addAmount <= 0)
+                return 0;
+
+            if (!targetSlot.IsBlank)
+            {
+                targetSlot.AddItem(addAmount);
+                return addAmount;
+            }
+
+            ItemBase slotItem;
+            if (allowReuseSourceReference)
+            {
+                slotItem = item;
+                slotItem.SetOwner(Owner);
+                allowReuseSourceReference = false;
+            }
+            else
+            {
+                slotItem = CreateItemInstance(item);
+            }
+
+            targetSlot.SetData(slotItem, addAmount);
+            return addAmount;
+        }
+
+        public int AddItemToSlot(ItemSlot targetSlot, ItemBase item, int count = 1)
+        {
+            if (item == null || count <= 0)
+                return 0;
+
+            bool allowReuseSourceReference = item.ItemData.maxStack == 1 && count == 1;
+            int added = AddItemToSlotInternal(targetSlot, item, count, ref allowReuseSourceReference);
+
+            if (added > 0)
+                UpdateInventory();
+
+            return added;
+        }
+
+        public int AddItemInternal(ItemBase item, int count, bool allowReuseSourceReference = false)
         {
             int remain = count;
 
             foreach (var slot in GetItemSlots(item.ItemData))
             {
-                if (slot.IsBlank || slot.IsFull)
-                    continue;
-
-                int addAmount = Mathf.Min(remain, item.ItemData.maxStack - slot.Stack);
-                slot.AddItem(addAmount);
-                remain -= addAmount;
+                int added = AddItemToSlotInternal(slot, item, remain, ref allowReuseSourceReference);
+                remain -= added;
 
                 if (remain <= 0)
                     return count;
             }
-
-            bool canReuseSourceReference = allowReuseSourceReference;
 
             foreach (var slot in GetItemSlots(null))
             {
                 if (remain <= 0)
                     break;
 
-                int addAmount = Mathf.Min(remain, item.ItemData.maxStack);
-                ItemBase slotItem;
-
-                if (canReuseSourceReference)
-                {
-                    slotItem = item;
-                    slotItem.SetOwner(Owner);
-                    canReuseSourceReference = false;
-                }
-                else
-                {
-                    slotItem = CreateItemInstance(item);
-                }
-
-                slot.SetData(slotItem, addAmount);
-                remain -= addAmount;
+                int added = AddItemToSlotInternal(slot, item, remain, ref allowReuseSourceReference);
+                remain -= added;
             }
 
             return count - remain;

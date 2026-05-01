@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Code.StatusEffectSystem;
 using Cysharp.Threading.Tasks;
@@ -104,7 +104,7 @@ namespace Code.SkillSystem.Skills.TrackingBlade
                 await UniTask.WaitForSeconds(delayToFire, cancellationToken:linkedCts.Token);
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 trackingTargetMark.CancelCharge();
                 return false;

@@ -4,6 +4,7 @@ using Chipmunk.GameEvents;
 using Work.LKW.Code.Events;
 using Code.GameEvents;
 using Code.InventorySystems;
+using Code.InventorySystems.Items;
 using Work.LKW.Code.Items.ItemInfo;
 using EPOOutline;
 using Scripts.Entities;
@@ -29,7 +30,8 @@ namespace Work.LKW.Code.ItemContainers
     public class ItemContainer : Inventory, IInteractable
     {
         [SerializeField] private List<ItemType> allowedTypes;
-        [FormerlySerializedAs("allowedSpawnArea")] [field:SerializeField] public SpawnArea AllowedSpawnArea;
+        [field:SerializeField] public SpawnArea AllowedSpawnArea {get; private set;}
+        [field:SerializeField] public SpawnSection SpawnSection { get; private set; }
         [SerializeField] private LayerMask whatIsPlayer;
         [SerializeField] private int minItems = 1;
         [SerializeField] private int maxItems = 4;
@@ -47,6 +49,11 @@ namespace Work.LKW.Code.ItemContainers
             base.Awake();
             EventBus.Subscribe<PlayerUIEvent>(HandlePlayerUIEvent);
             _cam = Camera.main;
+        }
+
+        protected override void CreateSlot(int idx)
+        {
+            base.CreateSlot(idx);
         }
 
         private void Start()

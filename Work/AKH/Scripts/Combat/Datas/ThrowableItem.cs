@@ -12,14 +12,13 @@ namespace Scripts.Combat.Datas
     {
         private Inventory _inventory;
         
-        public GameObject Dealer => WeaponObj.gameObject;
         public ThrowableDataSO ThrowableData { get; private set; }
-        public Entity Owner => _entity;
 
-        private Entity _entity;
         public float DefaultDamage => ThrowableData.defaultDamage;
 
         public float ProjectileSpeed => ThrowableData.speedCurve.Evaluate(0);
+
+        public float ProjectileMaxRange => ThrowableData.attackRange;
 
         public float DamageMultiplier =>ThrowableData.damageMultiplier;
 
@@ -31,7 +30,7 @@ namespace Scripts.Combat.Datas
             ThrowableData = itemData as ThrowableDataSO; 
         }
 
-        public AttackableState CurrentAttackableState { get
+        public override AttackableState CurrentAttackableState { get
             {
                 if (!IsEquipped)
                     return AttackableState.NotEquipped;
@@ -44,7 +43,6 @@ namespace Scripts.Combat.Datas
         {
             base.OnEquip(entity, parent);
             _inventory = entity.Get<Inventory>(true);
-            _entity = entity;
         }
 
         public override void OnUnequip(Entity entity)
@@ -53,18 +51,11 @@ namespace Scripts.Combat.Datas
             _inventory = null;
         }
 
-        public void EnterAttack()
+        public override void AttackTrigger()
         {
-        }
-
-        public void AttackTrigger()
-        {
+            base.AttackTrigger();
             if(!_inventory.RemoveItem(this, 1, false)) return;
             WeaponObj?.Attack();
-        }
-
-        public void EndAnimation()
-        {
         }
     }
 }

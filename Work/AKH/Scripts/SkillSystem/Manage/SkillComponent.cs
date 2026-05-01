@@ -71,6 +71,18 @@ namespace Scripts.SkillSystem.Manage
             OnSkillsChanged?.Invoke();
         }
 
+        public virtual void ClearSkills()
+        {
+            foreach (SkillSocket socket in Sockets.Values)
+            {
+                socket.ChangeItem(null);
+            }
+
+            _socketBySkillDic.Clear();
+            _skills.Clear();
+            OnSkillsChanged?.Invoke();
+        }
+
         public void ChangeSkill(SkillDataSO skillData, TSlotType targetSlot)
         {
             if (!Sockets.TryGetValue(targetSlot, out TSocketType socket))
@@ -106,6 +118,11 @@ namespace Scripts.SkillSystem.Manage
             KeyValuePair<TSlotType, TSocketType> kvp = Sockets.FirstOrDefault(kvp => kvp.Value.CurrentSkill == skill);
             slotType = kvp.Key;
             return kvp.Value != null;
+        }
+
+        public bool HasAnySkill()
+        {
+            return _skills.Count(skill => !skill.Key.defaultSkill) > 1;
         }
     }
 }

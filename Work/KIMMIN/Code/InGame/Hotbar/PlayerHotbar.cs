@@ -10,9 +10,8 @@ using Scripts.Players;
 using Scripts.Players.States;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Work.LKW.Code.Items;
-using Work.LKW.Code.Items.ItemInfo;
+using static Code.InventorySystems.InventoryUtility;
 
 namespace Code.InventorySystem
 {
@@ -20,7 +19,7 @@ namespace Code.InventorySystem
     {
         Gun, Melee, Item
     }
-    public class PlayerHotbar : MonoBehaviour, IContainerComponent
+    public class PlayerHotbar : MonoBehaviour, IContainerComponent, IAfterInitialze
     {
         [field: SerializeField] public HotbarType[] HotbarTypes { get; private set; }
         [SerializeField] private SerializedDictionary<HotbarType, int> hotbarCount = new();
@@ -36,6 +35,16 @@ namespace Code.InventorySystem
             _equipment = componentContainer.Get<PlayerEquipment>();
             _inventory = componentContainer.Get<PlayerInventory>();
 
+            _player.PlayerInput.OnItemUsePressed += UseSlot;
+            _inventory.InventoryChanged += HandleInventoryChanged;
+            
+            EventBus.Subscribe<EquipHotbarEvent>(HandleEquipHotbar);
+            EventBus.Subscribe<UnEquipHotbarEvent>(HandleUnEquipHotbar);
+            EventBus.Subscribe<HotbarUseEvent>(HandleUseHotbar);
+        }
+
+        public void AfterInitialize()
+        {
             int total = 0;
             
             foreach (var kvp in hotbarCount)
@@ -45,21 +54,14 @@ namespace Code.InventorySystem
                     var hotbar = new HotbarSlot(null);
                     hotbar.SetOwner(_inventory);
                     hotbar.HotbarType = kvp.Key;
-                    hotbar.Index = i;
+                    hotbar.SetIndex(i + (int)SlotType.Hotbar);
                     _slots.Add(hotbar);
                 }
 
                 total += kvp.Value;
             }
-
-            _player.PlayerInput.OnItemUsePressed += UseSlot;
-            _inventory.InventoryChanged += HandleInventoryChanged;
-            
-            EventBus.Subscribe<EquipHotbarEvent>(HandleEquipHotbar);
-            EventBus.Subscribe<UnEquipHotbarEvent>(HandleUnEquipHotbar);
-            EventBus.Subscribe<HotbarUseEvent>(HandleUseHotbar);
         }
-
+        
         private void OnDestroy()
         {
             if (_player != null)
@@ -86,22 +88,29 @@ namespace Code.InventorySystem
 
         private void HandleEquipHotbar(EquipHotbarEvent evt)
         {
-            if (!IsValidIndex(evt.Index))
+            int idx = evt.Index;
+            
+            if (!IsValidIndex(idx))
                 return;
 
-            if (evt.Item is not EquipableItem || !CheckValidItem(evt.Index, evt.Item))
+            if (evt.Item is not EquipableItem || !CheckValidItem(idx, evt.Item))
                 return;
 
-            _slots[evt.Index].SetData(evt.Item, GetHotbarStack(evt.Item));
+            ItemSlot inventorySlot = FindInventorySlot(evt.Item);
+            ItemBase slotItem = inventorySlot?.Item ?? evt.Item;
+
+            _slots[idx].SetData(slotItem, GetHotbarStack(slotItem, inventorySlot));
             UpdateUI();
         }
 
         private void HandleUnEquipHotbar(UnEquipHotbarEvent evt)
         {
-            if (!IsValidIndex(evt.Index))
+            int idx = evt.Index;
+            
+            if (!IsValidIndex(idx))
                 return;
 
-            _slots[evt.Index].SetData(null);
+            _slots[idx].SetData(null);
             UpdateUI();
         }
         
@@ -110,11 +119,11 @@ namespace Code.InventorySystem
             if (!IsValidIndex(index) || _player.StateMachine.CurrentStateEnum == PlayerStateEnum.ItemUse)
                 return;
 
-            if (!TryResolveSlot(index, out EquipableItem equipable))
+            if (!TryResolveSlot(index, out HandItem handItem))
                 return;
 
-            _equipment.ChangeHandlingHotbarItem(equipable as Weapon);
-            if (equipable is IUsable)
+            _equipment.ChangeHandlingHotbarItem(handItem);
+            if (handItem is IUsable)
                 _player.ChangeState(PlayerStateEnum.ItemUse);
         }
         
@@ -141,7 +150,7 @@ namespace Code.InventorySystem
             if (slot.Item == null)
                 return false;
 
-            if (!CheckValidItem(slot.Index, slot.Item))
+            if (!CheckValidItem(GetLocalIndex(slot.Index), slot.Item))
             {
                 slot.SetData(null);
                 return true;
@@ -163,27 +172,28 @@ namespace Code.InventorySystem
                 return true;
             }
 
-            int stack = GetHotbarStack(inventorySlot.Item);
+            int stack = GetHotbarStack(inventorySlot.Item, inventorySlot);
             if (slot.Item == inventorySlot.Item && slot.Stack == stack)
                 return false;
 
+            
             slot.SetData(inventorySlot.Item, stack);
             return true;
         }
 
-        private bool TryResolveSlot(int index, out EquipableItem equipable)
+        private bool TryResolveSlot(int index, out HandItem handItem)
         {
-            equipable = null;
+            handItem = null;
             var slot = _slots[index];
 
             bool isUpdated = SyncHotbarSlot(slot);
             if (isUpdated)
                 UpdateUI();
 
-            if (slot.Item is not EquipableItem validItem)
+            if (slot.Item is not HandItem validItem)
                 return false;
 
-            equipable = validItem;
+            handItem = validItem;
             return true;
         }
 
@@ -207,10 +217,10 @@ namespace Code.InventorySystem
             return null;
         }
 
-        private int GetHotbarStack(ItemBase item)
+        private int GetHotbarStack(ItemBase item, ItemSlot inventorySlot)
         {
             if (item is UsableItem or ThrowableItem)
-                return Mathf.Max(1, _inventory.GetItemCount(item.ItemData));
+                return inventorySlot != null ? inventorySlot.Stack : 1;
 
             return 1;
         }

@@ -36,7 +36,7 @@ namespace Code.Hotbar
                     _hotbars[i].EnableFor(evt.EquipSlots[i]);
                 }
                 else
-                    _hotbars[i].Clear();
+                    _hotbars[i].ClearUI();
             }
         }
     }

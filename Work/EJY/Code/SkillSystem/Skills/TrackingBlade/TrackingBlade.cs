@@ -22,7 +22,7 @@ namespace Code.SkillSystem.Skills.TrackingBlade
         [SerializeField] private float rotationSpeed = 120f;
         [SerializeField] private float delayToRotate = 0.5f;
         [SerializeField] private float lifeTime = 6f;
-        [SerializeField] private float additionalRotationSpeedMultiplier = 30f;
+        //[SerializeField] private float additionalRotationSpeedMultiplier = 30f;
 
         public PoolItemSO PoolItem => trackingBladeItemSO;
         public GameObject GameObject => gameObject;
@@ -105,11 +105,7 @@ namespace Code.SkillSystem.Skills.TrackingBlade
 
                 if (entity.TryGet(out EntityStatusEffect statusEffect))
                 {
-                    if(statusEffect != null)
-                        foreach (var info in bleedingBuffInfos)
-                        {
-                            statusEffect.AddStatusEffect(info);
-                        }
+                    statusEffect.AddStatusEffect(bleedingBuffInfos);
                 }
                     
                 
