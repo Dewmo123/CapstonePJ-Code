@@ -15,27 +15,17 @@ MonoBehaviour:
   itemId: FOD_001
   itemName: "\uC0DD\uC218"
   itemType: 1
-  spawnArea: 11
-  itemImage: {fileID: 21300000, guid: 052474fe8cbdfb6409122d95e6056814, type: 3}
+  spawnArea: 24
+  itemImage: {fileID: 21300000, guid: cb45535054684f145866bdd5925aad24, type: 3}
   description: "\uC124\uBA85"
   rarity: 0
-  rarityWeight: 15
+  rarityWeight: 0
   value: 0
-  maxStack: 99
+  maxStack: 9
   maxSpawnCount: 3
   addStats: []
   modelOffset: {x: 0, y: 0, z: 0}
   equipmentPrefab: {fileID: 1714967983448266501, guid: a024a6317a022bf4b98c60d3ee288b92, type: 3}
   skillDB: {fileID: 0}
-  maxDurability: 0
-  attackRange: 0
-  defaultDamage: 0
-  attackSpeed: 0
   controller: {fileID: 0}
-  fireRate: 0
-  attackSoundID:
-    _entity: {fileID: 0}
-    ID: 0
-    <DebugObject>k__BackingField: {fileID: 0}
-  foodAmount: 0
-  waterAmount: 30
+  staminaAmount: 10

@@ -40,8 +40,14 @@ namespace Code.UI.Minimap.SectionName
 
         private void HandleShowItemsOnMap(ShowItemsOnMap evt)
         {
-            Debug.Log("ddd");
-            _targetItems.Clear();
+            for (int i = parentTrm.childCount - 1; i >= 0; i--)
+            {
+                Destroy(parentTrm.GetChild(i).gameObject);
+            }
+
+            _targetItems.Clear();  // 삭제 후 리스트 정리
+            _showItems.Clear();
+            
             foreach (var item in evt.ItemList)
             {
                 if ((item.spawnArea & Area) > 0)

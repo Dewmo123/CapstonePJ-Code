@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c01ccda77da7499b92d72dc01b1961ac, type: 3}
+  m_Name: FOD_011_
+  m_EditorClassIdentifier: 
+  itemId: FOD_011
+  itemName: 
+  itemType: 0
+  spawnArea: 0
+  itemImage: {fileID: 0}
+  description: "\uC124\uBA85"
+  rarity: 0
+  rarityWeight: 0
+  value: 0
+  maxStack: 0
+  maxSpawnCount: 0
+  addStats: []
+  modelOffset: {x: 0, y: 0, z: 0}
+  equipmentPrefab: {fileID: 1714967983448266501, guid: a024a6317a022bf4b98c60d3ee288b92, type: 3}
+  skillDB: {fileID: 0}
+  controller: {fileID: 0}
+  staminaAmount: 0

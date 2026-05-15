@@ -15,25 +15,25 @@ MonoBehaviour:
   itemId: GUN_007_C
   itemName: BenelliM4
   itemType: 4
-  spawnArea: 64
-  itemImage: {fileID: 21300000, guid: e847d202303fd5d40911a545204d1a5a, type: 3}
+  spawnArea: 0
+  itemImage: {fileID: 21300000, guid: 981805c71c2ab4f449287aa5d5f04137, type: 3}
   description: "\uBC18\uC790\uB3D9 \uC2DC\uC2A4\uD15C\uC744 \uAC16\uCD98 \uAC15\uB825\uD55C
     \uC804\uC220 \uC0B0\uD0C4\uCD1D\uC785\uB2C8\uB2E4."
   rarity: 0
   rarityWeight: 70
   value: 32
   maxStack: 1
-  maxSpawnCount: 1
+  maxSpawnCount: 0
   addStats: []
-  modelOffset: {x: 0, y: 0.025, z: 0.618}
+  modelOffset: {x: -0.046, y: 0.165, z: 0.468}
   equipmentPrefab: {fileID: 168361770237977466, guid: 659e57d7035ba9e4a9c8691ed6c72418, type: 3}
   skillDB: {fileID: 11400000, guid: 8d774c9ec3ed519468eeb141576d259c, type: 2}
+  controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
   maxDurability: 434
   attackRange: 16
-  defaultDamage: 12
+  defaultDamage: 32
   attackSpeed: 3
-  controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
-  fireRate: 1
+  fireRate: 0.45
   attackSoundID:
     _entity: {fileID: 0}
     ID: 0
@@ -42,6 +42,7 @@ MonoBehaviour:
   bulletPerShot: 8
   reloadTime: 2.75
   bulletSpeed: 45
+  maxRange: 0
   maxAmmoCapacity: 7
   aimSpeedMultiplier: 0.665
   noiseRadius: 0

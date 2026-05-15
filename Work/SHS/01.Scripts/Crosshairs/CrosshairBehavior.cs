@@ -15,6 +15,7 @@ using Code.InventorySystems.Equipments;
 using DewmoLib.Dependencies;
 using Scripts.Players.States;
 using SHS.Scripts.Combats.Events;
+using UnityEngine.Serialization;
 using Work.SHS.Items.Events;
 using Random = UnityEngine.Random;
 
@@ -23,8 +24,8 @@ namespace SHS.Scripts.Crosshairs
     [Provide]
     public class CrosshairBehavior : MonoBehaviour, IContainerComponent, IAfterInitialze, IAimProvider,
         IDependencyProvider
-    {
-        [Header("Input")] [SerializeField] private float sensitivity = 18f;
+    { 
+        [Header("Input")] [SerializeField] private float baseSensitivity = 18f;
         [SerializeField] private float clampMargin = 8f;
 
         [Header("Aim Sampling")] [SerializeField]
@@ -51,6 +52,7 @@ namespace SHS.Scripts.Crosshairs
         private Vector2 _recoilOffsetPixel;
         private Vector3 _aimPosition;
         private float _lastShotTime = -999f;
+        private float _sensitivity;
 
         public void OnInitialize(ComponentContainer componentContainer)
         {
@@ -101,7 +103,7 @@ namespace SHS.Scripts.Crosshairs
 
         private void LateUpdate()
         {
-            Vector3 nextAimPosition = GetCrosshairPlanePosition();
+            Vector3 nextAimPosition = GetCrosshairWorldPosition();
             if (Vector3.Distance(transform.position, nextAimPosition) < minAimDistance)
                 return;
 
@@ -148,7 +150,7 @@ namespace SHS.Scripts.Crosshairs
             if (!IsCursorLocked)
                 return;
 
-            Vector2 cursorDelta = delta * sensitivity;
+            Vector2 cursorDelta = delta * _sensitivity;
             ConsumeRecoilFromCursorDelta(ref cursorDelta);
 
             _userCursorPixel += cursorDelta;
@@ -393,5 +395,8 @@ namespace SHS.Scripts.Crosshairs
             p.x = Mathf.Clamp(p.x, clampMargin, Screen.width - clampMargin);
             p.y = Mathf.Clamp(p.y, clampMargin, Screen.height - clampMargin);
         }
+
+        public void SetSensitivity(float value) 
+            => _sensitivity = baseSensitivity * value; 
     }
 }

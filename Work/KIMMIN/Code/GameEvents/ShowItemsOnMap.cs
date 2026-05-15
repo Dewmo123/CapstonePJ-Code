@@ -13,4 +13,14 @@ namespace Work.Code.GameEvents
             this.ItemList = ItemList;
         }
     }
+
+    public struct HideItemsOnMap : IEvent
+    {
+        public List<ItemDataSO> ItemList { get; }
+
+        public HideItemsOnMap(List<ItemDataSO> ItemList)
+        {
+            this.ItemList = ItemList;
+        }
+    }
 }

@@ -15,24 +15,24 @@ MonoBehaviour:
   itemId: GUN_005_R
   itemName: AK47
   itemType: 4
-  spawnArea: 64
-  itemImage: {fileID: 21300000, guid: d3d38d23223e4b64489ae8178401e5b6, type: 3}
+  spawnArea: 0
+  itemImage: {fileID: 21300000, guid: 86d4314890c3ec747bce4396417e26e6, type: 3}
   description: "\uB192\uC740 \uC0B4\uC0C1\uB825\uACFC \uC2E0\uB8B0\uC131\uC744 \uC790\uB791\uD558\uB294
     \uAC15\uB825\uD55C \uC790\uB3D9\uC18C\uCD1D\uC785\uB2C8\uB2E4."
   rarity: 1
   rarityWeight: 25
   value: 40
   maxStack: 1
-  maxSpawnCount: 1
+  maxSpawnCount: 0
   addStats: []
   modelOffset: {x: 0.012, y: 0.141, z: 0.369}
   equipmentPrefab: {fileID: 5912053865660236352, guid: f83af4bd2c594b74fb6265902dca2d20, type: 3}
   skillDB: {fileID: 11400000, guid: 8d774c9ec3ed519468eeb141576d259c, type: 2}
+  controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
   maxDurability: 500
   attackRange: 60
-  defaultDamage: 33
+  defaultDamage: 40
   attackSpeed: 5.7
-  controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
   fireRate: 0.175
   attackSoundID:
     _entity: {fileID: 11400000, guid: 9d063bdcc4d6e4345a8365eeec2dbac1, type: 2}
@@ -42,6 +42,7 @@ MonoBehaviour:
   bulletPerShot: 1
   reloadTime: 2.5
   bulletSpeed: 45
+  maxRange: 0
   maxAmmoCapacity: 26
   aimSpeedMultiplier: 0.651
   noiseRadius: 0

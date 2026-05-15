@@ -28,6 +28,7 @@ Material:
     - _BlurSize: 0.002
     - _BlurSpread: 0.002
     - _Darkness: 0.36
+    - _DebugVisibilityMask: 0
     - _FOVAngle: 90
     - _FOVRadius: 10
     - _Softness: 0.1

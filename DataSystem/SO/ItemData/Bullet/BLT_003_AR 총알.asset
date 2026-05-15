@@ -15,8 +15,8 @@ MonoBehaviour:
   itemId: BLT_003
   itemName: "AR \uCD1D\uC54C"
   itemType: 5
-  spawnArea: 64
-  itemImage: {fileID: 21300000, guid: a8d67fa26a1719a4190dac1370dc55d0, type: 3}
+  spawnArea: 4194303
+  itemImage: {fileID: 21300000, guid: e2c9a9780baa3474c815ca23b2e2faf7, type: 3}
   description: "AR \uCD1D\uC54C"
   rarity: 0
   rarityWeight: 10

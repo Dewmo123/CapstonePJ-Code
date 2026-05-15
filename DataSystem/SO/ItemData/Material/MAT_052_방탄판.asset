@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d044ac5a9924024af7d52404d16e196, type: 3}
+  m_Name: "MAT_052_\uBC29\uD0C4\uD310"
+  m_EditorClassIdentifier: 
+  itemId: MAT_052
+  itemName: "\uBC29\uD0C4\uD310"
+  itemType: 0
+  spawnArea: 0
+  itemImage: {fileID: 0}
+  description: "\uC124\uBA85"
+  rarity: 1
+  rarityWeight: 5
+  value: 0
+  maxStack: 1
+  maxSpawnCount: 0

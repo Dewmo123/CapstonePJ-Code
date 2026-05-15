@@ -1,7 +1,8 @@
+using System;
 using DewmoLib.Dependencies;
 using Scripts.Players;
-using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Work.Code.UI.Misc;
 
 namespace Work.Code.Tutorials
@@ -9,30 +10,45 @@ namespace Work.Code.Tutorials
     public class TutorialController : MonoBehaviour
     {
         [SerializeField] private TypeEffectText dialogueText;
+        [SerializeField] private TutorialProgressUI progressUI;
 
         [Inject] private Player _player;
         private TutorialState[] _tutorialStates;
-
         private TutorialState _currentState;
         private int _tutorialIndex;
+
+        public Action OnTutorialComplete;
 
         private void Start()
         {
             _tutorialStates = GetComponentsInChildren<TutorialState>();
+            Debug.Assert(_tutorialStates.Length != 0, "TutorialStates is empty");
             
             foreach (TutorialState state in _tutorialStates)
             {
                 state.InitializeTutorial(this, _player);
             }
             
+            progressUI.InitProgressUI(_tutorialStates.Length);
             ChangeTutorialState(_tutorialStates[_tutorialIndex]);
+        }
+        
+        private void Update()
+        {
+            if(Keyboard.current.oKey.wasPressedThisFrame)
+                HandleTutorialComplete();
         }
 
         private void HandleTutorialComplete()
         {
             _tutorialIndex++;
+            progressUI.SetProgress(_tutorialIndex , _tutorialStates.Length);
+            
             if (_tutorialIndex >= _tutorialStates.Length)
+            {
+                OnTutorialComplete?.Invoke();
                 return;
+            }
             
             TutorialState newState = _tutorialStates[_tutorialIndex];
             ChangeTutorialState(newState);
@@ -54,6 +70,12 @@ namespace Work.Code.Tutorials
         public void SetDialogue(string dialogue, bool nonEffect = false)
         {
             dialogueText.SetText(dialogue, nonEffect);
+        }
+
+        private void OnDestroy()
+        {
+            if (_currentState != null)
+                _currentState.OnTutorialComplete -= HandleTutorialComplete;
         }
     }
 }

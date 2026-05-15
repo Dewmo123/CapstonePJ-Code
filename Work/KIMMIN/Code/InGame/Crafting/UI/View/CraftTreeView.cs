@@ -133,7 +133,7 @@ namespace Work.Code.Craft.View
         {
             nodeUI.Clear();
 
-            bool isRootNode = lineIndex is 0 or 1;
+            bool isRootNode = lineIndex != 0 && lineIndex != 1;
             int itemCount = RequestItemCount(node.Item);
             CraftNodeData craftData = new(node, itemCount, isRootNode);
 

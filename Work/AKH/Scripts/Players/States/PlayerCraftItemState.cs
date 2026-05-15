@@ -1,10 +1,11 @@
-﻿using Chipmunk.ComponentContainers;
+using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
 using Code.InventorySystems;
 using Code.InventorySystems.Items;
 using Code.Players;
 using System.Collections.Generic;
 using System.Linq;
+using SHS.Scripts.Effects;
 using UnityEngine;
 using Work.Code.Craft;
 using Work.Code.GameEvents;
@@ -17,12 +18,17 @@ namespace Scripts.Players.States
     {
         private PlayerInventory _targetInventory;
         private CraftTreeSO _targetCraftTree;
+        private CraftEffect _craftEffect;
+
         public PlayerCraftItemState(ComponentContainer container, int animationHash) : base(container, animationHash)
         {
+            _craftEffect = container.Get<CraftEffect>();
         }
+
         public override void Enter()
         {
             base.Enter();
+            _craftEffect.StartCrafting();
             (_targetInventory, _targetCraftTree) = _blackboard.GetOrDefault<CraftContext>("SelectedCraftSO");
             Debug.Assert(_targetInventory != null || _targetCraftTree != null, $"{_targetInventory}, {_targetCraftTree}");
             if (!_targetInventory.CanConsume(_targetCraftTree.ConsumeItems))
@@ -35,15 +41,23 @@ namespace Scripts.Players.States
             EventBus.Raise(new PlayerGageEvent("제작중", craftTime, HandleCompleteCraft));
             _player.LocalEventBus.Raise(new StartCraftingEvent());
         }
+
         public override void Update()
         {
             base.Update();
-            if(_player.PlayerInput.MovementKey.sqrMagnitude > 0f || _player.PlayerInput.AimKey)
+            if (_player.PlayerInput.MovementKey.sqrMagnitude > 0f || _player.PlayerInput.AimKey)
             {
                 EventBus.Raise(new StopPlayerGageEvent());
                 _player.ChangeState(PlayerStateEnum.Idle);
             }
         }
+
+        public override void Exit()
+        {
+            base.Exit();
+            _craftEffect.StopCrafting();
+        }
+
         private void HandleCompleteCraft()
         {
             EquipableItem skillSource = FindSkillSourceItem();

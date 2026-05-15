@@ -11,9 +11,8 @@ namespace DewmoLib.ObjectPool.RunTime
         private void Awake()
         {
             poolManager.Init(transform);
-            
-            
         }
+        
         public T Pop<T>(PoolItemSO item) where T : IPoolable
         {
             return (T)poolManager.Pop(item);

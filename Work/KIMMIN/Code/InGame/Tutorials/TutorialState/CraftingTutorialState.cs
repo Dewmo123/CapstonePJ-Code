@@ -11,6 +11,7 @@ namespace Work.Code.Tutorials
     public class CraftingTutorialState : TutorialState
     {
         [SerializeField] private ItemDataSO[] requireItems;
+        [SerializeField] private TutorialDoor tutorialDoor;
         
         private List<ItemDataSO> _requiredItems = new();
 
@@ -58,6 +59,12 @@ namespace Work.Code.Tutorials
 
             strBuilder.Append("을 제작하세요");
             return strBuilder.ToString();
+        }
+
+        protected override void TutorialComplete()
+        {
+            tutorialDoor.OpenDoor();
+            base.TutorialComplete();
         }
     }
 }

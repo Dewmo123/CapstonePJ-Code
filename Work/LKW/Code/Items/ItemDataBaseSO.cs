@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Ami.BroAudio.Editor;
-using NUnit.Framework;
 using UnityEngine;
 using Work.LKW.Code.Items.ItemInfo;
 using Random = UnityEngine.Random;
@@ -16,7 +14,6 @@ namespace Work.LKW.Code.Items
         private Dictionary<ItemType, List<ItemDataSO>> _itemDataByType;
         private Dictionary<Rarity, List<ItemDataSO>> _itemDataByRarity;
         private Dictionary<SpawnArea, List<ItemDataSO>> _itemDataBySpawnArea;
-        private Dictionary<SpawnSection, List<ItemDataSO>> _itemDataBySpawnSection;
 
         private void OnEnable()
         {
@@ -27,9 +24,6 @@ namespace Work.LKW.Code.Items
                 .ToDictionary(group => group.Key, group => group.ToList());
 
             _itemDataBySpawnArea = allItems.GroupBy(item => item.spawnArea)
-                .ToDictionary(group => group.Key, group => group.ToList());
-            
-            _itemDataBySpawnSection = allItems.GroupBy(item => item.spawnSection)
                 .ToDictionary(group => group.Key, group => group.ToList());
         }
 
@@ -51,13 +45,10 @@ namespace Work.LKW.Code.Items
 
         public List<ItemDataSO> GetItemBySpawnArea(SpawnArea area)
             => _itemDataBySpawnArea[area];
-        
-        public List<ItemDataSO> GetItemBySpawnSection(SpawnSection section)
-        => _itemDataBySpawnSection[section];
 
 
         // 가중치에 따라 랜덤으로 하나 쁩는
-        
+
         public ItemDataSO GetRandomItem(List<ItemDataSO> items)
         {
             int totalWeight = items.Sum(item => item.rarityWeight);
@@ -108,41 +99,26 @@ namespace Work.LKW.Code.Items
             return result;
         }
         
-        public List<ItemDataSO> GetRandomItems(SpawnSection section, int count)
+        public List<ItemDataSO> GetRandomItems(ItemType type, Rarity rarity, int count)
         {
-            List<ItemDataSO> targetItems = GetItemBySpawnSection(section);
-
+            List<ItemDataSO> targetItemByRarity = GetItemByRarity(rarity);
+            List<ItemDataSO> targetItemByType = GetItemByType(type);
+            List<ItemDataSO> targetItems = targetItemByRarity.Intersect(targetItemByType).ToList();
+        
             List<ItemDataSO> result = new List<ItemDataSO>();
-            
+        
             for (int i = 0; i < count; i++)
             {
                 result.Add(GetRandomItem(targetItems));
             }
-
+        
             return result;
         }
         
-        public List<ItemDataSO> GetRandomItems(SpawnArea area, SpawnSection section, int count)
-        {   
-            List<ItemDataSO> sectionItems = GetItemBySpawnSection(section);
-            List<ItemDataSO> areaItems = GetItemBySpawnArea(area);
-            
-            List<ItemDataSO> targetItems = sectionItems.Intersect(areaItems).ToList();
-
-            List<ItemDataSO> result = new List<ItemDataSO>();
-            
-            for (int i = 0; i < count; i++)
-            {
-                result.Add(GetRandomItem(targetItems));
-            }
-
-            return result;
-        }
-
-
-        public List<ItemDataSO> GetRandomItems(List<ItemDataSO> targetItems, SpawnArea area, SpawnSection section, int count)
+   
+        public List<ItemDataSO> GetRandomItems(List<ItemDataSO> targetItems, SpawnArea area, int count)
         {
-            var filtered = targetItems.Where(i => (i.spawnArea & area) != 0 && (i.spawnSection & section) != 0).ToList();
+            var filtered = targetItems.Where(i => (i.spawnArea & area) != 0).ToList();
             if (filtered.Count == 0)
             {
                 Debug.LogError($"No items type : {targetItems.First().GetType()} for SpawnArea {area}");
@@ -151,7 +127,7 @@ namespace Work.LKW.Code.Items
 
             List<ItemDataSO> result = new List<ItemDataSO>();
 
-            for (int i = 0; i < count; i++) 
+            for (int i = 0; i < count; i++)
             {
                 result.Add(GetRandomItem(filtered));
             }

@@ -15,8 +15,8 @@ MonoBehaviour:
   itemId: BLT_002
   itemName: "SMG \uCD1D\uC54C"
   itemType: 5
-  spawnArea: 64
-  itemImage: {fileID: 21300000, guid: d9f849b2074e75f43bf5bf1ad2942098, type: 3}
+  spawnArea: 4194303
+  itemImage: {fileID: 21300000, guid: e2ad49a981d3bcc4c85582e2aee3a120, type: 3}
   description: "SMG \uCD1D\uC54C"
   rarity: 0
   rarityWeight: 10

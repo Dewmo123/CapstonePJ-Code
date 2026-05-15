@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: "\uB808\uBAAC"
   itemType: 1
   spawnArea: 7
-  itemImage: {fileID: 21300000, guid: ec89f7d8e64a1e84b946354f75d7352b, type: 3}
+  itemImage: {fileID: 21300000, guid: da8d7ee09b2579e4ca555ee48b78eaca, type: 3}
   description: "\uC124\uBA85"
   rarity: 0
   rarityWeight: 10

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a7d2df082134dfb8bdeabb0985cc47b, type: 3}
+  m_Name: "MDC_002_\uC9C4\uD1B5\uC81C"
+  m_EditorClassIdentifier: 
+  itemId: MDC_002
+  itemName: "\uC9C4\uD1B5\uC81C"
+  itemType: 2
+  spawnArea: 4194303
+  itemImage: {fileID: 21300000, guid: e76f17111a9c8ae4b81bd91829d309dc, type: 3}
+  description: "\uC124\uBA85"
+  rarity: 0
+  rarityWeight: 10
+  value: 0
+  maxStack: 9
+  maxSpawnCount: 2
+  addStats: []
+  modelOffset: {x: 0, y: 0, z: 0}
+  equipmentPrefab: {fileID: 1714967983448266501, guid: a024a6317a022bf4b98c60d3ee288b92, type: 3}
+  skillDB: {fileID: 0}
+  controller: {fileID: 0}
+  healAmount: 15

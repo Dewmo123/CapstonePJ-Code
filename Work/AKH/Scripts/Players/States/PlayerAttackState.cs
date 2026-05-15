@@ -1,5 +1,6 @@
 using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
+using Code.ETC;
 using Code.GameEvents;
 using Code.InventorySystems.Equipments;
 using Code.Players;
@@ -12,32 +13,44 @@ namespace Scripts.Players.States
     public class PlayerAttackState : PlayerMoveState
     {
         private IAttackable _weaponItem;
+        private IAimProvider _aimProvider;
         private PlayerEquipment _equipment;
+
         public PlayerAttackState(ComponentContainer container, int animationHash) : base(container, animationHash)
         {
             _myMoveType = MoveType.Aim;
             _equipment = container.Get<PlayerEquipment>();
+            _aimProvider = container.GetSubclassComponent<IAimProvider>();
         }
+
         public override void Enter()
         {
             base.Enter();
+
+            Vector3 aimDirection = _aimProvider.GetAimPosition() - _player.transform.position;
+            aimDirection.y = 0;
+            _player.transform.forward = aimDirection;
             _animatorTrigger.OnDamageCastTrigger += HandleDamageCast;
-            if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) && item is IAttackable attackable)
+            if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) &&
+                item is IAttackable attackable)
                 _weaponItem = attackable;
             _weaponItem.EnterAttack();
         }
+
         public override void Update()
         {
             base.Update();
-            if(_player.PlayerInput.AttackKey && _weaponItem.CanAttack())
-                _player.ChangeState(PlayerStateEnum.Attack,true);
+            if (_player.PlayerInput.AttackKey && _weaponItem.CanAttack())
+                _player.ChangeState(PlayerStateEnum.Attack, true);
             else if (_isTriggerCall)
                 _player.ChangeState(PlayerStateEnum.Aim);
         }
+
         private void HandleDamageCast()
         {
             _weaponItem.AttackTrigger();
         }
+
         public override void Exit()
         {
             base.Exit();

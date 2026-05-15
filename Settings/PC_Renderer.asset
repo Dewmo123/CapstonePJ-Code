@@ -18,8 +18,28 @@ MonoBehaviour:
   requirements: 0
   passMaterial: {fileID: 2100000, guid: d1f2e3c4b5a697887766554433221100, type: 2}
   passIndex: 0
-  bindDepthStencilAttachment: 1
+  bindDepthStencilAttachment: 0
   m_Version: 1
+--- !u!114 &5317248824723519491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f51b8938dfad4f6fbaf44c5890a4aab7, type: 3}
+  m_Name: FovVisibilityMask
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    renderPassEvent: 550
+    fovLayerMask:
+      serializedVersion: 2
+      m_Bits: 524288
+    visibilityMaskMaterial: {fileID: 2100000, guid: 79a52795713d44f7889c7e2f035c2a51, type: 2}
+    debugVisibilityMask: 0
 --- !u!114 &-6275350031919400933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,10 +125,11 @@ MonoBehaviour:
   - {fileID: 3427456163832821859}
   - {fileID: -6275350031919400933}
   - {fileID: 2253137332828972708}
+  - {fileID: 5317248824723519491}
   - {fileID: -7793512855513936898}
   - {fileID: 7461621032711829247}
   - {fileID: -4771906601412353872}
-  m_RendererFeatureMap: ad6b866f10d7b46c4b6ba655c8fb490163787ab838c5902f1b3835ea647ae9a8a426717177c0441ffecba68659e1d793ff365fbfcb008d67b0a079893ac8c6bd
+  m_RendererFeatureMap: ad6b866f10d7b46c4b6ba655c8fb490163787ab838c5902f1b3835ea647ae9a8a426717177c0441f03380254a2a9ca49fecba68659e1d793ff365fbfcb008d67b0a079893ac8c6bd
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -167,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: Mask
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
     passTag: Mask
     Event: 450
@@ -182,7 +203,7 @@ MonoBehaviour:
     overrideShader: {fileID: 0}
     overrideShaderPassIndex: 0
     overrideMode: 1
-    overrideDepthState: 1
+    overrideDepthState: 0
     depthCompareFunction: 7
     enableWrite: 1
     stencilSettings:
@@ -240,7 +261,7 @@ MonoBehaviour:
       RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
-        m_Bits: 6338240
+        m_Bits: 6338112
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0

@@ -1,6 +1,7 @@
 using System;
 using Scripts.Players;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Work.Code.Tutorials
 {
@@ -25,7 +26,7 @@ namespace Work.Code.Tutorials
 
         public virtual void ExitTutorial() { }
     
-        protected void TutorialComplete()
+        protected virtual void TutorialComplete()
         {
             OnTutorialComplete?.Invoke();
         }

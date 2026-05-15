@@ -15,14 +15,14 @@ MonoBehaviour:
   itemId: BLT_001
   itemName: "\uAD8C\uCD1D \uCD1D\uC54C"
   itemType: 5
-  spawnArea: 15
-  itemImage: {fileID: 21300000, guid: a8d67fa26a1719a4190dac1370dc55d0, type: 3}
+  spawnArea: 4194303
+  itemImage: {fileID: 21300000, guid: 75beefa7029e290488a5e1925126311f, type: 3}
   description: "\uAD8C\uCD1D \uCD1D\uC54C"
   rarity: 0
   rarityWeight: 10
   value: 0
   maxStack: 99
-  maxSpawnCount: 30
+  maxSpawnCount: 24
   gunType: 0
   damageMultiplier: 1
   defPierceLevel: 0

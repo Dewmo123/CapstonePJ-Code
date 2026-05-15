@@ -10,7 +10,7 @@ using Work.LKW.Code.Items.ItemInfo;
 
 namespace Code.InventorySystems
 {
-    public abstract class Inventory : MonoBehaviour, IContainerComponent
+    public class Inventory : MonoBehaviour, IContainerComponent
     {
         public Entity Owner { get; private set; }
         public ComponentContainer ComponentContainer { get; set; }
@@ -28,7 +28,7 @@ namespace Code.InventorySystems
                         CreateSlot(i);
                     }
                 }
-
+                
                 _currentInventorySize = value;
             }
         }
@@ -37,6 +37,7 @@ namespace Code.InventorySystems
 
         public event Action InventoryChanged;
 
+        
         protected virtual void Awake()
         {
             for (int i = 0; i < CurrentInventorySize; ++i)
@@ -519,6 +520,21 @@ namespace Code.InventorySystems
             }
 
             UpdateInventory();
+        }
+
+        public int GetRemainItems()
+        {
+            int total = 0;
+            
+            for (int i = 0; i < CurrentInventorySize; i++)
+            {
+                if (itemSlots[i].Item != null)
+                {
+                    total++;
+                }
+            }
+
+            return total;
         }
     }
 }

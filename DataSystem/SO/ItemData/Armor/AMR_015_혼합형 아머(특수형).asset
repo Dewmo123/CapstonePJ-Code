@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: "\uD63C\uD569\uD615 \uC544\uBA38(\uD2B9\uC218\uD615)"
   itemType: 3
   spawnArea: 1
-  itemImage: {fileID: 21300000, guid: ab2ec6828d3a7884f94058028d75c04f, type: 3}
+  itemImage: {fileID: 21300000, guid: ead4df18b6175a14eb4ff920ed53e92a, type: 3}
   description: "\uACE0\uAE09 \uD504\uB808\uC784\uACFC \uBCF4\uAC15\uC7AC\uB85C \uC81C\uC791\uB418\uC5B4
     \uC804\uD22C\uC640 \uC6B4\uC6A9\uC744 \uB3D9\uC2DC\uC5D0 \uC9C0\uC6D0\uD558\uBA70
     \uD30C\uD3B8\uACFC \uD0C0\uACA9\uC73C\uB85C\uBD80\uD130 \uC0C1\uCCB4\uB97C \uACAC\uACE0\uD558\uAC8C

@@ -16,11 +16,5 @@ namespace Work.Code.Tutorials
             _activeComponent = _player.Get<ActiveSkillComponent>();
             _passiveComponent = _player.Get<PassiveSkillComponent>();
         }
-
-        public override void EnterTutorial()
-        {
-            base.EnterTutorial();
-            TutorialComplete();
-        }
     }
 }

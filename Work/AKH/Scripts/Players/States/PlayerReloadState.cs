@@ -10,6 +10,7 @@ using UnityEngine;
 using Code.Combat;
 using Code.InventorySystems.Equipments;
 using SHS.Scripts.Entities.Players;
+using SHS.Scripts.Entities.Rigings;
 using Work.Code.GameEvents;
 using Work.LKW.Code.Items;
 
@@ -20,7 +21,7 @@ namespace Scripts.Players.States
         private GunItem _gun;
         private PlayerEquipment _equipment;
         private EntityGunStatInfo _entityGunStatInfo;
-        private ItemGrabBehavior _itemGrabBehavior;
+        private ItemGrabRiggingController _itemGrabBehavior;
 
         private float _reloadTime;
         private readonly string _reloadText = "재장전..";
@@ -30,7 +31,7 @@ namespace Scripts.Players.States
             _myMoveType = MoveType.Walk;
             _equipment = container.Get<PlayerEquipment>();
             _entityGunStatInfo = container.Get<EntityGunStatInfo>();
-            _itemGrabBehavior = container.Get<ItemGrabBehavior>();
+            _itemGrabBehavior = container.Get<ItemGrabRiggingController>();
         }
 
         public override void Enter()

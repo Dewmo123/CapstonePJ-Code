@@ -68,6 +68,23 @@ MonoBehaviour:
   behaviourPrefabs:
   - _target: {fileID: 114189840105380667, guid: 9709e573ae4e5a54d9b4da8f7a19ab09, type: 3}
     _inputs:
+    - _fieldKey: Scripts.Enemies.EnemyBehaviours.EnemyAttackBehaviour.attackCount
+      _fieldName: attackCount
+      _valueKind: 1
+      _hasOverride: 1
+      _intValue: 3
+      _floatValue: 0
+      _doubleValue: 0
+      _longValue: 0
+      _boolValue: 0
+      _stringValue: 
+      _vector2Value: {x: 0, y: 0}
+      _vector3Value: {x: 0, y: 0, z: 0}
+      _vector4Value: {x: 0, y: 0, z: 0, w: 0}
+      _colorValue: {r: 1, g: 1, b: 1, a: 1}
+      _enumValue: 0
+      _objectValue: {fileID: 0}
+      _managedReferenceData: 
     - _fieldKey: Scripts.Enemies.EnemyBehaviours.EnemyBehaviour.<Priority>k__BackingField
       _fieldName: Priority
       _valueKind: 1
@@ -105,9 +122,9 @@ MonoBehaviour:
     - _fieldKey: Scripts.Enemies.EnemyBehaviours.EnemyBehaviour.cooldown
       _fieldName: cooldown
       _valueKind: 2
-      _hasOverride: 0
+      _hasOverride: 1
       _intValue: 0
-      _floatValue: 0
+      _floatValue: 3
       _doubleValue: 0
       _longValue: 0
       _boolValue: 0

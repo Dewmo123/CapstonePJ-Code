@@ -1,4 +1,5 @@
-using Code.UI.Core;
+﻿using Code.UI.Core;
+using Code.UI.Minimap.Minimaps;
 using DewmoLib.Dependencies;
 using Scripts.Players;
 using UnityEngine;
@@ -19,7 +20,6 @@ namespace Work.Code.Craft.Installer
 
         [SerializeField] private CraftTreeListSO treeListSO;
         [SerializeField] private PlayerInputSO playerInput;
-
         private CraftMenuPresenter _menuPresenter;
         private CraftTreePresenter _treePresenter;
         private CraftModel _model;
@@ -69,9 +69,8 @@ namespace Work.Code.Craft.Installer
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            
-            playerInput.OnCraftTreePressed -= HandleToggleUI;
 
+            playerInput.OnCraftTreePressed -= HandleToggleUI;
             _menuPresenter.DisposePresenter();
             _treePresenter.DisposePresenter();
         }

@@ -15,8 +15,8 @@ MonoBehaviour:
   itemId: AMR_007
   itemName: "\uC815\uCC30 \uACBD\uB7C9 \uD5EC\uBA67(\uAE30\uBCF8\uD615)"
   itemType: 6
-  spawnArea: 1
-  itemImage: {fileID: 21300000, guid: 9bfd8def30b38cc44a4103fa950e52c8, type: 3}
+  spawnArea: 0
+  itemImage: {fileID: 21300000, guid: ece5cb108251eea42ba4822705460dba, type: 3}
   description: "\uACBD\uB7C9 \uC18C\uC7AC\uB85C \uC81C\uC791\uB418\uC5B4 \uAE30\uB3D9\uC131\uC744
     \uD574\uCE58\uC9C0 \uC54A\uC73C\uBA74\uC11C\uB3C4 \uD30C\uD3B8\uACFC \uACBD\uBBF8\uD55C
     \uD0C0\uACA9\uC73C\uB85C\uBD80\uD130 \uBA38\uB9AC\uB97C \uBCF4\uD638\uD574 \uC8FC\uB294
@@ -25,7 +25,7 @@ MonoBehaviour:
   rarityWeight: 45
   value: 0
   maxStack: 1
-  maxSpawnCount: 1
+  maxSpawnCount: 0
   addStats:
   - targetStat: {fileID: 11400000, guid: e8d35beaad87d9f48ab996860659e33d, type: 2}
     value: 4

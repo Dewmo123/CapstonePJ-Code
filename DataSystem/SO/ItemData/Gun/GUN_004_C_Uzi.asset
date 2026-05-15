@@ -15,24 +15,24 @@ MonoBehaviour:
   itemId: GUN_004_C
   itemName: Uzi
   itemType: 4
-  spawnArea: 64
-  itemImage: {fileID: 21300000, guid: 099aa349480287f46b43241532e8fe09, type: 3}
+  spawnArea: 0
+  itemImage: {fileID: 21300000, guid: ab10d30871d5898428e71742bb9430b1, type: 3}
   description: "\uBE60\uB978 \uC5F0\uC0AC \uC18D\uB3C4\uB97C \uAC16\uCD94\uC5B4 \uADFC\uC811\uC804\uC5D0\uC11C
     \uD0C1\uC6D4\uD55C \uAE30\uB3D9\uC131\uC744 \uBC1C\uD718\uD558\uB294 \uAE30\uAD00\uB2E8\uCD1D\uC785\uB2C8\uB2E4."
   rarity: 0
   rarityWeight: 70
   value: 28
   maxStack: 1
-  maxSpawnCount: 1
+  maxSpawnCount: 0
   addStats: []
   modelOffset: {x: 0.012, y: 0.141, z: 0.369}
   equipmentPrefab: {fileID: 7187024952327147829, guid: bbf8f75bf0db37b4ebf4bc48187256bc, type: 3}
   skillDB: {fileID: 11400000, guid: 8d774c9ec3ed519468eeb141576d259c, type: 2}
+  controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
   maxDurability: 366
   attackRange: 36
-  defaultDamage: 12
+  defaultDamage: 28
   attackSpeed: 5
-  controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
   fireRate: 0.1
   attackSoundID:
     _entity: {fileID: 11400000, guid: 0bac172cb47687a488e9f4da0f553f2f, type: 2}
@@ -42,6 +42,7 @@ MonoBehaviour:
   bulletPerShot: 1
   reloadTime: 2.42
   bulletSpeed: 45
+  maxRange: 0
   maxAmmoCapacity: 27
   aimSpeedMultiplier: 0.712
   noiseRadius: 0
