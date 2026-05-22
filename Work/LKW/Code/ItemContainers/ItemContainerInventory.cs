@@ -5,9 +5,9 @@ using Code.InventorySystems;
 using System.Collections.Generic;
 using UnityEngine;
 using Work.LKW.Code.Events;
-using Work.LKW.Code.Items.ItemInfo;
+using Code.Items.ItemInfo;
 
-namespace Work.LKW.Code.ItemContainers
+namespace Code.ItemContainers
 {
     public class ItemContainerInventory : Inventory
     {
@@ -22,13 +22,9 @@ namespace Work.LKW.Code.ItemContainers
             EventBus.Unsubscribe<PlayerUIEvent>(HandlePlayerUIEvent);
             base.OnDestroy();
         }
-        
-        public void Select()
-        {
-            EventBus.Raise(new OpenPlayerUIEvent(true));
-            var evt = new OpenRightInventoryEvent(this);
-            Bus.Raise(evt);
 
+        public void OpenLootUI()
+        {
             HandleSubscribe();
             UpdateInventory();
         }

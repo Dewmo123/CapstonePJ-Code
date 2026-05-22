@@ -52,7 +52,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   energyBallPoolItem: {fileID: 11400000, guid: ebdf1ff2ae5d90a4888414ddf014463b, type: 2}
-  damage: 7
+  energyBallSoundID:
+    _entity: {fileID: 0}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 0}
+  damage: 16
   projectileMaxRange: 25
   explosionRange: 1.5
   additionalExplosionRange: 1

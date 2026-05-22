@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: GUN_001_C
   itemName: P239
   itemType: 4
-  spawnArea: 1
+  spawnArea: 0
   itemImage: {fileID: 21300000, guid: 81113212e433945469e2ba6587b36902, type: 3}
   description: "\uC791\uACE0 \uC2AC\uB9BC\uD55C \uB514\uC790\uC778\uC73C\uB85C \uC740\uB2C9
     \uD734\uB300\uC5D0 \uCD5C\uC801\uD654\uB41C \uBC18\uC790\uB3D9 \uAD8C\uCD1D\uC785\uB2C8\uB2E4."
@@ -23,7 +23,7 @@ MonoBehaviour:
   rarityWeight: 70
   value: 16
   maxStack: 1
-  maxSpawnCount: 1
+  maxSpawnCount: 0
   addStats: []
   modelOffset: {x: -0.065, y: 0.183, z: 0.294}
   equipmentPrefab: {fileID: 1917922319423184702, guid: dff2ea46ccc37f54b88c3604f856a15c, type: 3}

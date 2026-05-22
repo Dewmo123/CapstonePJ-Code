@@ -1,4 +1,4 @@
-using Chipmunk.ComponentContainers;
+﻿using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
 using Code.InventorySystems;
 using Code.InventorySystems.Items;
@@ -9,8 +9,8 @@ using SHS.Scripts.Effects;
 using UnityEngine;
 using Work.Code.Craft;
 using Work.Code.GameEvents;
-using Work.LKW.Code.Items;
-using Work.LKW.Code.Items.ItemInfo;
+using Code.Items;
+using Code.Items.ItemInfo;
 
 namespace Scripts.Players.States
 {
@@ -28,15 +28,25 @@ namespace Scripts.Players.States
         public override void Enter()
         {
             base.Enter();
-            _craftEffect.StartCrafting();
             (_targetInventory, _targetCraftTree) = _blackboard.GetOrDefault<CraftContext>("SelectedCraftSO");
-            Debug.Assert(_targetInventory != null || _targetCraftTree != null, $"{_targetInventory}, {_targetCraftTree}");
+            Debug.Assert(_targetInventory != null || _targetCraftTree != null,
+                $"{_targetInventory}, {_targetCraftTree}");
             if (!_targetInventory.CanConsume(_targetCraftTree.ConsumeItems))
             {
                 Debug.Log("Need More materials");
                 _player.ChangeState(PlayerStateEnum.Idle);
                 return;
             }
+            _craftEffect.StartCrafting();
+
+            if (_targetInventory.GetAddableItemCount(_targetCraftTree.Item, _targetCraftTree.Count) <
+                _targetCraftTree.Count)
+            {
+                Debug.Log("Not enough inventory space");
+                _player.ChangeState(PlayerStateEnum.Idle);
+                return;
+            }
+
             float craftTime = _targetCraftTree.CraftTime;
             EventBus.Raise(new PlayerGageEvent("제작중", craftTime, HandleCompleteCraft));
             _player.LocalEventBus.Raise(new StartCraftingEvent());
@@ -45,6 +55,7 @@ namespace Scripts.Players.States
         public override void Update()
         {
             base.Update();
+                Debug.Log("asdASDDASffff");
             if (_player.PlayerInput.MovementKey.sqrMagnitude > 0f || _player.PlayerInput.AimKey)
             {
                 EventBus.Raise(new StopPlayerGageEvent());
@@ -77,7 +88,8 @@ namespace Scripts.Players.States
         {
             List<NodeData> consumeNodes = _targetCraftTree.nodeList.ToList();
             consumeNodes.Remove(_targetCraftTree.Root);
-            EquipableItem explicitSource = FindSkillSourceItem(consumeNodes.Where(node => node.InheritSkillToCraftResult));
+            EquipableItem explicitSource =
+                FindSkillSourceItem(consumeNodes.Where(node => node.InheritSkillToCraftResult));
 
             if (explicitSource != null)
                 return explicitSource;

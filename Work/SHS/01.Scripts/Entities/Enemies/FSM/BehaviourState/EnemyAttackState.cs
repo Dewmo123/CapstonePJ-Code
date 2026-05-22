@@ -3,7 +3,7 @@ using Code.InventorySystems.Equipments;
 using Scripts.Combat.Datas;
 using Scripts.Enemies.States;
 using UnityEngine;
-using Work.LKW.Code.Items;
+using Code.Items;
 
 namespace Code.SHS.Entities.Enemies.FSM.BehaviourState
 {

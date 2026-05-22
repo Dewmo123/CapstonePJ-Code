@@ -1,4 +1,5 @@
-﻿using AYellowpaper.SerializedCollections;
+﻿using System;
+using AYellowpaper.SerializedCollections;
 using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
 using Code.GameEvents;
@@ -10,7 +11,8 @@ using Scripts.Players;
 using Scripts.Players.States;
 using System.Collections.Generic;
 using UnityEngine;
-using Work.LKW.Code.Items;
+using Code.Items;
+using Code.Items.ItemInfo;
 using static Code.InventorySystems.InventoryUtility;
 
 namespace Code.InventorySystem
@@ -29,6 +31,8 @@ namespace Code.InventorySystem
         private PlayerInventory _inventory;
         private Player _player;
         public ComponentContainer ComponentContainer { get; set; }
+        public event Action<ItemDataSO> OnHotbarUse;
+        
         public void OnInitialize(ComponentContainer componentContainer)
         {
             _player = componentContainer.Get<Player>();
@@ -124,9 +128,19 @@ namespace Code.InventorySystem
 
             _equipment.ChangeHandlingHotbarItem(handItem);
             UpdateUI();
+            OnHotbarUse?.Invoke(handItem.ItemData);
             
-            if (handItem is IUsable)
+            if (handItem is UsableItem usable)
+            {
+                ItemUseContext context = _player.Blackboard.GetOrDefault<ItemUseContext>("ItemUseContext");
+                if (context == null)
+                {
+                    context = new ItemUseContext();
+                    _player.Blackboard.Set("ItemUseContext", context);
+                }
+                context.TargetItem = usable;
                 _player.ChangeState(PlayerStateEnum.ItemUse);
+            }
         }
         
         private void HandleInventoryChanged()

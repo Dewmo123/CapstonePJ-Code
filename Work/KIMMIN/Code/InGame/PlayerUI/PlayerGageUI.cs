@@ -23,6 +23,7 @@ namespace InGame.PlayerUI
         {
             base.Awake();
             EventBus.Subscribe<PlayerGageEvent>(HandlePlayerGage);
+            EventBus.Subscribe<StopPlayerGageEvent>(HandleStopPlayerGage);
             DisableUI();
         }
 
@@ -30,6 +31,12 @@ namespace InGame.PlayerUI
         {
             base.OnDestroy();
             EventBus.Unsubscribe<PlayerGageEvent>(HandlePlayerGage);
+            EventBus.Unsubscribe<StopPlayerGageEvent>(HandleStopPlayerGage);
+        }
+        
+        private void HandleStopPlayerGage(StopPlayerGageEvent evt)
+        {
+            ClearUI();
         }
 
         private void HandlePlayerGage(PlayerGageEvent evt)
@@ -59,17 +66,18 @@ namespace InGame.PlayerUI
         {
             if (Time.time - _startTime >= _duration)
             {
-                _onComplete?.Invoke();
+                var callback = _onComplete;
                 ClearUI();
+                callback?.Invoke();
             }
         }
 
         private void SetGageUI()
         {
-            float time = Time.time - _startTime;
-            string remainTime = (_duration - time).ToString("0.0");
+            float time = Mathf.Min(Time.time - _startTime, _duration);
+            float remain = _duration - time;
             fill.rectTransform.localScale = new Vector3(time / _duration, 1, 1);
-            gageText.text = $"{_gageText} {remainTime}초";
+            gageText.text = $"{_gageText} {remain:0.0}초";
         }
 
         public void ClearUI()

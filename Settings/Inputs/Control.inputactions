@@ -232,15 +232,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SkillTree",
-                    "type": "Button",
-                    "id": "ea86c363-8a46-4c2e-a171-db1375c6e8bb",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Minimap",
                     "type": "Button",
                     "id": "6d1b454c-2f3f-4010-bd91-d3acad7077e5",
@@ -262,6 +253,15 @@
                     "name": "Skill4",
                     "type": "Button",
                     "id": "3d18e7c5-b713-4624-8ce9-018c855f73e7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SkillTree",
+                    "type": "Button",
+                    "id": "60c98d5c-4c61-41cb-b75e-35746ef2d764",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -711,17 +711,6 @@
                 },
                 {
                     "name": "",
-                    "id": "b4e1b0d5-bb90-4716-8fe1-21b4a486e6a4",
-                    "path": "<Keyboard>/k",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "SkillTree",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "4ab39016-dda0-4ab0-aeb5-43f0ad418f6b",
                     "path": "<Keyboard>/m",
                     "interactions": "",
@@ -750,6 +739,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Skill4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5b66b30a-96ea-4acf-b316-e503ae3136ee",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "SkillTree",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1285,6 +1285,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "SkillTree",
+                    "type": "Button",
+                    "id": "bf41c8a2-71bb-4d0e-9523-f71fae3d49a6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Inventory",
                     "type": "Button",
                     "id": "35d43402-49fc-413b-9cd3-3abc1d25f56b",
@@ -1297,15 +1306,6 @@
                     "name": "CraftTree",
                     "type": "Button",
                     "id": "b484565c-169a-49d1-8573-c80e2e33a7de",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "SkillTree",
-                    "type": "Button",
-                    "id": "6f97684f-23a0-4ce5-9d96-380bdc954b59",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -1344,6 +1344,17 @@
                 },
                 {
                     "name": "",
+                    "id": "8478809c-2bfe-4248-8b2b-59a13af7058c",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "SkillTree",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ebe7bb0d-eef6-4894-985a-b7572a9e516c",
                     "path": "<Keyboard>/tab",
                     "interactions": "",
@@ -1361,17 +1372,6 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "CraftTree",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "221326b9-fccd-4eca-b573-b23c37d57898",
-                    "path": "<Keyboard>/k",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "SkillTree",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

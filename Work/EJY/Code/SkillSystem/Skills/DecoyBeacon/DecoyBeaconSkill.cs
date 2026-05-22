@@ -58,7 +58,7 @@ namespace Code.SkillSystem.Skills.DecoyBeacon
         public void StartAiming()
         {
             _isAiming = true;
-            _cachedAimPosition = _aimProvider.GetAimPosition();
+            _cachedAimPosition = _aimProvider.GetWorldAimPosition();
 
             if (decalObject != null)
             {
@@ -76,7 +76,7 @@ namespace Code.SkillSystem.Skills.DecoyBeacon
 
         public override void StartAndUseSkill()
         {
-            _castPosition = _aimProvider.GetAimPosition();
+            _castPosition = _aimProvider.GetWorldAimPosition();
             _isAiming = false;
             RestoreDecalParent();
         }
@@ -109,7 +109,7 @@ namespace Code.SkillSystem.Skills.DecoyBeacon
             if (_isAiming == false)
                 return;
 
-            _cachedAimPosition = _aimProvider.GetAimPosition();
+            _cachedAimPosition = _aimProvider.GetWorldAimPosition();
             if (decalObject != null)
                 decalObject.SetPos(_cachedAimPosition);
         }

@@ -9948,3 +9948,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolboxModel: {fileID: 453863742096372146}
   craftParticle: {fileID: 6444510584244687767}
+  craftID:
+    _entity: {fileID: 0}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 7989074806653789953}

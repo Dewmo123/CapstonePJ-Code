@@ -3,7 +3,7 @@ using Scripts.Entities;
 using UnityEngine;
 using Work.Code.UI;
 using Work.Code.UI.Interaction;
-using Work.LKW.Code.ItemContainers;
+using Code.ItemContainers;
 
 namespace Scripts.GameSystem
 {
@@ -37,7 +37,7 @@ namespace Scripts.GameSystem
             interactVisualUI.transform.forward = _cam.transform.forward;
         }
         
-        public void Select()
+        public virtual void Select()
         {
             if (_isSelected) return;
 
@@ -48,7 +48,7 @@ namespace Scripts.GameSystem
             Outlinable.enabled = true;
         }
 
-        public void DeSelect()
+        public virtual void DeSelect()
         {
             helpText.Disappear();
             interactVisualUI.StopHighlight();

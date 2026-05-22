@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using SHS.Scripts.Crosshairs;
 
 namespace Scripts.Combat.Fovs
 {
@@ -69,7 +68,6 @@ namespace Scripts.Combat.Fovs
         public FOVInfo[] fovInfos;
 
         private IAimProvider aimProvider;
-        private CrosshairBehavior _crosshairBehavior;
         private Transform _ownerTransform;
         private Vector3 _fovDirection = Vector3.forward;
         private List<MeshFilter> _viewMeshFilter;
@@ -108,7 +106,6 @@ namespace Scripts.Combat.Fovs
                 _viewMeshFilter[i].mesh = _viewMesh[i];
             }
             aimProvider = componentContainer?.GetSubclassComponent<IAimProvider>();
-            _crosshairBehavior = aimProvider as CrosshairBehavior;
             RefreshFovPose();
         }
 
@@ -242,12 +239,7 @@ namespace Scripts.Combat.Fovs
         }
 
         private Vector3 GetCurrentAimPosition()
-        {
-            if (_crosshairBehavior != null && Camera.main != null)
-                return _crosshairBehavior.GetCrosshairPlanePosition();
-
-            return aimProvider.GetAimPosition();
-        }
+            => aimProvider.GetAimPosition();
 
         private Vector3 GetFallbackDirection()
         {

@@ -33,12 +33,12 @@ namespace Code.UI.Core
         public OverlayUIManager OverlayManager => OverlayUIManager.Instance;
         public event Action OnUIStackChanged;
 
-        private void Awake()
+        protected override void Awake()
         {
             playerInput.OnToggleUIPressed += HandlePressEsc;
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             foreach (var ui in _registeredUI)
             {

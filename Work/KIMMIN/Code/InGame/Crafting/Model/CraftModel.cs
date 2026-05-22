@@ -4,7 +4,7 @@ using Code.Players;
 using Scripts.Players;
 using Scripts.Players.States;
 using UnityEngine;
-using Work.LKW.Code.Items.ItemInfo;
+using Code.Items.ItemInfo;
 
 namespace Work.Code.Craft
 {
@@ -39,6 +39,11 @@ namespace Work.Code.Craft
         {
             _player.Blackboard.Set("SelectedCraftSO", new CraftContext(Inventory,tree));
             _player.ChangeState(PlayerStateEnum.CraftItem);
+        }
+
+        public bool CanCraft(CraftTreeSO tree)
+        {
+            return tree != null && Inventory.CanConsume(tree.ConsumeItems);
         }
     }
 }

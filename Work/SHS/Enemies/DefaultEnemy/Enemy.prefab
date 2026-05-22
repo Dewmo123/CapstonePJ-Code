@@ -803,7 +803,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da258b7b495efbb43ba07be5aaca0a74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetForgetDuration: 5
+  targetForgetDuration: 10
+  <CanMissTarget>k__BackingField: 1
 --- !u!1 &4572426964823451192
 GameObject:
   m_ObjectHideFlags: 0

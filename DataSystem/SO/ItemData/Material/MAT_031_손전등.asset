@@ -15,11 +15,11 @@ MonoBehaviour:
   itemId: MAT_031
   itemName: "\uC190\uC804\uB4F1"
   itemType: 0
-  spawnArea: 66
+  spawnArea: 0
   itemImage: {fileID: 21300000, guid: d8cf2db532cc2a44b84673ad3a24f3c5, type: 3}
-  description: "\uC124\uBA85"
+  description: 
   rarity: 0
   rarityWeight: 5
   value: 0
   maxStack: 99
-  maxSpawnCount: 3
+  maxSpawnCount: 0

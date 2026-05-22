@@ -17,12 +17,14 @@ MonoBehaviour:
   itemType: 5
   spawnArea: 4194303
   itemImage: {fileID: 21300000, guid: 75beefa7029e290488a5e1925126311f, type: 3}
-  description: "\uAD8C\uCD1D \uCD1D\uC54C"
+  description: "\uBE44\uAD50\uC801 \uC704\uB825\uC740 \uB0AE\uC9C0\uB9CC \uBC18\uB3D9\uC774
+    \uC791\uC544 \uC81C\uC5B4\uAC00 \uC26C\uC6B4 \uC18C\uAD6C\uD615 \uD0C4\uD658\uC73C\uB85C,
+    \uAD8C\uCD1D\uB958\uC5D0 \uC8FC\uB85C \uC0AC\uC6A9\uB429\uB2C8\uB2E4."
   rarity: 0
   rarityWeight: 10
   value: 0
   maxStack: 99
-  maxSpawnCount: 24
+  maxSpawnCount: 99
   gunType: 0
   damageMultiplier: 1
   defPierceLevel: 0

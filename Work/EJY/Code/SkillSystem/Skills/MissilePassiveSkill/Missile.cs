@@ -479,7 +479,7 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
                 }
             }
 
-            var data = _dmgCalcCompo.CalculateDamage(16, 1, 1, DamageType.RANGE);
+            var data = _dmgCalcCompo.CalculateDamage(20, 1, 1, DamageType.RANGE);
             overlapDamageCaster.CastDamage(data, _rigidbody.position, _lastMoveDir, null);
 
             if (missileExplosionPoolItem != null)

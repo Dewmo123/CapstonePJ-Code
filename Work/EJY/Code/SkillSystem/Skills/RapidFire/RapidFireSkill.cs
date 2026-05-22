@@ -113,7 +113,8 @@ namespace Code.SkillSystem.Skills.RapidFire
                 for (int i = 0; i < totalShots; i++)
                 {
                     Vector3 aimPoint =
-                        GetPlaneAimPoint();
+                        _aimProvider.GetAimPosition(
+                            firePos.position.y);
 
                     _owner.RotateToTarget(aimPoint);
 
@@ -185,54 +186,6 @@ namespace Code.SkillSystem.Skills.RapidFire
                     0f);
 
             return spreadRotation * direction;
-        }
-
-        private Vector3 GetPlaneAimPoint()
-        {
-            Vector3 worldAimPoint =
-                _aimProvider.GetAimPosition();
-
-            Vector3 rayDirection =
-                (worldAimPoint
-                 - Camera.main.transform.position)
-                .normalized;
-
-            Ray aimRay =
-                new Ray(
-                    Camera.main.transform.position,
-                    rayDirection);
-
-            Plane firePlane =
-                new Plane(
-                    Vector3.up,
-                    new Vector3(
-                        0f,
-                        firePos.position.y,
-                        0f));
-
-            Vector3 planeAimPoint;
-
-            if (firePlane.Raycast(
-                    aimRay,
-                    out float enter))
-            {
-                planeAimPoint =
-                    aimRay.GetPoint(enter);
-            }
-            else
-            {
-                Vector3 flatDir =
-                    Vector3.ProjectOnPlane(
-                            rayDirection,
-                            Vector3.up)
-                        .normalized;
-
-                planeAimPoint =
-                    firePos.position +
-                    flatDir * 10f;
-            }
-
-            return planeAimPoint;
         }
 
         public float RegisterHitAndGetMultiplier(

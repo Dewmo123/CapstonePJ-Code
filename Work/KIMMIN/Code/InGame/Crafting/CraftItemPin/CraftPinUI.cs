@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Chipmunk.ComponentContainers;
+using Chipmunk.GameEvents;
+using Code.Items.ItemInfo;
 using Code.Players;
 using Code.UI.Core;
 using DewmoLib.Dependencies;
 using Scripts.Players;
 using UnityEngine;
 using UnityEngine.UI;
+using Work.Code.GameEvents;
 
 namespace Work.Code.Craft
 {
@@ -47,6 +50,7 @@ namespace Work.Code.Craft
             _orderList.Add(craftTree);
 
             RefreshUI();
+            RefreshMapItems();
         }
 
         public void RemovePinUI(CraftTreeSO targetTree)
@@ -58,7 +62,20 @@ namespace Work.Code.Craft
                 _orderList.Remove(targetTree);
                 
                 RefreshUI();
+                RefreshMapItems();
             }
+        }
+
+        private void RefreshMapItems()
+        {
+            ItemDataSO[] needItems = _orderList
+                .Where(craftTree => craftTree != null)
+                .SelectMany(craftTree => craftTree.NeedItemType)
+                .Where(item => item != null)
+                .Distinct()
+                .ToArray();
+
+            EventBus.Raise(new ShowItemsOnMap(needItems));
         }
 
         private void RefreshUI()

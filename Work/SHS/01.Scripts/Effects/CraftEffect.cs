@@ -1,3 +1,4 @@
+using Ami.BroAudio;
 using Chipmunk.ComponentContainers;
 using Scripts.Entities;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace SHS.Scripts.Effects
     {
         [SerializeField] private GameObject toolboxModel;
         [SerializeField] private ParticleSystem craftParticle;
+        [SerializeField] private SoundID craftID;
         private EntityAnimatorTrigger _animatorTrigger;
         public ComponentContainer ComponentContainer { get; set; }
 
@@ -19,6 +21,7 @@ namespace SHS.Scripts.Effects
 
         public void StartCrafting()
         {
+            BroAudio.Play(craftID, transform.position);
             gameObject.SetActive(true);
             _animatorTrigger.OnAnimationImpactTrigger += PlayCraftingEffect;
         }

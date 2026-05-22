@@ -1,10 +1,10 @@
-using System.Linq;
+﻿using System.Linq;
 using Chipmunk.GameEvents;
 using Code.Players;
 using Code.UI.Core;
 using UnityEngine;
 using Work.Code.GameEvents;
-using Work.LKW.Code.Items.ItemInfo;
+using Code.Items.ItemInfo;
 
 namespace Work.Code.Craft
 {
@@ -40,8 +40,6 @@ namespace Work.Code.Craft
 
         public void EnablePin(CraftTreeSO craftItem)
         {
-            ShowItemsOnMap evt = new(craftItem.ConsumeItems.Keys.ToList());
-            EventBus.Raise(evt);
             _craftTree = craftItem;
             targetItem.EnableDataUI(craftItem.Item);
             

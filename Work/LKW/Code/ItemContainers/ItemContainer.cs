@@ -12,10 +12,10 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Work.Code.UI;
 using Work.LKW.Code.Events;
-using Work.LKW.Code.Items.ItemInfo;
+using Code.Items.ItemInfo;
 using Random = UnityEngine.Random;
 
-namespace Work.LKW.Code.ItemContainers
+namespace Code.ItemContainers
 {
     public interface IInteractable
     {
@@ -35,35 +35,42 @@ namespace Work.LKW.Code.ItemContainers
     
     public class ItemContainer : InteractableStructure,IContainerComponent
     {
+        [Header("Item Spawn Setting")]
         [SerializeField] private List<ItemType> allowedTypes;
-        [SerializeField] private LayerMask whatIsPlayer;
         [SerializeField] private int minItems = 1;
         [SerializeField] private int maxItems = 4;
-        
-        
-        public ItemContainerInventory Inventory { get; private set; }
-        public ComponentContainer ComponentContainer { get; set; }
-
         [field: SerializeField] public SpawnArea AllowedSpawnArea { get; private set; }
+    
+        [Header("Self Initialization")]
         [field:SerializeField] public bool IsSelfInitialized { get; private set; } = false;
         [SerializeField, ShowIf("IsSelfInitialized")] private List<SelfInitInfo> infoList = new List<SelfInitInfo>();
+    
+        public ItemContainerInventory Inventory { get; private set; }
+        public ComponentContainer ComponentContainer { get; set; }
+    
+        protected override void Start()
+        {
+            base.Start();
 
+            InitializeSelf();
+        }
+    
         public void OnInitialize(ComponentContainer componentContainer)
         {
             Inventory = componentContainer.Get<ItemContainerInventory>();
         }
 
-        protected override void Start()
+        private void InitializeSelf()
         {
-            base.Start();
-            if (IsSelfInitialized)
+            if(IsSelfInitialized == false) return;
+        
+            if (Inventory == null)
             {
-                Debug.Log("dd");
-                Inventory.SetUpItemSelf(infoList);
+                Debug.LogError($"[ItemContainer] Inventory가 null입니다: {gameObject.name}");
+                return;
             }
+            Inventory.SetUpItemSelf(infoList);
         }
-
-    
 
         public List<ItemType> GetAllowedTypes() => allowedTypes;
         public int GetRandomCount() => Random.Range(minItems, maxItems + 1);
@@ -71,7 +78,12 @@ namespace Work.LKW.Code.ItemContainers
         [ContextMenu("Interact")]
         public override void Interact(Entity interactor)
         {
-            Inventory.Select();
+            if (Inventory == null)
+                return;
+
+            EventBus.Raise(new OpenPlayerUIEvent(true));
+            Bus.Raise(new OpenRightInventoryEvent(Inventory));
+            Inventory.OpenLootUI();
         }
 
     }

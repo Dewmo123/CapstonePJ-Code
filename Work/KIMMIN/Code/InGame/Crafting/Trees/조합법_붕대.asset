@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca62f7e28d5948408c5c73e6790860c8, type: 3}
-  m_Name: 조합법_붕대
+  m_Name: "\uC870\uD569\uBC95_\uBD95\uB300"
   m_EditorClassIdentifier: 
-  treeName: 조합법_붕대
+  treeName: "\uC870\uD569\uBC95_\uBD95\uB300"
   isBinary: 1
   nodeList:
   - <Item>k__BackingField: {fileID: 11400000, guid: bbad5cf33a50e3944bb342c5aecc95eb, type: 2}

@@ -17,12 +17,14 @@ MonoBehaviour:
   itemType: 2
   spawnArea: 4194303
   itemImage: {fileID: 21300000, guid: 70f0e02f2b7bdbd4f8e1788bc153d6d8, type: 3}
-  description: "\uC124\uBA85"
+  description: "\uCD9C\uD608\uC774 \uC2EC\uD55C \uBD80\uC704\uB97C \uB2E8\uB2E8\uD788
+    \uAC10\uC544 \uC9C0\uD608\uD558\uACE0 \uC0C1\uCC98\uB97C \uC678\uBD80 \uC624\uC5FC\uC73C\uB85C\uBD80\uD130
+    \uBCF4\uD638\uD558\uB294 \uC758\uB8CC \uC18C\uBAA8\uD488\uC785\uB2C8\uB2E4."
   rarity: 0
   rarityWeight: 15
   value: 0
   maxStack: 9
-  maxSpawnCount: 3
+  maxSpawnCount: 0
   addStats: []
   modelOffset: {x: 0, y: 0, z: 0}
   equipmentPrefab: {fileID: 1714967983448266501, guid: a024a6317a022bf4b98c60d3ee288b92, type: 3}

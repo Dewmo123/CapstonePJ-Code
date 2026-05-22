@@ -6,7 +6,7 @@ using Scripts.Combat;
 using Scripts.Combat.Datas;
 using Scripts.Entities;
 using UnityEngine;
-using Work.LKW.Code.Items;
+using Code.Items;
 
 namespace Scripts.Enemies.EnemyBehaviours
 {

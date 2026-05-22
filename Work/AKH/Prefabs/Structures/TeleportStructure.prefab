@@ -230,7 +230,7 @@ MonoBehaviour:
   helpText: {fileID: 7506094247660696892}
   interactVisualUI: {fileID: 2484737447330076751}
   <Outlinable>k__BackingField: {fileID: 5017912306607633625}
-  teleportIcon: {fileID: 21300000, guid: c7970070b35e949c5bd090e591fd3a82, type: 3}
+  teleportIcon: {fileID: 21300000, guid: b03a39376a9c64562a5c39b89d331b0f, type: 3}
   targetTrm: {fileID: 4929671822730034379}
 --- !u!4 &2977067796765189284 stripped
 Transform:

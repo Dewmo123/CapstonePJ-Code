@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: Glock17
   itemType: 4
   spawnArea: 10
-  itemImage: {fileID: 21300000, guid: 290944194a485c34da96f4c5cae8843d, type: 3}
+  itemImage: {fileID: 0}
   description: "\uC2E0\uB8B0\uC131 \uB192\uC740 \uC131\uB2A5\uACFC \uAC00\uBCBC\uC6B4
     \uBB34\uAC8C\uB97C \uAC16\uCD94\uC5B4 \uBCF4\uC870 \uBB34\uAE30\uB85C \uD65C\uC6A9\uD558\uAE30
     \uC88B\uC740 \uD45C\uC900\uC801\uC778 \uC790\uB3D9 \uAD8C\uCD1D\uC785\uB2C8\uB2E4."
@@ -29,11 +29,11 @@ MonoBehaviour:
   modelOffset: {x: 0, y: 0, z: 0}
   equipmentPrefab: {fileID: 9215368985558987372, guid: 1071f8ddf00deff45b83ca35c633fdf3, type: 3}
   skillDB: {fileID: 11400000, guid: 8d774c9ec3ed519468eeb141576d259c, type: 2}
+  controller: {fileID: 22100000, guid: 85ed5e8ca8afdea4c8a5fd11b05ec2bc, type: 2}
   maxDurability: 382
   attackRange: 32
   defaultDamage: 20
   attackSpeed: 5
-  controller: {fileID: 22100000, guid: 85ed5e8ca8afdea4c8a5fd11b05ec2bc, type: 2}
   fireRate: 0.44
   attackSoundID:
     _entity: {fileID: 11400000, guid: d357c0494a2cda54f8f4de693472aa5d, type: 2}
@@ -43,6 +43,7 @@ MonoBehaviour:
   bulletPerShot: 1
   reloadTime: 1.98
   bulletSpeed: 45
+  maxRange: 0
   maxAmmoCapacity: 14
   aimSpeedMultiplier: 0.807
   noiseRadius: 0

@@ -12,8 +12,6 @@ namespace Code.SHS.Entities.Enemies
     {
         private StatBehavior _statBehavior;
         private readonly Dictionary<string, float> _defaultBaseValues = new();
-        public ComponentContainer ComponentContainer { get; set; }
-
         public override void OnInitialize(ComponentContainer componentContainer)
         {
             _statBehavior = componentContainer.Get<StatBehavior>(true);

@@ -1,5 +1,62 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1349204941987019066
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4627050759322541377}
+  - component: {fileID: 6578544316304032457}
+  m_Layer: 7
+  m_Name: ItemDropper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4627050759322541377
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349204941987019066}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2862493119839661862}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6578544316304032457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349204941987019066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c658f83878901c144beb016f0f2dccb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDB: {fileID: 11400000, guid: 029992c9eccfd7443835fbb6db48696e, type: 2}
+  previewItemPool: {fileID: 11400000, guid: 12218114338a1134c96a96ad4e21fcee, type: 2}
+  dropConfigs:
+  - type: 0
+    rarityWeights:
+    - rarity: 0
+      weight: 85
+    - rarity: 1
+      weight: 10
+    - rarity: 2
+      weight: 5
+  arcHeight: 1
+  dropDuration: 0.4
 --- !u!1001 &2857720811805010186
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -82,7 +139,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4846357125400108, guid: 7d261aef3b84ccb4b91a005a110cdafe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4627050759322541377}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1475137749187476, guid: 7d261aef3b84ccb4b91a005a110cdafe, type: 3}
       insertIndex: -1
@@ -124,12 +184,15 @@ MonoBehaviour:
   minFragmentTorque: 1
   maxFragmentTorque: 2
   breakEffect: {fileID: 11400000, guid: 079de0902a0fcb34c9b6d0c3087750d0, type: 2}
+  breackSoundID:
+    _entity: {fileID: 11400000, guid: 28312a6f8aa3d2041a63f9611de3a229, type: 2}
+    ID: 0
+    <DebugObject>k__BackingField: {fileID: 2859104404322652830}
   minFadeDelay: 0.5
   maxFadeDelay: 1
   fadeDuration: 0.5
-  itemDB: {fileID: 11400000, guid: 029992c9eccfd7443835fbb6db48696e, type: 2}
-  dropTypes: 00000000
-  previewItemPool: {fileID: 11400000, guid: 12218114338a1134c96a96ad4e21fcee, type: 2}
+  itemDropper: {fileID: 6578544316304032457}
+  dropRadius: 1
 --- !u!208 &221871430148895208
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -146,3 +209,8 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.395, z: 0}
   m_TimeToStationary: 0.5
+--- !u!4 &2862493119839661862 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4846357125400108, guid: 7d261aef3b84ccb4b91a005a110cdafe, type: 3}
+  m_PrefabInstance: {fileID: 2857720811805010186}
+  m_PrefabAsset: {fileID: 0}

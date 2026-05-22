@@ -17,12 +17,14 @@ MonoBehaviour:
   itemType: 5
   spawnArea: 4194303
   itemImage: {fileID: 21300000, guid: e2ad49a981d3bcc4c85582e2aee3a120, type: 3}
-  description: "SMG \uCD1D\uC54C"
+  description: "\uB192\uC740 \uC5F0\uC0AC\uB825\uC744 \uAC10\uB2F9\uD560 \uC218 \uC788\uB3C4\uB85D
+    \uC124\uACC4\uB41C \uAD8C\uCD1D\uD0C4 \uAE30\uBC18\uC758 \uD0C4\uD658\uC73C\uB85C,
+    \uAE30\uAD00\uB2E8\uCD1D(SMG)\uC5D0 \uC7A5\uCC29\uB429\uB2C8\uB2E4."
   rarity: 0
   rarityWeight: 10
   value: 0
   maxStack: 99
-  maxSpawnCount: 30
+  maxSpawnCount: 50
   gunType: 1
   damageMultiplier: 1
   defPierceLevel: 0

@@ -122,8 +122,16 @@ PrefabInstance:
       objectReference: {fileID: 3242803067925836509}
     - target: {fileID: 704798627827735312, guid: 34119c0276e227841a6982247fa41c5f, type: 3}
       propertyPath: tweenDuration
-      value: 0.8
+      value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 704798627827735312, guid: 34119c0276e227841a6982247fa41c5f, type: 3}
+      propertyPath: doorSound._entity
+      value: 
+      objectReference: {fileID: 11400000, guid: 56721df1395bf524b9def89112d2973e, type: 2}
+    - target: {fileID: 704798627827735312, guid: 34119c0276e227841a6982247fa41c5f, type: 3}
+      propertyPath: doorSound.<DebugObject>k__BackingField
+      value: 
+      objectReference: {fileID: 6779787234504323991}
     - target: {fileID: 6268715340680291358, guid: 34119c0276e227841a6982247fa41c5f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -176,5 +184,10 @@ PrefabInstance:
 --- !u!4 &6151200472472217901 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6268715340680291358, guid: 34119c0276e227841a6982247fa41c5f, type: 3}
+  m_PrefabInstance: {fileID: 262202043675020595}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6779787234504323991 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6752342589316939428, guid: 34119c0276e227841a6982247fa41c5f, type: 3}
   m_PrefabInstance: {fileID: 262202043675020595}
   m_PrefabAsset: {fileID: 0}

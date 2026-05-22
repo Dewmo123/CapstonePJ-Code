@@ -20,26 +20,6 @@ MonoBehaviour:
   passIndex: 0
   bindDepthStencilAttachment: 0
   m_Version: 1
---- !u!114 &5317248824723519491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f51b8938dfad4f6fbaf44c5890a4aab7, type: 3}
-  m_Name: FovVisibilityMask
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  settings:
-    renderPassEvent: 550
-    fovLayerMask:
-      serializedVersion: 2
-      m_Bits: 524288
-    visibilityMaskMaterial: {fileID: 2100000, guid: 79a52795713d44f7889c7e2f035c2a51, type: 2}
-    debugVisibilityMask: 0
 --- !u!114 &-6275350031919400933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,6 +221,26 @@ MonoBehaviour:
   blurType: 0
   injectionPoint: 600
   shader: {fileID: 4800000, guid: bb11bdc2e8aaf4c80b5315f3778d7ad4, type: 3}
+--- !u!114 &5317248824723519491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f51b8938dfad4f6fbaf44c5890a4aab7, type: 3}
+  m_Name: FovVisibilityMask
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    renderPassEvent: 550
+    fovLayerMask:
+      serializedVersion: 2
+      m_Bits: 524288
+    visibilityMaskMaterial: {fileID: 2100000, guid: 79a52795713d44f7889c7e2f035c2a51, type: 2}
+    debugVisibilityMask: 0
 --- !u!114 &7461621032711829247
 MonoBehaviour:
   m_ObjectHideFlags: 0

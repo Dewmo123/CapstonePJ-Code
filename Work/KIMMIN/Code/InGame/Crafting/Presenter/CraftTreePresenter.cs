@@ -1,5 +1,5 @@
 using Work.Code.Craft.View;
-using Work.LKW.Code.Items.ItemInfo;
+using Code.Items.ItemInfo;
 
 namespace Work.Code.Craft.Presenter
 {
@@ -7,6 +7,7 @@ namespace Work.Code.Craft.Presenter
     {
         private readonly CraftModel _model;
         private readonly CraftTreeView _treeView;
+        private CraftTreeSO _currentTree;
         
         public CraftTreePresenter(CraftModel craftModel, CraftTreeView treeView)
         {
@@ -15,6 +16,7 @@ namespace Work.Code.Craft.Presenter
 
             _treeView.RequestItemCount += HandleGetItemCount;
             _treeView.OnNodeSelected += SelectTree;
+            _model.Inventory.InventoryChanged += HandleInventoryChanged;
         }
 
         private int HandleGetItemCount(ItemDataSO item)
@@ -24,13 +26,23 @@ namespace Work.Code.Craft.Presenter
         
         public void SelectTree(CraftTreeSO tree)
         {
+            _currentTree = tree;
             _treeView.RenderTree(tree, hasAnim: true);
+        }
+
+        private void HandleInventoryChanged()
+        {
+            if (_currentTree == null)
+                return;
+
+            _treeView.RenderTree(_currentTree, hasAnim: false);
         }
 
         public void DisposePresenter()
         {
             _treeView.RequestItemCount -= HandleGetItemCount;
             _treeView.OnNodeSelected -= SelectTree;
+            _model.Inventory.InventoryChanged -= HandleInventoryChanged;
         }
     }
 }

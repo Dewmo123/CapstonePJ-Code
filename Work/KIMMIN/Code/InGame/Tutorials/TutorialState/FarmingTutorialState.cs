@@ -1,7 +1,7 @@
 ﻿using System;
 using Scripts.Players;
 using UnityEngine;
-using Work.LKW.Code.ItemContainers;
+using Code.ItemContainers;
 
 namespace Work.Code.Tutorials
 {

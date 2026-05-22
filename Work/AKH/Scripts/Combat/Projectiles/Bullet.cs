@@ -29,6 +29,7 @@ namespace Scripts.Combat.Projectiles
         [SerializeField] private BulletImpactEffect _bulletImpactEffect;
         [SerializeField] private PoolItemSO bulletHole;
         [SerializeField] private PoolManagerSO poolManager;
+        [SerializeField] private LayerMask hitMask;
 
         [Header("Hit Detection (Swept Cast)")]
         [SerializeField] private float castRadius = 0.1f;
@@ -50,7 +51,6 @@ namespace Scripts.Combat.Projectiles
         private Vector3 _onInitVelocity;
         private float _maxTravelDistance;
         private bool _isReturningToPool;
-        private LayerMask _hitMask = ~0;
 
         private void Awake()
         {
@@ -80,7 +80,7 @@ namespace Scripts.Combat.Projectiles
             {
                 Vector3 dir = moveDelta / distance;
                 if (Physics.SphereCast(currentPos, castRadius, dir,
-                        out RaycastHit hit, distance, _hitMask, triggerInteraction))
+                        out RaycastHit hit, distance, hitMask, triggerInteraction))
                 {
                     Entity hitEntity = hit.collider.GetComponentInParent<Entity>();
                     bool isOwner = (hitEntity != null && hitEntity == _owner);
@@ -102,7 +102,7 @@ namespace Scripts.Combat.Projectiles
             Vector3 direction,
             LayerMask excludeLayer)
         {
-            _hitMask = ~excludeLayer;
+            //hitMask = ~excludeLayer;
             if (_collider != null)
                 _collider.excludeLayers = excludeLayer;
             InitBullet(owner, projectileShooter, initPos, direction);
@@ -117,10 +117,6 @@ namespace Scripts.Combat.Projectiles
             _spawnPosition = initPos;
 
             transform.position = initPos;
-            // 트리거 콜라이더는 더 이상 히트 판정에 사용하지 않음 (SphereCast로 대체)
-            // 다른 시스템에서 콜라이더 참조가 필요할 수 있으므로 컴포넌트 자체는 남기되 비활성화
-            if (_collider != null)
-                _collider.enabled = false;
 
             if (direction.sqrMagnitude > 0.0001f)
                 transform.forward = direction.normalized;
@@ -139,12 +135,6 @@ namespace Scripts.Combat.Projectiles
 
         public void ResetItem()
         {
-            _hitMask = ~0;
-            if (_collider != null)
-            {
-                _collider.excludeLayers = 0;
-                _collider.enabled = false;
-            }
             _isReturningToPool = false;
             _previousPosition = transform.position;
             _spawnPosition = transform.position;
@@ -258,9 +248,6 @@ namespace Scripts.Combat.Projectiles
 
         private void PrepareForDespawn()
         {
-            if (_collider != null)
-                _collider.enabled = false;
-
             if (rb != null)
             {
                 rb.linearVelocity = Vector3.zero;

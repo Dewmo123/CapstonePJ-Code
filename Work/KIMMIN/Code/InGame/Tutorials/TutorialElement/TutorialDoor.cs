@@ -1,4 +1,5 @@
 using System;
+using Ami.BroAudio;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Unity.Cinemachine;
@@ -11,6 +12,7 @@ namespace Work.Code.Tutorials
         [SerializeField] private float tweenDuration;
         [SerializeField] private float targetScale;
         [SerializeField] private CinemachineCamera doorCamera;
+        [SerializeField] private SoundID doorSound;
         
         private float _originalScale;
 
@@ -19,16 +21,22 @@ namespace Work.Code.Tutorials
             _originalScale = transform.localScale.x;
         }
 
-        public async UniTask OpenDoor()
+        public void OpenDoor()
         {
-            doorCamera.Priority = 100;
             gameObject.transform.DOKill();
-            
+            SetCameraPriority(100);
+            OpenDoorAfterDelay();
+        }
+
+        private async void OpenDoorAfterDelay()
+        {
             await UniTask.WaitForSeconds(1.5f);
+            
+            BroAudio.Play(doorSound);
             gameObject.transform.DOScaleX(targetScale, tweenDuration)
                 .OnComplete(() =>
                 {
-                    doorCamera.Priority = -1;
+                    SetCameraPriority(-1);
                 });
         }
 
@@ -36,6 +44,12 @@ namespace Work.Code.Tutorials
         {
             transform.DOKill();
             transform.DOScaleX(_originalScale, tweenDuration);
+        }
+
+        private void SetCameraPriority(int priority)
+        {
+            if(doorCamera != null)
+                doorCamera.Priority = priority;
         }
     }
 }

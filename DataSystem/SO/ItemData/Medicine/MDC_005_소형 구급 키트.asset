@@ -16,8 +16,10 @@ MonoBehaviour:
   itemName: "\uC18C\uD615 \uAD6C\uAE09 \uD0A4\uD2B8"
   itemType: 2
   spawnArea: 0
-  itemImage: {fileID: 0}
-  description: "\uC124\uBA85"
+  itemImage: {fileID: 21300000, guid: bf3b333e33699424abfa001a30e42f53, type: 3}
+  description: "\uBD95\uB300, \uC18C\uB3C5\uC81C, \uAE30\uBCF8\uC801\uC778 \uC57D\uD488\uC774
+    \uD3EC\uD568\uB41C \uD734\uB300\uC6A9 \uAD6C\uAE09 \uC0C1\uC790\uB85C, \uC911\uB4F1\uB3C4
+    \uC0C1\uCC98\uB97C \uCE58\uB8CC\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
   rarity: 1
   rarityWeight: 25
   value: 0

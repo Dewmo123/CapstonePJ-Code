@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolingName: PoisonBuffCaster
   prefab: {fileID: 4589075043009221076, guid: 72cd7bbbdbf45ec42acedbe3b8845896, type: 3}
-  initCount: 1
+  initCount: 0

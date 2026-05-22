@@ -15,17 +15,19 @@ MonoBehaviour:
   itemId: FOD_004
   itemName: "\uC5D0\uB108\uC9C0\uBC14"
   itemType: 1
-  spawnArea: 17
+  spawnArea: 8200
   itemImage: {fileID: 21300000, guid: d132c12b59bd3c647a4b2dcc87a14494, type: 3}
-  description: "\uC124\uBA85"
-  rarity: 0
+  description: "\uACE1\uBB3C\uACFC \uACAC\uACFC\uB958\uB97C \uBB49\uCCD0 \uB9CC\uB4E0
+    \uACE0\uC5F4\uB7C9 \uAC04\uC2DD\uC73C\uB85C, \uAC00\uBCCD\uACE0 \uBCF4\uAD00\uC774
+    \uC26C\uC6B0\uBA70 \uD5C8\uAE30\uB97C \uBE60\uB974\uAC8C \uCC44\uC6CC\uC90D\uB2C8\uB2E4."
+  rarity: 1
   rarityWeight: 0
   value: 0
   maxStack: 9
-  maxSpawnCount: 3
+  maxSpawnCount: 0
   addStats: []
   modelOffset: {x: 0, y: 0, z: 0}
   equipmentPrefab: {fileID: 1714967983448266501, guid: a024a6317a022bf4b98c60d3ee288b92, type: 3}
   skillDB: {fileID: 0}
   controller: {fileID: 0}
-  staminaAmount: 20
+  staminaAmount: 25

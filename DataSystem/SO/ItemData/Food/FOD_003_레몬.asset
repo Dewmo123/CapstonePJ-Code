@@ -15,14 +15,16 @@ MonoBehaviour:
   itemId: FOD_003
   itemName: "\uB808\uBAAC"
   itemType: 1
-  spawnArea: 12
+  spawnArea: 1152
   itemImage: {fileID: 21300000, guid: da8d7ee09b2579e4ca555ee48b78eaca, type: 3}
-  description: "\uC124\uBA85"
+  description: "\uBE44\uD0C0\uBBFC C\uAC00 \uD48D\uBD80\uD55C \uC2E0\uB9DB\uC758
+    \uACFC\uC77C\uB85C, \uD53C\uB85C\uB97C \uD68C\uBCF5\uD558\uACE0 \uBA74\uC5ED\uB825\uC744
+    \uB192\uC5EC\uC8FC\uBA70 \uC694\uB9AC\uC758 \uD48D\uBBF8\uB97C \uB354\uD574\uC90D\uB2C8\uB2E4."
   rarity: 0
   rarityWeight: 0
   value: 0
   maxStack: 9
-  maxSpawnCount: 3
+  maxSpawnCount: 0
   addStats: []
   modelOffset: {x: 0, y: 0, z: 0}
   equipmentPrefab: {fileID: 1714967983448266501, guid: a024a6317a022bf4b98c60d3ee288b92, type: 3}

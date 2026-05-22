@@ -1,4 +1,5 @@
 using System;
+using Ami.BroAudio;
 using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
 using Code.GameEvents;
@@ -22,6 +23,7 @@ namespace Code.SkillSystem.Skills.EnergyBalls
         [SerializeField] private ParticleSystem trailParticle;
         [SerializeField] private PoolManagerSO poolManager;
         [SerializeField] private LayerMask whatIsGround;
+        [SerializeField] private SoundID soundID;
 
         public PoolItemSO PoolItem => energyBallItem;
         public GameObject GameObject => gameObject;
@@ -74,6 +76,9 @@ namespace Code.SkillSystem.Skills.EnergyBalls
 
         private void OnTriggerEnter(Collider other)
         {
+            BroAudio.Play(soundID, transform.position);
+
+            
             DamageData damageData = _damageCalcCompo.CalculateDamage
             (
                 _projectileShooter.DefaultDamage,

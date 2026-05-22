@@ -12,7 +12,7 @@ using Code.InventorySystems.Equipments;
 using SHS.Scripts.Entities.Players;
 using SHS.Scripts.Entities.Rigings;
 using Work.Code.GameEvents;
-using Work.LKW.Code.Items;
+using Code.Items;
 
 namespace Scripts.Players.States
 {
@@ -25,6 +25,7 @@ namespace Scripts.Players.States
 
         private float _reloadTime;
         private readonly string _reloadText = "재장전..";
+        private bool _isReloadCompleted;
 
         public PlayerReloadState(ComponentContainer container, int animationHash) : base(container, animationHash)
         {
@@ -37,11 +38,14 @@ namespace Scripts.Players.States
         public override void Enter()
         {
             base.Enter();
+            _gun = null;
+            _isReloadCompleted = false;
 
             if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) && item is GunItem gun)
             {
                 _gun = gun;
-                _reloadTime = _gun.GunItemData.reloadTime / _entityGunStatInfo.ReloadSpeedMultiplier;
+                float reloadSpeedMultiplier = Mathf.Max(_entityGunStatInfo.ReloadSpeedMultiplier, 0.01f);
+                _reloadTime = _gun.GunItemData.reloadTime / reloadSpeedMultiplier;
                 BroAudio.Play(_gun.GunItemData.reloadSound, _gun.ItemObject.transform.position);
                 EventBus.Raise(new OffReplaceBulletUI());
                 EventBus.Raise(new PlayerGageEvent(_reloadText, _reloadTime, HandleCompleteReload));
@@ -55,6 +59,14 @@ namespace Scripts.Players.States
 
         private void HandleCompleteReload()
         {
+            if (_gun == null || !_gun.CanReload)
+            {
+                EventBus.Raise(new AmmoUpdateEvent(_gun?.CurrentBulletCnt ?? 0, _gun?.GunItemData.maxAmmoCapacity ?? 0));
+                _player.ChangeState(PlayerStateEnum.Idle);
+                return;
+            }
+
+            _isReloadCompleted = true;
             _player.ChangeState(PlayerStateEnum.Idle);
         }
 
@@ -63,11 +75,22 @@ namespace Scripts.Players.States
             if (_gun == null)
             {
                 Debug.LogError("총이 왜 없냐 예외처리 안함? 씁국현 진짜.");
+                EventBus.Raise(new StopPlayerGageEvent());
+                base.Exit();
                 return;
             }
 
-            _gun.Reload();
-            EventBus.Raise(new AmmoUpdateEvent(_gun.CurrentBulletCnt, _gun.GunItemData.maxAmmoCapacity));
+            if (_isReloadCompleted)
+            {
+                _gun.Reload();
+                EventBus.Raise(new AmmoUpdateEvent(_gun.CurrentBulletCnt, _gun.GunItemData.maxAmmoCapacity));
+            }
+            else
+            {
+                EventBus.Raise(new StopPlayerGageEvent());
+            }
+
+            _gun = null;
             base.Exit();
         }
     }

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Work.Code.Craft;
 
-namespace Work.LKW.Code.Items.ItemInfo
+namespace Code.Items.ItemInfo
 {
     public struct ItemCreateData
     {

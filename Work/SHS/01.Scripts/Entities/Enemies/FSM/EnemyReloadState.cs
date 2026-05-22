@@ -7,7 +7,7 @@ using Code.Combat;
 using Code.InventorySystems.Equipments;
 using SHS.Scripts.Entities.Players;
 using SHS.Scripts.Entities.Rigings;
-using Work.LKW.Code.Items;
+using Code.Items;
 
 namespace Code.SHS.Entities.Enemies.FSM
 {

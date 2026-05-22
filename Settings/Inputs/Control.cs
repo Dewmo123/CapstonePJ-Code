@@ -318,15 +318,6 @@ public partial class @Control: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SkillTree"",
-                    ""type"": ""Button"",
-                    ""id"": ""ea86c363-8a46-4c2e-a171-db1375c6e8bb"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Minimap"",
                     ""type"": ""Button"",
                     ""id"": ""6d1b454c-2f3f-4010-bd91-d3acad7077e5"",
@@ -348,6 +339,15 @@ public partial class @Control: IInputActionCollection2, IDisposable
                     ""name"": ""Skill4"",
                     ""type"": ""Button"",
                     ""id"": ""3d18e7c5-b713-4624-8ce9-018c855f73e7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillTree"",
+                    ""type"": ""Button"",
+                    ""id"": ""60c98d5c-4c61-41cb-b75e-35746ef2d764"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -797,17 +797,6 @@ public partial class @Control: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""b4e1b0d5-bb90-4716-8fe1-21b4a486e6a4"",
-                    ""path"": ""<Keyboard>/k"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""SkillTree"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""4ab39016-dda0-4ab0-aeb5-43f0ad418f6b"",
                     ""path"": ""<Keyboard>/m"",
                     ""interactions"": """",
@@ -836,6 +825,17 @@ public partial class @Control: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Skill4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5b66b30a-96ea-4acf-b316-e503ae3136ee"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SkillTree"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1371,6 +1371,15 @@ public partial class @Control: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""SkillTree"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf41c8a2-71bb-4d0e-9523-f71fae3d49a6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Inventory"",
                     ""type"": ""Button"",
                     ""id"": ""35d43402-49fc-413b-9cd3-3abc1d25f56b"",
@@ -1383,15 +1392,6 @@ public partial class @Control: IInputActionCollection2, IDisposable
                     ""name"": ""CraftTree"",
                     ""type"": ""Button"",
                     ""id"": ""b484565c-169a-49d1-8573-c80e2e33a7de"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""SkillTree"",
-                    ""type"": ""Button"",
-                    ""id"": ""6f97684f-23a0-4ce5-9d96-380bdc954b59"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -1430,6 +1430,17 @@ public partial class @Control: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""8478809c-2bfe-4248-8b2b-59a13af7058c"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SkillTree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""ebe7bb0d-eef6-4894-985a-b7572a9e516c"",
                     ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
@@ -1447,17 +1458,6 @@ public partial class @Control: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""CraftTree"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""221326b9-fccd-4eca-b573-b23c37d57898"",
-                    ""path"": ""<Keyboard>/k"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""SkillTree"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1576,10 +1576,10 @@ public partial class @Control: IInputActionCollection2, IDisposable
         m_Player_Item6 = m_Player.FindAction("Item6", throwIfNotFound: true);
         m_Player_Item7 = m_Player.FindAction("Item7", throwIfNotFound: true);
         m_Player_Item8 = m_Player.FindAction("Item8", throwIfNotFound: true);
-        m_Player_SkillTree = m_Player.FindAction("SkillTree", throwIfNotFound: true);
         m_Player_Minimap = m_Player.FindAction("Minimap", throwIfNotFound: true);
         m_Player_MoveCursor = m_Player.FindAction("MoveCursor", throwIfNotFound: true);
         m_Player_Skill4 = m_Player.FindAction("Skill4", throwIfNotFound: true);
+        m_Player_SkillTree = m_Player.FindAction("SkillTree", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1595,9 +1595,9 @@ public partial class @Control: IInputActionCollection2, IDisposable
         // Farming
         m_Farming = asset.FindActionMap("Farming", throwIfNotFound: true);
         m_Farming_ItemInteract = m_Farming.FindAction("ItemInteract", throwIfNotFound: true);
+        m_Farming_SkillTree = m_Farming.FindAction("SkillTree", throwIfNotFound: true);
         m_Farming_Inventory = m_Farming.FindAction("Inventory", throwIfNotFound: true);
         m_Farming_CraftTree = m_Farming.FindAction("CraftTree", throwIfNotFound: true);
-        m_Farming_SkillTree = m_Farming.FindAction("SkillTree", throwIfNotFound: true);
         m_Farming_ToggleUI = m_Farming.FindAction("ToggleUI", throwIfNotFound: true);
         m_Farming_Minimap = m_Farming.FindAction("Minimap", throwIfNotFound: true);
     }
@@ -1707,10 +1707,10 @@ public partial class @Control: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Item6;
     private readonly InputAction m_Player_Item7;
     private readonly InputAction m_Player_Item8;
-    private readonly InputAction m_Player_SkillTree;
     private readonly InputAction m_Player_Minimap;
     private readonly InputAction m_Player_MoveCursor;
     private readonly InputAction m_Player_Skill4;
+    private readonly InputAction m_Player_SkillTree;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1823,10 +1823,6 @@ public partial class @Control: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Item8 => m_Wrapper.m_Player_Item8;
         /// <summary>
-        /// Provides access to the underlying input action "Player/SkillTree".
-        /// </summary>
-        public InputAction @SkillTree => m_Wrapper.m_Player_SkillTree;
-        /// <summary>
         /// Provides access to the underlying input action "Player/Minimap".
         /// </summary>
         public InputAction @Minimap => m_Wrapper.m_Player_Minimap;
@@ -1838,6 +1834,10 @@ public partial class @Control: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Skill4".
         /// </summary>
         public InputAction @Skill4 => m_Wrapper.m_Player_Skill4;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SkillTree".
+        /// </summary>
+        public InputAction @SkillTree => m_Wrapper.m_Player_SkillTree;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1939,9 +1939,6 @@ public partial class @Control: IInputActionCollection2, IDisposable
             @Item8.started += instance.OnItem8;
             @Item8.performed += instance.OnItem8;
             @Item8.canceled += instance.OnItem8;
-            @SkillTree.started += instance.OnSkillTree;
-            @SkillTree.performed += instance.OnSkillTree;
-            @SkillTree.canceled += instance.OnSkillTree;
             @Minimap.started += instance.OnMinimap;
             @Minimap.performed += instance.OnMinimap;
             @Minimap.canceled += instance.OnMinimap;
@@ -1951,6 +1948,9 @@ public partial class @Control: IInputActionCollection2, IDisposable
             @Skill4.started += instance.OnSkill4;
             @Skill4.performed += instance.OnSkill4;
             @Skill4.canceled += instance.OnSkill4;
+            @SkillTree.started += instance.OnSkillTree;
+            @SkillTree.performed += instance.OnSkillTree;
+            @SkillTree.canceled += instance.OnSkillTree;
         }
 
         /// <summary>
@@ -2037,9 +2037,6 @@ public partial class @Control: IInputActionCollection2, IDisposable
             @Item8.started -= instance.OnItem8;
             @Item8.performed -= instance.OnItem8;
             @Item8.canceled -= instance.OnItem8;
-            @SkillTree.started -= instance.OnSkillTree;
-            @SkillTree.performed -= instance.OnSkillTree;
-            @SkillTree.canceled -= instance.OnSkillTree;
             @Minimap.started -= instance.OnMinimap;
             @Minimap.performed -= instance.OnMinimap;
             @Minimap.canceled -= instance.OnMinimap;
@@ -2049,6 +2046,9 @@ public partial class @Control: IInputActionCollection2, IDisposable
             @Skill4.started -= instance.OnSkill4;
             @Skill4.performed -= instance.OnSkill4;
             @Skill4.canceled -= instance.OnSkill4;
+            @SkillTree.started -= instance.OnSkillTree;
+            @SkillTree.performed -= instance.OnSkillTree;
+            @SkillTree.canceled -= instance.OnSkillTree;
         }
 
         /// <summary>
@@ -2282,9 +2282,9 @@ public partial class @Control: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Farming;
     private List<IFarmingActions> m_FarmingActionsCallbackInterfaces = new List<IFarmingActions>();
     private readonly InputAction m_Farming_ItemInteract;
+    private readonly InputAction m_Farming_SkillTree;
     private readonly InputAction m_Farming_Inventory;
     private readonly InputAction m_Farming_CraftTree;
-    private readonly InputAction m_Farming_SkillTree;
     private readonly InputAction m_Farming_ToggleUI;
     private readonly InputAction m_Farming_Minimap;
     /// <summary>
@@ -2303,6 +2303,10 @@ public partial class @Control: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @ItemInteract => m_Wrapper.m_Farming_ItemInteract;
         /// <summary>
+        /// Provides access to the underlying input action "Farming/SkillTree".
+        /// </summary>
+        public InputAction @SkillTree => m_Wrapper.m_Farming_SkillTree;
+        /// <summary>
         /// Provides access to the underlying input action "Farming/Inventory".
         /// </summary>
         public InputAction @Inventory => m_Wrapper.m_Farming_Inventory;
@@ -2310,10 +2314,6 @@ public partial class @Control: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Farming/CraftTree".
         /// </summary>
         public InputAction @CraftTree => m_Wrapper.m_Farming_CraftTree;
-        /// <summary>
-        /// Provides access to the underlying input action "Farming/SkillTree".
-        /// </summary>
-        public InputAction @SkillTree => m_Wrapper.m_Farming_SkillTree;
         /// <summary>
         /// Provides access to the underlying input action "Farming/ToggleUI".
         /// </summary>
@@ -2351,15 +2351,15 @@ public partial class @Control: IInputActionCollection2, IDisposable
             @ItemInteract.started += instance.OnItemInteract;
             @ItemInteract.performed += instance.OnItemInteract;
             @ItemInteract.canceled += instance.OnItemInteract;
+            @SkillTree.started += instance.OnSkillTree;
+            @SkillTree.performed += instance.OnSkillTree;
+            @SkillTree.canceled += instance.OnSkillTree;
             @Inventory.started += instance.OnInventory;
             @Inventory.performed += instance.OnInventory;
             @Inventory.canceled += instance.OnInventory;
             @CraftTree.started += instance.OnCraftTree;
             @CraftTree.performed += instance.OnCraftTree;
             @CraftTree.canceled += instance.OnCraftTree;
-            @SkillTree.started += instance.OnSkillTree;
-            @SkillTree.performed += instance.OnSkillTree;
-            @SkillTree.canceled += instance.OnSkillTree;
             @ToggleUI.started += instance.OnToggleUI;
             @ToggleUI.performed += instance.OnToggleUI;
             @ToggleUI.canceled += instance.OnToggleUI;
@@ -2380,15 +2380,15 @@ public partial class @Control: IInputActionCollection2, IDisposable
             @ItemInteract.started -= instance.OnItemInteract;
             @ItemInteract.performed -= instance.OnItemInteract;
             @ItemInteract.canceled -= instance.OnItemInteract;
+            @SkillTree.started -= instance.OnSkillTree;
+            @SkillTree.performed -= instance.OnSkillTree;
+            @SkillTree.canceled -= instance.OnSkillTree;
             @Inventory.started -= instance.OnInventory;
             @Inventory.performed -= instance.OnInventory;
             @Inventory.canceled -= instance.OnInventory;
             @CraftTree.started -= instance.OnCraftTree;
             @CraftTree.performed -= instance.OnCraftTree;
             @CraftTree.canceled -= instance.OnCraftTree;
-            @SkillTree.started -= instance.OnSkillTree;
-            @SkillTree.performed -= instance.OnSkillTree;
-            @SkillTree.canceled -= instance.OnSkillTree;
             @ToggleUI.started -= instance.OnToggleUI;
             @ToggleUI.performed -= instance.OnToggleUI;
             @ToggleUI.canceled -= instance.OnToggleUI;
@@ -2676,13 +2676,6 @@ public partial class @Control: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnItem8(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "SkillTree" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSkillTree(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "Minimap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -2703,6 +2696,13 @@ public partial class @Control: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSkill4(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SkillTree" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSkillTree(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
@@ -2797,6 +2797,13 @@ public partial class @Control: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnItemInteract(InputAction.CallbackContext context);
         /// <summary>
+        /// Method invoked when associated input action "SkillTree" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSkillTree(InputAction.CallbackContext context);
+        /// <summary>
         /// Method invoked when associated input action "Inventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -2810,13 +2817,6 @@ public partial class @Control: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCraftTree(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "SkillTree" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSkillTree(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "ToggleUI" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

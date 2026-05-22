@@ -1,6 +1,6 @@
 ﻿using Chipmunk.ComponentContainers;
 using Chipmunk.GameEvents;
-using Scripts.GameSystem.Teleports;
+using Scripts.GameSystem.Structures;
 using System;
 using UnityEngine;
 using Work.Code.Craft;

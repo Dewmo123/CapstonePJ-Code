@@ -25,7 +25,7 @@ MonoBehaviour:
   maxStack: 1
   maxSpawnCount: 0
   addStats: []
-  modelOffset: {x: -0.046, y: 0.165, z: 0.468}
+  modelOffset: {x: 0, y: 0.025, z: 0.619}
   equipmentPrefab: {fileID: 168361770237977466, guid: 659e57d7035ba9e4a9c8691ed6c72418, type: 3}
   skillDB: {fileID: 11400000, guid: 8d774c9ec3ed519468eeb141576d259c, type: 2}
   controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
@@ -35,7 +35,7 @@ MonoBehaviour:
   attackSpeed: 3
   fireRate: 0.38
   attackSoundID:
-    _entity: {fileID: 0}
+    _entity: {fileID: 11400000, guid: 3003b41a669285a43ac3512389545ead, type: 2}
     ID: 0
     <DebugObject>k__BackingField: {fileID: 0}
   gunType: 4

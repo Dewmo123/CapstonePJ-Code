@@ -15,11 +15,13 @@ MonoBehaviour:
   itemId: MAT_006
   itemName: "\uCCA0\uC0AC"
   itemType: 0
-  spawnArea: 6
+  spawnArea: 320
   itemImage: {fileID: 21300000, guid: 3cb0361539b8ee54a81f56189186229d, type: 3}
-  description: "\uC124\uBA85"
+  description: "\uC720\uC5F0\uD558\uAC8C \uD718\uC5B4\uC9C0\uB294 \uAE08\uC18D \uC120\uC73C\uB85C,
+    \uBB3C\uAC74\uC744 \uBB36\uC5B4 \uACE0\uC815\uD558\uAC70\uB098 \uAC04\uB2E8\uD55C
+    \uB3C4\uAD6C \uBC0F \uD568\uC815\uC744 \uB9CC\uB4E4 \uB54C \uC720\uC6A9\uD569\uB2C8\uB2E4."
   rarity: 0
   rarityWeight: 5
   value: 0
   maxStack: 99
-  maxSpawnCount: 3
+  maxSpawnCount: 0

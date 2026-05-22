@@ -1,5 +1,5 @@
 ﻿using Code.UI.Minimap.Core;
-using Scripts.GameSystem.Teleports;
+using Scripts.GameSystem.Structures;
 using UnityEngine;
 
 namespace Minimap.Teleport

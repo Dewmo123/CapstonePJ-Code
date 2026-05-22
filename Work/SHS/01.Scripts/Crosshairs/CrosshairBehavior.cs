@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Chipmunk.ComponentContainers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,7 +8,7 @@ using Scripts.Players;
 using InGame.PlayerUI;
 using Code.ETC;
 using Code.Players;
-using Work.LKW.Code.Items;
+using Code.Items;
 using Chipmunk.GameEvents;
 using Chipmunk.Library.Utility.GameEvents.Local;
 using Code.InventorySystems.Equipments;
@@ -24,7 +24,7 @@ namespace SHS.Scripts.Crosshairs
     [Provide]
     public class CrosshairBehavior : MonoBehaviour, IContainerComponent, IAfterInitialze, IAimProvider,
         IDependencyProvider
-    { 
+    {
         [Header("Input")] [SerializeField] private float baseSensitivity = 18f;
         [SerializeField] private float clampMargin = 8f;
 
@@ -51,6 +51,7 @@ namespace SHS.Scripts.Crosshairs
         private Vector2 _recoilTargetPixel;
         private Vector2 _recoilOffsetPixel;
         private Vector3 _aimPosition;
+        private Vector3 _worldAimPosition;
         private float _lastShotTime = -999f;
         private float _sensitivity;
 
@@ -73,6 +74,8 @@ namespace SHS.Scripts.Crosshairs
         public void AfterInitialize()
         {
             RefreshEquippedGunContext();
+            _worldAimPosition = GetCrosshairWorldPosition();
+            _aimPosition = GetCrosshairPlanePosition();
             UpdateSpreadRadiusPixels();
         }
 
@@ -100,11 +103,15 @@ namespace SHS.Scripts.Crosshairs
             UpdateSpreadRadiusPixels();
         }
 
-
         private void LateUpdate()
         {
-            Vector3 nextAimPosition = GetCrosshairWorldPosition();
-            if (Vector3.Distance(transform.position, nextAimPosition) < minAimDistance)
+            _worldAimPosition = GetCrosshairWorldPosition();
+
+            Vector3 nextAimPosition = GetCrosshairPlanePosition();
+            Vector3 planarOffset = nextAimPosition - transform.position;
+            planarOffset.y = 0f;
+
+            if (planarOffset.sqrMagnitude < minAimDistance * minAimDistance)
                 return;
 
             _aimPosition = nextAimPosition;
@@ -113,13 +120,22 @@ namespace SHS.Scripts.Crosshairs
         public Vector3 GetAimPosition()
             => _aimPosition;
 
+        public Vector3 GetAimPosition(float planeY)
+            => GetCrosshairPlanePosition(planeY);
+
+        public Vector3 GetWorldAimPosition()
+            => _worldAimPosition;
+
         public Vector2 GetCrosshairScreenPosition()
             => GetFinalCrosshairPixel();
 
         public Vector3 GetCrosshairPlanePosition()
+            => GetCrosshairPlanePosition(transform.position.y);
+
+        public Vector3 GetCrosshairPlanePosition(float planeY)
         {
             Ray aimRay = GetAimRay();
-            Plane aimPlane = new Plane(Vector3.up, new Vector3(0f, transform.position.y, 0f));
+            Plane aimPlane = new Plane(Vector3.up, new Vector3(0f, planeY, 0f));
 
             if (aimPlane.Raycast(aimRay, out float enter))
                 return aimRay.GetPoint(enter);
@@ -204,7 +220,8 @@ namespace SHS.Scripts.Crosshairs
             _currentGunData = null;
             _currentGunObject = null;
 
-            if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) && item is GunItem gunItem)
+            if (_equipment.TryGetEquippedItem(EquipPartType.Hand, out EquipableItem item) &&
+                item is GunItem gunItem)
             {
                 _currentGunData = gunItem.GunItemData;
                 _currentGunObject = gunItem.WeaponObj as GunObject;
@@ -217,7 +234,8 @@ namespace SHS.Scripts.Crosshairs
         {
             _lastShotTime = Time.time;
 
-            float verticalMultiplier = Random.Range(recoilData.minVerticalMultiplier, recoilData.maxVerticalMultiplier);
+            float verticalMultiplier =
+                Random.Range(recoilData.minVerticalMultiplier, recoilData.maxVerticalMultiplier);
             float horizontalMultiplier =
                 Random.Range(recoilData.minHorizontalMultiplier, recoilData.maxHorizontalMultiplier);
 
@@ -328,7 +346,7 @@ namespace SHS.Scripts.Crosshairs
                 spreadAngleDeg = _currentGunObject.CurrentSpreadAngleDeg;
 
                 Vector3 firePosition = _currentGunObject.FirePosition;
-                Vector3 aimPointOnFirePlane = GetCrosshairPlanePosition();
+                Vector3 aimPointOnFirePlane = GetCrosshairPlanePosition(firePosition.y);
                 Vector3 planarOffset = aimPointOnFirePlane - firePosition;
                 planarOffset.y = 0f;
                 spreadTargetDistance = planarOffset.magnitude;
@@ -396,7 +414,7 @@ namespace SHS.Scripts.Crosshairs
             p.y = Mathf.Clamp(p.y, clampMargin, Screen.height - clampMargin);
         }
 
-        public void SetSensitivity(float value) 
-            => _sensitivity = baseSensitivity * value; 
+        public void SetSensitivity(float value)
+            => _sensitivity = baseSensitivity * value;
     }
 }

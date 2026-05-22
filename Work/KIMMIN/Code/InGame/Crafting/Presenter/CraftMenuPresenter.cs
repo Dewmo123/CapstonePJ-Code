@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Work.Code.Craft.View;
-using Work.LKW.Code.Items.ItemInfo;
+using Code.Items.ItemInfo;
+using Code.UI.Core;
 
 namespace Work.Code.Craft.Presenter
 {
@@ -24,6 +25,14 @@ namespace Work.Code.Craft.Presenter
             _menuView.OnTreeSelected += HandleTreeSelected;
             _filter.OnRefreshCraftUI += HandleRefreshCraftUI;
             _menuView.OnPinItem += HandlePinItem;
+            _model.Inventory.InventoryChanged += HandleInventoryChanged;
+
+            HandleInventoryChanged();
+        }
+
+        private void HandleInventoryChanged()
+        {
+            _menuView.RefreshCraftableItems(_model.CanCraft, UIDefine.GreenColor);
         }
 
         private void HandlePinItem(CraftItemUI ui, bool isPinned)
@@ -52,6 +61,7 @@ namespace Work.Code.Craft.Presenter
             _menuView.OnRequestCraft -= HandleRequestCraft;
             _menuView.OnTreeSelected -= HandleTreeSelected;
             _menuView.OnPinItem -= HandlePinItem;
+            _model.Inventory.InventoryChanged -= HandleInventoryChanged;
         }
     }
 }

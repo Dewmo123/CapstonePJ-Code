@@ -8,7 +8,7 @@ using SHS.Scripts.Entities.Players;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using Work.LKW.Code.Items;
+using Code.Items;
 using Work.SHS.Items.Events;
 
 namespace SHS.Scripts.Entities.Rigings

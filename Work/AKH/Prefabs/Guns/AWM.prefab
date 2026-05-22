@@ -772,7 +772,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particleByHeatRatio: {fileID: 3029521597397357274}
-  materialByHeatRatio: {fileID: 0}
+  materialByHeatRatio: {fileID: 1885510412162065241}
 --- !u!114 &1885510412162065241
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   itemType: 2
   spawnArea: 0
   itemImage: {fileID: 0}
-  description: "\uC124\uBA85"
+  description: 
   rarity: 2
   rarityWeight: 40
   value: 0

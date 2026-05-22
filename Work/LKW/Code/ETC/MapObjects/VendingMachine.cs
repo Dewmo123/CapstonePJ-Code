@@ -1,41 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Code.ETC.MapObjects;
-using DewmoLib.Dependencies;
-using DewmoLib.ObjectPool.RunTime;
-using DG.Tweening;
-using Scripts.Combat.Datas;
-using Scripts.Effects;
+using Ami.BroAudio;
 using Scripts.Entities;
-using Unity.Mathematics;
+using Scripts.GameSystem;
 using UnityEngine;
-using Work.LKW.Code.Items;
-using Work.LKW.Code.Items.ItemInfo;
+using Code.Items;
+using Code.Items.ItemInfo;
 using Random = UnityEngine.Random;
 
 namespace Code.ETC.MapObjects
 {
-    public class VendingMachine : InteractableHittableObject
+    public class VendingMachine : InteractableStructure
     {
-        [Inject]
-        private PoolManagerMono _poolManagerMono;
+        private const string EmissionKeyword = "_EMISSION";
+        private const string EmissionColorKeyword = "_EmissionColor";
+        private const float EmissionIntensity = 10.0f;
+        private static readonly int EmissionColorID = Shader.PropertyToID(EmissionColorKeyword);
+        private static readonly Color BaseEmissionColor = Color.white * EmissionIntensity;
         
+        private static readonly Dictionary<Rarity, Color> RarityColors = new()
+        {
+            { Rarity.Common, Color.white },
+            { Rarity.Rare,   Color.cyan },
+            { Rarity.Epic,   new Color(0.6f, 0f, 1f) }
+        };
 
         [Header("Reference")]
-        [SerializeField] private PoolItemSO explosiveItem;
-        [SerializeField] private LayerMask whatIsBullet;
         [SerializeField] private MeshRenderer meshRenderer;
-        [SerializeField] private ItemDataBaseSO itemDB;
-        [SerializeField] private PoolItemSO previewItem;
         [SerializeField] private Transform discardPoint;
         [SerializeField] private Transform spawnPoint;
-        [SerializeField] private float offDuration = 1f;
+        [SerializeField] private ItemDropper itemDropper;
+        [SerializeField] private SoundID dropSoundID;
+
+        [Header("Settings")]
+        [SerializeField] private int minDropCount = 1;
+        [SerializeField] private int maxDropCount = 5;
+        [SerializeField] private float offDuration = 1.6f;
         [SerializeField] private float discardRange = 0.5f;
         [SerializeField] private float interactCooldown = 1f;
-        [SerializeField] private List<ItemType> allowedTypes;
 
-        private readonly int _maxSpawnCount = 5;
+        private int _dropCount = 0;
         private bool _isOff = false;
         private float _lastInteractTime = float.NegativeInfinity;
         private Material _material;
@@ -54,92 +58,75 @@ namespace Code.ETC.MapObjects
 
         private void Init()
         {
-            _material.EnableKeyword("_EMISSION");
-            _material.SetColor("_EmissionColor", Color.white * 10.0f);
-            SetMaxHp(Random.Range(1, _maxSpawnCount));
+            _material.EnableKeyword(EmissionKeyword);
+            _material.SetColor(EmissionColorID, BaseEmissionColor);
             _isOff = false;
+            _dropCount = 0;
         }
+
+        private bool CanInteract()
+            => !_isOff
+            && Time.time - _lastInteractTime >= interactCooldown
+            && _dropCount < maxDropCount;
 
         public override void Interact(Entity interactor)
         {
-            if (_isOff || IsDead) return;
-            if (Time.time - _lastInteractTime < interactCooldown) return;
-            _lastInteractTime = Time.time;
-            ApplyDamage(new DamageData { damage = 1 });
-        }
+            if (!CanInteract()) return;
 
-        public override void TakeHit()
-        {
-            base.TakeHit();
-            if (_isOff) return;
-
-            float hitsTaken = MaxHp - CurrentHp;
-            if (hitsTaken > 1)
+            if (_dropCount > 1 && Random.value < 0.5f)
             {
-                float explodeChance = (hitsTaken - 1) / MaxHp;
-                if (Random.value < explodeChance)
-                {
-                    Explode();
-                    return;
-                }
+                _dropCount = maxDropCount;
+                StartCoroutine(MachineOffCoroutine(offDuration));
+                return;
             }
 
             SpawnItem();
-        }
-
-        protected override void OnDeath()
-        {
-            if (_isOff) return;
-            _isOff = true;
-            StartCoroutine(MachineOffCoroutine(offDuration));
-        }
-
-        private void Explode()
-        {
-            _isOff = true;
-            StartCoroutine(MachineOffCoroutine(offDuration));
-
-            PoolingEffect effect = _poolManagerMono.Pop<PoolingEffect>(explosiveItem);
-            if (effect != null) effect.PlayVFX(transform.position, quaternion.identity);
-
-            Kill();
+            _dropCount++;
+            _lastInteractTime = Time.time;
         }
 
         private void SpawnItem()
         {
-            if (allowedTypes == null || allowedTypes.Count == 0) return;
+            Vector3 to = discardPoint.position;
+            to.x += Random.Range(-discardRange, discardRange);
+            to.z += Random.Range(-discardRange, discardRange);
 
-            ItemType type = allowedTypes[Random.Range(0, allowedTypes.Count)];
-            var targetItemData = itemDB.GetRandomItems(type, 1).FirstOrDefault();
-            if (targetItemData == null) return;
+            PreviewItem targetItem = itemDropper.Drop(spawnPoint.position, to);
+            BroAudio.Play(dropSoundID, transform.position);
 
-            ItemCreateData createData = targetItemData.CreateItem();
-            var spawnPreviewItem = _poolManagerMono.Pop<PreviewItem>(previewItem);
+            if (RarityColors.TryGetValue(targetItem.Item.ItemData.rarity, out var color))
+                StartCoroutine(RarityFlashCoroutine(color));
+        }
 
-            Vector3 discardPos = discardPoint.position;
-            discardPos.x += Random.Range(-discardRange, discardRange);
-            discardPos.z += Random.Range(-discardRange, discardRange);
-            discardPos.y += 0.2f;
+        private IEnumerator RarityFlashCoroutine(Color rarityColor)
+        {
+            Color flashColor = rarityColor * EmissionIntensity;
+            float flashDuration = 1f;
 
-            spawnPreviewItem.Discard(spawnPoint.position, createData.Item, createData.Stack);
-            spawnPreviewItem.transform.DOMove(discardPos, 0.25f).SetEase(Ease.InCubic);
+            _material.SetColor(EmissionColorID, flashColor);
+            yield return new WaitForSeconds(flashDuration);
+            _material.SetColor(EmissionColorID, BaseEmissionColor);
+            yield return new WaitForSeconds(flashDuration);
+
+            _material.SetColor(EmissionColorID, BaseEmissionColor);
         }
 
         private IEnumerator MachineOffCoroutine(float duration)
         {
-            Color startColor = _material.GetColor("_EmissionColor");
-            Color endColor = Color.white * 0f;
+            _isOff = true;
+            Color startColor = _material.GetColor(EmissionColorID);
+            Color endColor = Color.black;
             float elapsed = 0f;
 
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
-                _material.SetColor("_EmissionColor", Color.Lerp(startColor, endColor, elapsed / duration));
+                _material.SetColor(EmissionColorID, Color.Lerp(startColor, endColor, elapsed / duration));
                 yield return null;
             }
 
-            _material.SetColor("_EmissionColor", endColor);
-            _material.DisableKeyword("_EMISSION");
+            _material.SetColor(EmissionColorID, endColor);
+            _material.DisableKeyword(EmissionKeyword);
         }
     }
 }
