@@ -24,7 +24,6 @@ MonoBehaviour:
   maxStack: 0
   maxSpawnCount: 0
   addStats: []
-  modelOffset: {x: 0, y: 0, z: 0}
   equipmentPrefab: {fileID: 1714967983448266501, guid: a024a6317a022bf4b98c60d3ee288b92, type: 3}
   skillDB: {fileID: 11400000, guid: 8d774c9ec3ed519468eeb141576d259c, type: 2}
   maxDurability: 0
@@ -44,12 +43,20 @@ MonoBehaviour:
   maxAmmoCapacity: 0
   aimSpeedMultiplier: 0
   noiseRadius: 10
-  defaultSpread: 0
+  hipFire:
+    defaultSpread: 0
+    maxSpread: 0
+    spreadGrow: 0
+    spreadRecover: 0
+    spreadFactor: 0
+  ads:
+    defaultSpread: 0
+    maxSpread: 0
+    spreadGrow: 0
+    spreadRecover: 0
+    spreadFactor: 0
+  adsTime: 0.5
   crosshairData: {fileID: 0}
-  maxSpread: 0
-  spreadGrow: 0
-  spreadRecover: 0
-  spreadFactor: 0
   verticalRecoil: 0
   horizontalRecoil: 0
   minVerticalMultiplier: 0

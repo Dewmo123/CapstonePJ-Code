@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5a9e70a188f4e09930eb89a37d88e73, type: 3}
   m_Name: Melee
   m_EditorClassIdentifier: 
+  enemyType: 2
   enemyPrefab: {fileID: 600493579497088898, guid: f4838d7dfa586564eab6e4b7d3fad1af, type: 3}
   enemyPoolItem: {fileID: 11400000, guid: a2474b1841564b9eb2db88de38bd9620, type: 2}
   spawnRarityWeight: 50
@@ -63,6 +64,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 263fa95952b08ea4a8f842459494aeef, type: 2}
   - {fileID: 11400000, guid: 3a41d7f697bfc2841bf1d0542978f4b5, type: 2}
   - {fileID: 11400000, guid: 78221511401be5b488b6a8c7595827c5, type: 2}
+  - {fileID: 11400000, guid: cb97e1630627c9945806347dea8564f8, type: 2}
   - {fileID: 11400000, guid: 82033aa1a6498b146a7f79c63579acf8, type: 2}
   - {fileID: 11400000, guid: 00619ee578cc37a4c9128a8ee596b4b1, type: 2}
   behaviourPrefabs:
@@ -72,7 +74,7 @@ MonoBehaviour:
       _fieldName: attackCount
       _valueKind: 1
       _hasOverride: 0
-      _intValue: 0
+      _intValue: 1
       _floatValue: 0
       _doubleValue: 0
       _longValue: 0
@@ -558,9 +560,9 @@ MonoBehaviour:
           _enumValue: 0
           _objectValue: {fileID: 0}
           _managedReferenceData: 
-        - _fieldKey: Scripts.SkillSystem.Skills.RollingSkill.<TargetState>k__BackingField
-          _fieldName: TargetState
-          _valueKind: 12
+        - _fieldKey: Scripts.SkillSystem.ActiveSkill.isWalkable
+          _fieldName: isWalkable
+          _valueKind: 5
           _hasOverride: 0
           _intValue: 0
           _floatValue: 0
@@ -573,7 +575,7 @@ MonoBehaviour:
           _vector4Value: {x: 0, y: 0, z: 0, w: 0}
           _colorValue: {r: 1, g: 1, b: 1, a: 1}
           _enumValue: 0
-          _objectValue: {fileID: 11400000, guid: 92665a5a1cf0aec4e87819ed62d2d2e1, type: 2}
+          _objectValue: {fileID: 0}
           _managedReferenceData: 
         - _fieldKey: Scripts.SkillSystem.ActiveSkill.cooldown
           _fieldName: cooldown
@@ -591,6 +593,57 @@ MonoBehaviour:
           _colorValue: {r: 1, g: 1, b: 1, a: 1}
           _enumValue: 0
           _objectValue: {fileID: 0}
+          _managedReferenceData: 
+        - _fieldKey: Scripts.SkillSystem.ActiveSkill.<AnimType>k__BackingField
+          _fieldName: AnimType
+          _valueKind: 11
+          _hasOverride: 0
+          _intValue: 0
+          _floatValue: 0
+          _doubleValue: 0
+          _longValue: 0
+          _boolValue: 0
+          _stringValue: 
+          _vector2Value: {x: 0, y: 0}
+          _vector3Value: {x: 0, y: 0, z: 0}
+          _vector4Value: {x: 0, y: 0, z: 0, w: 0}
+          _colorValue: {r: 1, g: 1, b: 1, a: 1}
+          _enumValue: 1
+          _objectValue: {fileID: 0}
+          _managedReferenceData: 
+        - _fieldKey: Scripts.SkillSystem.ActiveSkill.<MoveType>k__BackingField
+          _fieldName: MoveType
+          _valueKind: 11
+          _hasOverride: 0
+          _intValue: 0
+          _floatValue: 0
+          _doubleValue: 0
+          _longValue: 0
+          _boolValue: 0
+          _stringValue: 
+          _vector2Value: {x: 0, y: 0}
+          _vector3Value: {x: 0, y: 0, z: 0}
+          _vector4Value: {x: 0, y: 0, z: 0, w: 0}
+          _colorValue: {r: 1, g: 1, b: 1, a: 1}
+          _enumValue: 1
+          _objectValue: {fileID: 0}
+          _managedReferenceData: 
+        - _fieldKey: Scripts.SkillSystem.ActiveSkill.<TargetState>k__BackingField
+          _fieldName: TargetState
+          _valueKind: 12
+          _hasOverride: 0
+          _intValue: 0
+          _floatValue: 0
+          _doubleValue: 0
+          _longValue: 0
+          _boolValue: 0
+          _stringValue: 
+          _vector2Value: {x: 0, y: 0}
+          _vector3Value: {x: 0, y: 0, z: 0}
+          _vector4Value: {x: 0, y: 0, z: 0, w: 0}
+          _colorValue: {r: 1, g: 1, b: 1, a: 1}
+          _enumValue: 0
+          _objectValue: {fileID: 11400000, guid: 92665a5a1cf0aec4e87819ed62d2d2e1, type: 2}
           _managedReferenceData: 
         - _fieldKey: Scripts.SkillSystem.Skill.<SkillData>k__BackingField
           _fieldName: SkillData

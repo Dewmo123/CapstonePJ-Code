@@ -47,7 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SkillData>k__BackingField: {fileID: 11400000, guid: dc2b6ed70ca24313a3985ba72a8932e2, type: 2}
   cooldown: 14
-  targetState: {fileID: 11400000, guid: de2fb001db655cc4f9bbc241c6759ae3, type: 2}
+  <AnimType>k__BackingField: 0
+  <TargetState>k__BackingField: {fileID: 11400000, guid: de2fb001db655cc4f9bbc241c6759ae3, type: 2}
   decalObject: {fileID: 1140100000000000003}
   beaconPoolItem: {fileID: 11400000, guid: 35638b0a3f7744f19bf403cd230a7c15, type: 2}
   enemyLayerMask:

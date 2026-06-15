@@ -53,7 +53,7 @@ namespace Code.SkillSystem.Skills.TrackingBlade
             return base.CanUseSkill() && _target != null;
         }
 
-        public override void StartAndUseSkill()
+        public override void OnSkillTrigger()
         {
             if (_target != null)
             {
@@ -102,11 +102,13 @@ namespace Code.SkillSystem.Skills.TrackingBlade
 
             try
             {
+                trackingTargetMark.SetTarget(_target.transform, delayToFire);
                 await UniTask.WaitForSeconds(delayToFire, cancellationToken:linkedCts.Token);
                 return true;
             }
             catch (Exception)
             {
+                Debug.Log("Mark charge canceled");
                 trackingTargetMark.CancelCharge();
                 return false;
             }

@@ -4,10 +4,11 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Unity.Cinemachine;
 using UnityEngine;
+using Work.Code.PlayerTasks;
 
 namespace Work.Code.Tutorials
 {
-    public class TutorialDoor : MonoBehaviour
+    public class TutorialDoor : TaskCompleteInteraction
     {
         [SerializeField] private float tweenDuration;
         [SerializeField] private float targetScale;
@@ -20,14 +21,15 @@ namespace Work.Code.Tutorials
         {
             _originalScale = transform.localScale.x;
         }
-
-        public void OpenDoor()
+        
+        
+        public override void Interact()
         {
             gameObject.transform.DOKill();
             SetCameraPriority(100);
             OpenDoorAfterDelay();
         }
-
+        
         private async void OpenDoorAfterDelay()
         {
             await UniTask.WaitForSeconds(1.5f);

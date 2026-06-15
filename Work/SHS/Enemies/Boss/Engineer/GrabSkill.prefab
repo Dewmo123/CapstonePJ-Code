@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SkillData>k__BackingField: {fileID: 11400000, guid: 112976183d32d1d42b19860a3500758a, type: 2}
   cooldown: 12
+  <AnimType>k__BackingField: 2
   hookProjectilePrefab: {fileID: 7476008836844655840, guid: f679a210d0fc4564e928c97624f63ef3, type: 3}
   firePoint: {fileID: 0}
   hitMask:

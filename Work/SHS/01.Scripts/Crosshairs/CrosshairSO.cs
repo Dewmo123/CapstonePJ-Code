@@ -6,6 +6,8 @@ namespace SHS.Scripts.Crosshairs
     public class CrosshairSO : ScriptableObject
     {
         public GameObject crosshairPrefab;
+        public float cameraFocusDistance = 1f;
+        public float cameraFovReduction = 0f;
 
         private void OnValidate()
         {

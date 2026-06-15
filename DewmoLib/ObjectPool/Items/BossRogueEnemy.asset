@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: BossRogueEnemy
   m_EditorClassIdentifier: 
   poolingName: BossRogueEnemy
-  prefab: {fileID: 8744048729638733587, guid: 9f11f78ccce62c44bb4b712647f20d08, type: 3}
+  prefab: {fileID: 669838599292868045, guid: 00208491f26e7f64fb21a7243db5d0a9, type: 3}
   initCount: 2

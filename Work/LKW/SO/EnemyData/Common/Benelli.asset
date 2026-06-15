@@ -63,6 +63,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 263fa95952b08ea4a8f842459494aeef, type: 2}
   - {fileID: 11400000, guid: 3a41d7f697bfc2841bf1d0542978f4b5, type: 2}
   - {fileID: 11400000, guid: 78221511401be5b488b6a8c7595827c5, type: 2}
+  - {fileID: 11400000, guid: cb97e1630627c9945806347dea8564f8, type: 2}
   - {fileID: 11400000, guid: 82033aa1a6498b146a7f79c63579acf8, type: 2}
   - {fileID: 11400000, guid: 00619ee578cc37a4c9128a8ee596b4b1, type: 2}
   behaviourPrefabs:

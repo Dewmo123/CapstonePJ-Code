@@ -25,13 +25,12 @@ MonoBehaviour:
   maxStack: 1
   maxSpawnCount: 0
   addStats: []
-  modelOffset: {x: 0.012, y: 0.141, z: 0.369}
   equipmentPrefab: {fileID: 5912053865660236352, guid: f83af4bd2c594b74fb6265902dca2d20, type: 3}
   skillDB: {fileID: 11400000, guid: 8d774c9ec3ed519468eeb141576d259c, type: 2}
   controller: {fileID: 22100000, guid: f137525389913154e9e8e83852dd9ac0, type: 2}
   maxDurability: 500
   attackRange: 60
-  defaultDamage: 40
+  defaultDamage: 25
   attackSpeed: 5.7
   fireRate: 0.175
   attackSoundID:
@@ -46,12 +45,20 @@ MonoBehaviour:
   maxAmmoCapacity: 26
   aimSpeedMultiplier: 0.651
   noiseRadius: 0
-  defaultSpread: 0.045
+  hipFire:
+    defaultSpread: 0.045
+    maxSpread: 0.78
+    spreadGrow: 0.25
+    spreadRecover: 0.77
+    spreadFactor: 43.16
+  ads:
+    defaultSpread: 0.045
+    maxSpread: 0.78
+    spreadGrow: 0.25
+    spreadRecover: 0.77
+    spreadFactor: 10.79
+  adsTime: 0.5
   crosshairData: {fileID: 0}
-  maxSpread: 0.78
-  spreadGrow: 0.25
-  spreadRecover: 0.77
-  spreadFactor: 10.79
   verticalRecoil: 78.401
   horizontalRecoil: 52.267
   minVerticalMultiplier: 0.95

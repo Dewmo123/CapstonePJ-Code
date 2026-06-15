@@ -40,6 +40,7 @@ namespace Code.Items.ItemInfo
         Common,
         Rare,
         Epic,
+        None
     }
 
     

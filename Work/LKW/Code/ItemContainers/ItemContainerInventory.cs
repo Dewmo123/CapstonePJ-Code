@@ -3,20 +3,24 @@ using Chipmunk.GameEvents;
 using Code.GameEvents;
 using Code.InventorySystems;
 using System.Collections.Generic;
-using UnityEngine;
-using Work.LKW.Code.Events;
+using Code.InventorySystems.Equipments;
+using Code.Items;
 using Code.Items.ItemInfo;
+using Code.Players;
+using Scripts.Entities;
 
 namespace Code.ItemContainers
 {
     public class ItemContainerInventory : Inventory
     {
         private bool _isSubscribe = false;
+
         public override void OnInitialize(ComponentContainer componentContainer)
         {
             base.OnInitialize(componentContainer);
             EventBus.Subscribe<PlayerUIEvent>(HandlePlayerUIEvent);
         }
+
         protected override void OnDestroy()
         {
             EventBus.Unsubscribe<PlayerUIEvent>(HandlePlayerUIEvent);
@@ -28,11 +32,11 @@ namespace Code.ItemContainers
             HandleSubscribe();
             UpdateInventory();
         }
-        
+
         public void SetUpItem(List<ItemDataSO> items)
         {
             ClearInventory();
-            
+
             for (int i = 0; i < items.Count && i < CurrentInventorySize; ++i)
             {
                 var createData = items[i].CreateItem();
@@ -42,11 +46,11 @@ namespace Code.ItemContainers
 
             UpdateInventory();
         }
-        
+
         public void SetUpItemSelf(List<SelfInitInfo> items)
         {
             ClearInventory();
-            
+
             for (int i = 0; i < items.Count && i < CurrentInventorySize; ++i)
             {
                 var createData = items[i].itemData.CreateItem();
@@ -60,12 +64,13 @@ namespace Code.ItemContainers
         public void SetUpItem(ItemDataSO item)
         {
             ClearInventory();
-            
+
             var createData = item.CreateItem();
             itemSlots[0].SetData(createData.Item, createData.Stack);
 
             UpdateInventory();
         }
+
         private void HandleSubscribe()
         {
             if (!_isSubscribe)
@@ -83,6 +88,7 @@ namespace Code.ItemContainers
                 _isSubscribe = false;
             }
         }
+
         private void UpdateUI()
         {
             EventBus.Raise(new UpdateRightInventoryUIEvent { ItemSlots = itemSlots, SlotCnt = CurrentInventorySize });
@@ -93,6 +99,5 @@ namespace Code.ItemContainers
             if (!evt.IsEnabled)
                 HandleUnsubscribe();
         }
-
     }
 }

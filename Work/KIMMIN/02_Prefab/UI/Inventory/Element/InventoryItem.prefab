@@ -950,6 +950,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 7490263778105669035}
   backgroundEffect: {fileID: 6107991398858300863}
+  effectScale: 1.25
   inventoryMenu: {fileID: 11400000, guid: 88f5b69b81d098a469b692dd65ea0019, type: 2}
   craftableItemListSO: {fileID: 11400000, guid: 63488831ca7f3a4499cf46d3c45d9a1d, type: 2}
   stackText: {fileID: 7421697897874951314}

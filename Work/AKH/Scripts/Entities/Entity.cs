@@ -19,7 +19,7 @@ namespace Scripts.Entities
         [SerializeField] private Transform hitBodyTrm;
         public bool IsDead { get; set; }
         public ComponentContainer ComponentContainer { get; set; }
-        public Transform HitTransform => hitBodyTrm;
+        public Transform HitTransform => hitBodyTrm == null ? transform : hitBodyTrm;
 
         public OnDamageCalcDelegate OnDamageCalc;
         public OnAttackDelegate OnAttack; // 내가 맞출 때

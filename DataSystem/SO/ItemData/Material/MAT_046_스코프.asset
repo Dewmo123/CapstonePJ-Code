@@ -23,5 +23,5 @@ MonoBehaviour:
   rarity: 1
   rarityWeight: 5
   value: 0
-  maxStack: 1
+  maxStack: 5
   maxSpawnCount: 0

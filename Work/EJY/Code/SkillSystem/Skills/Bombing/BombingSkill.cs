@@ -13,7 +13,6 @@ namespace Code.SkillSystem.Skills.Bombing
 {
     public class BombingSkill : ActiveSkill, IAimSkill
     {
-        [SerializeField] private StateDataSO targetState;
         [SerializeField] private DecalObject decalObject;
         [SerializeField] private PoolItemSO bombingItemSO;
         [SerializeField] private StatSO attackStat;
@@ -28,9 +27,6 @@ namespace Code.SkillSystem.Skills.Bombing
         private IAimProvider _aimProvider;
         private bool _isAiming;
 
-        public StateDataSO TargetState { get => targetState; set => targetState = value; }
-        public SkillAnimType AnimType => SkillAnimType.Default;
-
         public override void Init(ComponentContainer container)
         {
             base.Init(container);
@@ -39,7 +35,7 @@ namespace Code.SkillSystem.Skills.Bombing
             _aimProvider = container.GetSubclassComponent<IAimProvider>();
         }
 
-        public override void StartAndUseSkill()
+        public override void StartSkill()
         {
             _isAiming = false;
             decalObject.SetParent(null);
@@ -85,7 +81,7 @@ namespace Code.SkillSystem.Skills.Bombing
             }
         }
 
-        public void OnSkillTrigger()
+        public override void OnSkillTrigger()
         {
         }
     }

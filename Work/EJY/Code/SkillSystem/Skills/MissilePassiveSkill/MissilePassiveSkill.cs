@@ -18,7 +18,6 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
         [SerializeField] private int downHitCnt = 2;
         [SerializeField] private PoolItemSO missilePoolItem;
         [SerializeField] private bool isDmgRangIncrease;
-        [SerializeField] private bool isInduction;
         [SerializeField] private float additionalDmgRange = 2.5f;
         [SerializeField] private float launchRiseHeight = 2f;
         [SerializeField] private float randomSpawnRangeX = 1.5f;
@@ -47,14 +46,12 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
 
         private void UpgradeMultiShot()
         {
-            isInduction = true;
             hitCntToFireMissile -= downHitCnt;
             shotMissile += additionalMissile;
         }
 
         private void RollbackMultiShot()
         {
-            isInduction = false;
             hitCntToFireMissile += downHitCnt;
             shotMissile -= additionalMissile;
         }
@@ -80,9 +77,8 @@ namespace Code.SkillSystem.Skills.MissilePassiveSkill
 
                 for (int i = 0; i < shotMissile; ++i)
                 {
-                    Debug.Log(1);
                     var missile = _poolManager.Pop<Missile>(missilePoolItem);
-                    missile.InitMissile(_owner, hitTransform.HitTransform, firePosTrm.position, isInduction, GenerateLaunchOffset(), middlePoints[i]);
+                    missile.InitMissile(_owner, hitTransform.HitTransform, firePosTrm.position, GenerateLaunchOffset(), middlePoints[i]);
                     if (isDmgRangIncrease)
                         missile.SetDmgRange(additionalDmgRange);
                 }

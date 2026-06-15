@@ -37,6 +37,12 @@ namespace Code.EnemySpawn
             _returnStructurePos = returnStructure.transform.position;
         }
 
+        [ContextMenu("Spawn")]
+        private void Spawn()
+        {
+            _currentEnemy = EnemySpawnUtility.SpawnEnemy(bossSO, targetTransform.position, Quaternion.identity, _poolManager);
+            _currentEnemy.OnDeadEvent.AddListener(HandleBossDead);
+        }
         public void Enter(Entity entity)
         {
             if(_currentEnemy != null)

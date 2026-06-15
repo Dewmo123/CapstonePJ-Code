@@ -44,9 +44,9 @@ namespace Code.SkillSystem.Skills.StoneEdges
             _skillSize -= additionalSize;
         }
 
-        public override void StartAndUseSkill()
+        public override void OnSkillTrigger()
         {
-            base.StartAndUseSkill();
+            base.StartSkill();
 
             Vector3 dir = _skillPos - _owner.transform.position;
 

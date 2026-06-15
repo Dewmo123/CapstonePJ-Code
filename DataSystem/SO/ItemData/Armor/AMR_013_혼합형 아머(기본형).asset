@@ -33,7 +33,6 @@ MonoBehaviour:
     value: 2
   - targetStat: {fileID: 11400000, guid: 15fc09ad501e2844986107c6459f339e, type: 2}
     value: 22
-  modelOffset: {x: 0, y: 0, z: 0}
   equipmentPrefab: {fileID: 8600578797793443140, guid: e1899104b714c6d48ba5d312e111978b, type: 3}
   skillDB: {fileID: 11400000, guid: 8d774c9ec3ed519468eeb141576d259c, type: 2}
   maxDurability: 0

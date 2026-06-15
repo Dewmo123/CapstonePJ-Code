@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,8 +14,16 @@ namespace Work.Code.Craft.View
         [FormerlySerializedAs("craftingUIPrefab")] [SerializeField] private CraftItemUI craftUIPrefab;
         [SerializeField] private Transform root; 
         [SerializeField] private Button createButton;
+        [SerializeField] private GameObject inventoryFullText;
 
         private readonly Dictionary<ItemDataSO, CraftItemUI> _itemDict = new();
+        private HashSet<ItemDataSO> _interactableItems;
+        private Coroutine _inventoryFullTextRoutine;
+        private bool _hasTutorialItemType;
+        private ItemType _tutorialItemType = ItemType.None;
+        private Rarity _tutorialRarity = Rarity.None;
+        private Color _tutorialItemColor;
+        private const float InventoryFullTextDuration = 3f;
         
         public event Action<CraftTreeSO> OnTreeSelected;
         public event Action<CraftTreeSO> OnRequestCraft;
@@ -24,6 +33,8 @@ namespace Work.Code.Craft.View
 
         public void InitMenuView(CraftTreeListSO craftTreeList)
         {
+            SetInventoryFullText(false);
+
             foreach (CraftTreeSO tree in craftTreeList.list)
             {
                 if (tree.Item != null)
@@ -34,7 +45,7 @@ namespace Work.Code.Craft.View
             
             createButton.onClick.AddListener(() => HandleRequestCraft(_currentTree));
             
-            RefreshItems(ItemType.None, false);
+            RefreshItems(null, false);
         }
 
         private void InitCraftingItemUI(CraftTreeSO tree)
@@ -58,16 +69,27 @@ namespace Work.Code.Craft.View
 
         private void HandleRequestCraft(CraftTreeSO tree)
         {
+            if (tree == null || !CanInteract(tree.Item))
+                return;
+
+            SetInventoryFullText(false);
             OnRequestCraft?.Invoke(tree);
         }
 
         private void HandleSelectTree(CraftTreeSO tree)
         {
-            _currentTree = tree;
+            SetCurrentTree(tree);
             OnTreeSelected?.Invoke(tree);
         }
+
+        public void SetCurrentTree(CraftTreeSO tree)
+        {
+            _currentTree = tree;
+            createButton.interactable = CanInteract(tree.Item);
+            SetInventoryFullText(false);
+        }
         
-        public void RefreshItems(ItemType itemType, bool isFavorite)
+        public void RefreshItems(ItemType[] itemTypes, bool isFavorite)
         {
             foreach (CraftItemUI ui in _itemDict.Values)
             {
@@ -76,9 +98,9 @@ namespace Work.Code.Craft.View
             
             var query = _itemDict.AsEnumerable();
             
-            if (itemType != ItemType.None)
+            if (itemTypes != null && itemTypes.Length > 0)
             {
-                query = query.Where(x => x.Key.itemType == itemType);
+                query = query.Where(x => itemTypes.Contains(x.Key.itemType));
             }
             if (isFavorite)
             {
@@ -91,6 +113,8 @@ namespace Work.Code.Craft.View
             {
                 ui.Value.EnableUI();
             }
+
+            RefreshTutorialItemType();
         }
 
         private void OnDestroy()
@@ -122,6 +146,112 @@ namespace Work.Code.Craft.View
             {
                 ui.RefreshCraftableEffect(canCraft(ui.Tree), effectColor);
             }
+        }
+
+        public void SetInventoryFullText(bool isActive)
+        {
+            if (inventoryFullText == null)
+                return;
+
+            if (_inventoryFullTextRoutine != null)
+            {
+                StopCoroutine(_inventoryFullTextRoutine);
+                _inventoryFullTextRoutine = null;
+            }
+
+            inventoryFullText.SetActive(isActive);
+
+            if (isActive)
+                _inventoryFullTextRoutine = StartCoroutine(HideInventoryFullTextRoutine());
+        }
+
+        private IEnumerator HideInventoryFullTextRoutine()
+        {
+            yield return new WaitForSeconds(InventoryFullTextDuration);
+            inventoryFullText.SetActive(false);
+            _inventoryFullTextRoutine = null;
+        }
+
+        public void SetInteractableItems(IReadOnlyCollection<ItemDataSO> items)
+        {
+            if (items == null || items.Count == 0)
+            {
+                ClearInteractableItems();
+                return;
+            }
+
+            _interactableItems = new HashSet<ItemDataSO>(items);
+
+            foreach (var pair in _itemDict)
+            {
+                pair.Value.SetInteractable(_interactableItems.Contains(pair.Key));
+            }
+
+            createButton.interactable = _currentTree != null && CanInteract(_currentTree.Item);
+        }
+
+        public void ClearInteractableItems()
+        {
+            _interactableItems = null;
+
+            foreach (CraftItemUI ui in _itemDict.Values)
+            {
+                ui.SetInteractable(true);
+            }
+
+            createButton.interactable = _currentTree != null;
+        }
+
+        public void SetTutorialItemType(ItemType itemType, Rarity itemRarity, Color effectColor)
+        {
+            _hasTutorialItemType = true;
+            _tutorialItemType = itemType;
+            _tutorialItemColor = effectColor;
+            _tutorialRarity = itemRarity;
+            RefreshTutorialItemType();
+        }
+
+        public void ClearTutorialItemType()
+        {
+            _hasTutorialItemType = false;
+
+            foreach (CraftItemUI ui in _itemDict.Values)
+            {
+                ui.StopBackgroundEffect();
+            }
+
+            ClearInteractableItems();
+        }
+
+        private void RefreshTutorialItemType()
+        {
+            if (!_hasTutorialItemType)
+                return;
+
+            List<ItemDataSO> items = new List<ItemDataSO>();
+
+            foreach (var pair in _itemDict)
+            {
+                if (pair.Key.itemType == _tutorialItemType)
+                {
+                    if(_tutorialRarity != Rarity.None 
+                       && _tutorialRarity != pair.Key.rarity)
+                        continue;
+                    
+                    items.Add(pair.Key);
+                    pair.Value.PlayBackgroundEffect(_tutorialItemColor);
+                    continue;
+                }
+
+                pair.Value.StopBackgroundEffect();
+            }
+
+            SetInteractableItems(items);
+        }
+
+        private bool CanInteract(ItemDataSO item)
+        {
+            return _interactableItems == null || _interactableItems.Contains(item);
         }
     }
 }

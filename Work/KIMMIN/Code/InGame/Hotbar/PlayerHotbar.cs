@@ -10,6 +10,7 @@ using Scripts.Combat.Datas;
 using Scripts.Players;
 using Scripts.Players.States;
 using System.Collections.Generic;
+using Code.InventorySystems;
 using UnityEngine;
 using Code.Items;
 using Code.Items.ItemInfo;
@@ -29,6 +30,7 @@ namespace Code.InventorySystem
         private List<HotbarSlot> _slots = new();
         private PlayerEquipment _equipment;
         private PlayerInventory _inventory;
+        private HandlingComponent _handlingCompo;
         private Player _player;
         public ComponentContainer ComponentContainer { get; set; }
         public event Action<ItemDataSO> OnHotbarUse;
@@ -38,6 +40,7 @@ namespace Code.InventorySystem
             _player = componentContainer.Get<Player>();
             _equipment = componentContainer.Get<PlayerEquipment>();
             _inventory = componentContainer.Get<PlayerInventory>();
+            _handlingCompo = componentContainer.Get<HandlingComponent>();
 
             _player.PlayerInput.OnItemUsePressed += UseSlot;
             _inventory.InventoryChanged += HandleInventoryChanged;
@@ -45,6 +48,7 @@ namespace Code.InventorySystem
             EventBus.Subscribe<EquipHotbarEvent>(HandleEquipHotbar);
             EventBus.Subscribe<UnEquipHotbarEvent>(HandleUnEquipHotbar);
             EventBus.Subscribe<HotbarUseEvent>(HandleUseHotbar);
+            _player.LocalEventBus.Subscribe<ChangeHandlingEvent>(HandleChangeHandling);
         }
 
         public void AfterInitialize()
@@ -77,6 +81,12 @@ namespace Code.InventorySystem
             EventBus.Unsubscribe<EquipHotbarEvent>(HandleEquipHotbar);
             EventBus.Unsubscribe<UnEquipHotbarEvent>(HandleUnEquipHotbar);
             EventBus.Unsubscribe<HotbarUseEvent>(HandleUseHotbar);
+            _player.LocalEventBus.Unsubscribe<ChangeHandlingEvent>(HandleChangeHandling);
+        }
+
+        private void HandleChangeHandling(ChangeHandlingEvent evt)
+        {
+            UpdateUI();
         }
 
         private void Start()
@@ -126,8 +136,7 @@ namespace Code.InventorySystem
             if (!TryResolveSlot(index, out HandItem handItem))
                 return;
 
-            _equipment.ChangeHandlingHotbarItem(handItem);
-            UpdateUI();
+            _handlingCompo.ChangeHandlingHotbarItem(handItem);
             OnHotbarUse?.Invoke(handItem.ItemData);
             
             if (handItem is UsableItem usable)
@@ -139,6 +148,7 @@ namespace Code.InventorySystem
                     _player.Blackboard.Set("ItemUseContext", context);
                 }
                 context.TargetItem = usable;
+                context.ShouldRestoreHandledItem = true;
                 _player.ChangeState(PlayerStateEnum.ItemUse);
             }
         }

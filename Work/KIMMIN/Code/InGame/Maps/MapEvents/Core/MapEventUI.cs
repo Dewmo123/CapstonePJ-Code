@@ -21,7 +21,6 @@ namespace Work.Code.MapEvents
         private float _remainTime;
         private bool _isActive;
 
-        [field: SerializeField] public RectTransform Rect { get; private set; }
         [field: SerializeField] public LayoutElement Layout { get; private set; }
         [field: SerializeField] public CanvasGroup Canvas { get; private set; }
         public event Action<MapEventUI> OnInActive;

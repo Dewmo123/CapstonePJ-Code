@@ -14,8 +14,6 @@ namespace Code.SkillSystem.Skills.DecoyBeacon
     public class DecoyBeaconSkill : ActiveSkill, IAimSkill
     {
         public PlayerInputSO playerInput;
-        [Header("State")]
-        [SerializeField] private StateDataSO targetState;
         [SerializeField] private DecalObject decalObject;
 
         [Header("Beacon")]
@@ -40,9 +38,6 @@ namespace Code.SkillSystem.Skills.DecoyBeacon
         private Vector3 _cachedAimPosition;
         private Vector3 _castPosition;
         private bool _isAiming;
-
-        public SkillAnimType AnimType => SkillAnimType.Default;
-        public StateDataSO TargetState => targetState;
 
         public override bool CanUseSkill()
             => base.CanUseSkill() && beaconPoolItem != null && _poolManager != null && _aimProvider != null;
@@ -74,14 +69,14 @@ namespace Code.SkillSystem.Skills.DecoyBeacon
             RestoreDecalParent();
         }
 
-        public override void StartAndUseSkill()
+        public override void StartSkill()
         {
             _castPosition = _aimProvider.GetWorldAimPosition();
             _isAiming = false;
             RestoreDecalParent();
         }
 
-        public void OnSkillTrigger()
+        public override void OnSkillTrigger()
         {
             if (beaconPoolItem == null || _poolManager == null)
                 return;

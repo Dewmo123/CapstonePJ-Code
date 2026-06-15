@@ -9,6 +9,7 @@ namespace Work.Code.UI.Slots
     {
         [SerializeField] protected Image outline;
         [SerializeField] protected Image backgroundEffect;
+        [SerializeField] private float effectScale = 1.3f;
         
         private const float BackgroundEffectDuration = 1f;
         private Sequence _backgroundEffectSeq;
@@ -21,7 +22,7 @@ namespace Work.Code.UI.Slots
             backgroundEffect.color = effectColor;
             IsBackgroundEffectPlaying = true;
             
-            _backgroundEffectSeq.Append(backgroundEffect.transform.DOScale(1.3f, BackgroundEffectDuration))
+            _backgroundEffectSeq.Append(backgroundEffect.transform.DOScale(effectScale, BackgroundEffectDuration))
                 .SetEase(Ease.OutCirc);
             _backgroundEffectSeq.Join(backgroundEffect.DOFade(0f, BackgroundEffectDuration))
                 .SetEase(Ease.OutCirc);
@@ -36,5 +37,7 @@ namespace Work.Code.UI.Slots
             _backgroundEffectSeq?.Kill();
             IsBackgroundEffectPlaying = false;
         }
+
+        public override bool CanDrag() => false;
     }
 }

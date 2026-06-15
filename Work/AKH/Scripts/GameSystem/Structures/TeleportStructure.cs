@@ -1,16 +1,10 @@
-﻿using Chipmunk.ComponentContainers;
-using Chipmunk.GameEvents;
-using Code.UI.Core;
+﻿using Code.UI.Core;
 using Code.UI.Minimap.Core;
-using Code.UI.Minimap.Minimaps;
 using DewmoLib.Dependencies;
-using EPOOutline;
 using Scripts.Entities;
 using Scripts.Players;
 using Scripts.Players.States;
 using UnityEngine;
-using Scripts.GameSystem;
-using Code.ItemContainers;
 
 namespace Scripts.GameSystem.Structures
 {
@@ -25,7 +19,7 @@ namespace Scripts.GameSystem.Structures
         {
             base.Start();
             _viewOnlyMinimapUI = UIManager.Instance.GetPanel<UIPanel>("TeleportMinimap");
-            MinimapUtil.AddToMinimap(this, ElementType.Marker, teleportIcon, true, transform.position);
+            MinimapUtil.AddToMinimap(this, ElementType.LockedMarker, teleportIcon, true, transform.position);
             MinimapUtil.AddToMinimap(this, ElementType.Teleport, null, false, transform.position);
         }
 

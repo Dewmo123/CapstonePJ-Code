@@ -30,7 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3431707653077194657}
+  m_Father: {fileID: 4609713744730952220}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &501100000000000003
 MonoBehaviour:
@@ -45,13 +45,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SkillData>k__BackingField: {fileID: 0}
-  <animName>k__BackingField: 
+  isWalkable: 0
   cooldown: 10
-  canUse: 1
-  animHash: 0
-  upgradedList: []
+  <AnimType>k__BackingField: 0
+  <MoveType>k__BackingField: 1
+  <TargetState>k__BackingField: {fileID: 0}
   stealthDuration: 4
-  stealthMoveSpeedMultiplier: 1.2
+  stealthMaterial: {fileID: 2100000, guid: 37a9e5ce1365de248acbbbfd3627f207, type: 2}
 --- !u!1 &501100000000000011
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,7 +82,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3431707653077194657}
+  m_Father: {fileID: 4609713744730952220}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &501100000000000013
 MonoBehaviour:
@@ -97,11 +97,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SkillData>k__BackingField: {fileID: 0}
-  <animName>k__BackingField: 
+  isWalkable: 0
   cooldown: 8
-  canUse: 1
-  animHash: 0
-  upgradedList: []
+  <AnimType>k__BackingField: 0
+  <MoveType>k__BackingField: 1
+  <TargetState>k__BackingField: {fileID: 0}
   smokeEffectPrefab: {fileID: 163066, guid: 53777b8572d1e7242bc90044f62667ce, type: 3}
   smokeDuration: 2.5
   repositionRadius: 5
@@ -136,7 +136,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3431707653077194657}
+  m_Father: {fileID: 4609713744730952220}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &501100000000000023
 MonoBehaviour:
@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5decc7a40cbf426db1f72123226fdef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <SkillData>k__BackingField: {fileID: 0}
   backAttackDotThreshold: -0.15
   backAttackBonusMultiplier: 0.55
   stealthBonusMultiplier: 0.35
@@ -337,6 +338,10 @@ PrefabInstance:
       propertyPath: 'renderers.Array.data[2]'
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3594451060687249943, guid: c860746277aafea409ac52b43a9c6259, type: 3}
+      propertyPath: <CanMissTarget>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6689825365382193100, guid: c860746277aafea409ac52b43a9c6259, type: 3}
       propertyPath: statOverrides.Array.data[0].overrideValue
       value: 3.5
@@ -417,13 +422,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7612038083271959362, guid: c860746277aafea409ac52b43a9c6259, type: 3}
       insertIndex: 0
       addedObject: {fileID: 730732887619673845}
-    - targetCorrespondingSourceObject: {fileID: 8774214501724645119, guid: c860746277aafea409ac52b43a9c6259, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 7612038083271959362, guid: c860746277aafea409ac52b43a9c6259, type: 3}
       insertIndex: -1
       addedObject: {fileID: 501100000000000002}
-    - targetCorrespondingSourceObject: {fileID: 8774214501724645119, guid: c860746277aafea409ac52b43a9c6259, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 7612038083271959362, guid: c860746277aafea409ac52b43a9c6259, type: 3}
       insertIndex: -1
       addedObject: {fileID: 501100000000000012}
-    - targetCorrespondingSourceObject: {fileID: 8774214501724645119, guid: c860746277aafea409ac52b43a9c6259, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 7612038083271959362, guid: c860746277aafea409ac52b43a9c6259, type: 3}
       insertIndex: -1
       addedObject: {fileID: 501100000000000022}
     m_AddedComponents:
@@ -451,6 +456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 853fc5ea43cc4978bf53dfa332372bbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitBodyTrm: {fileID: 0}
   OnHitEvent:
     m_PersistentCalls:
       m_Calls:
@@ -472,16 +478,9 @@ MonoBehaviour:
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  test: {fileID: 0}
   movingRange: 5
-  stunEffect: {fileID: 0}
-  attackRange: 15
-  phase2HealthThreshold: 0.6
-  phase3HealthThreshold: 0.3
-  hasRageMode: 1
-  rageHealthThreshold: 0.2
-  rageDamageMultiplier: 1.5
-  rageSpeedMultiplier: 1.3
-  patternCooldown: 2
+  <SpawnPos>k__BackingField: {x: 0, y: 0, z: 0}
 --- !u!114 &2341523884949515239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -496,11 +495,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 8416602310900000011}
   enemyData: {fileID: 11400000, guid: ba6ff0db7358846428ef4aea7e7b1243, type: 2}
---- !u!4 &3431707653077194657 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8774214501724645119, guid: c860746277aafea409ac52b43a9c6259, type: 3}
-  m_PrefabInstance: {fileID: 6222737134437478750}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4609713744730952220 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7612038083271959362, guid: c860746277aafea409ac52b43a9c6259, type: 3}

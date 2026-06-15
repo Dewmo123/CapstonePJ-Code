@@ -46,7 +46,6 @@ namespace Code.SHS.Entities.Enemies
                 // 경로가 없으면 도착한 것으로 처리
                 if (!agent.hasPath)
                     return true;
-
                 return agent.remainingDistance <= agent.stoppingDistance + stopOffset;
             }
         }
@@ -241,10 +240,16 @@ namespace Code.SHS.Entities.Enemies
                 return;
 
             if (agent.isOnNavMesh)
-            {
                 agent.ResetPath();
-                agent.Warp(position);
+
+            if (!agent.Warp(position))
+            {
+                if (!NavMesh.SamplePosition(position, out NavMeshHit hit, 2f, agent.areaMask) ||
+                    !agent.Warp(hit.position))
+                    return;
             }
+
+            transform.rotation = rotation;
 
             agent.velocity = Vector3.zero;
             agent.isStopped = true;

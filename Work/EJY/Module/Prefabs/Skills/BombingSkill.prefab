@@ -132,8 +132,9 @@ MonoBehaviour:
   upgradedList: []
   <animName>k__BackingField: Skill
   cooldown: 15
+  <AnimType>k__BackingField: 0
+  <TargetState>k__BackingField: {fileID: 11400000, guid: de2fb001db655cc4f9bbc241c6759ae3, type: 2}
   animHash: 0
-  targetState: {fileID: 11400000, guid: de2fb001db655cc4f9bbc241c6759ae3, type: 2}
   decalObject: {fileID: 2362904857669209716}
   bombingItemSO: {fileID: 11400000, guid: 85128d36861585a4c91df7ca4f56544f, type: 2}
   attackStat: {fileID: 11400000, guid: 7a0d6ceb21222d849ad9defa279caa41, type: 2}
